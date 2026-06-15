@@ -35,6 +35,8 @@ Initial planned stack:
 - Disclaimer
 
 ## Current Output State
+- YuNet detector output exists when the detector is supplied and loaded.
+- Detection-only responses include face boxes and landmarks, but not embeddings.
 - No face-recognition output is produced yet.
 - No identity verification claim is made.
 

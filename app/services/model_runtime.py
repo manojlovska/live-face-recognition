@@ -41,7 +41,8 @@ class ModelRuntime:
         self._settings = settings
         self._asset_manager = asset_manager or ModelAssetManager(settings)
         self._models = LoadedModelBundle()
-        self._load_error: str | None = None
+        self._detector_error: str | None = None
+        self._embedder_error: str | None = None
         self._load_attempted = False
         self._detector_state = MODEL_STATE_MISSING
         self._embedder_state = MODEL_STATE_MISSING
@@ -51,6 +52,10 @@ class ModelRuntime:
     @property
     def cpu_only(self) -> bool:
         return True
+
+    @property
+    def model_id(self) -> str:
+        return self._settings.model_id
 
     @property
     def opencv_available(self) -> bool:
@@ -63,72 +68,25 @@ class ModelRuntime:
 
     def load_models(self) -> dict[str, object]:
         self._load_attempted = True
+        self._detector_error = None
+        self._embedder_error = None
         asset_status = self._asset_manager.status()
         detector_asset = asset_status["detector"]
         embedder_asset = asset_status["embedder"]
         self._models = LoadedModelBundle()
 
-        if (
-            detector_asset["checksum_status"] == CHECKSUM_MISMATCH
-            or embedder_asset["checksum_status"] == CHECKSUM_MISMATCH
-        ):
-            self._load_error = "checksum_mismatch"
-            self._detector_state = MODEL_STATE_ERROR
-            self._embedder_state = MODEL_STATE_ERROR
-            return self.status()
-
-        if (
-            detector_asset["checksum_status"] == CHECKSUM_FILE_MISSING
-            or embedder_asset["checksum_status"] == CHECKSUM_FILE_MISSING
-        ):
-            self._load_error = None
-            self._detector_state = (
-                MODEL_STATE_MISSING
-                if not detector_asset["exists"]
-                else MODEL_STATE_PRESENT_NOT_LOADED
-            )
-            self._embedder_state = (
-                MODEL_STATE_MISSING
-                if not embedder_asset["exists"]
-                else MODEL_STATE_PRESENT_NOT_LOADED
-            )
-            return self.status()
-
-        if not self.opencv_available:
-            self._load_error = "opencv_not_available"
-            self._detector_state = MODEL_STATE_ERROR
-            self._embedder_state = MODEL_STATE_ERROR
-            return self.status()
-
-        try:
-            detector_path = Path(detector_asset["path"])
-            embedder_path = Path(embedder_asset["path"])
-            self._models.detector = cv2.FaceDetectorYN.create(  # type: ignore[union-attr]
-                str(detector_path),
-                "",
-                _MODEL_INPUT_SIZE,
-                0.9,
-                0.3,
-                5000,
-                _cpu_backend_id(),
-                _cpu_target_id(),
-            )
-            self._models.embedder = cv2.FaceRecognizerSF.create(  # type: ignore[union-attr]
-                str(embedder_path),
-                "",
-                _cpu_backend_id(),
-                _cpu_target_id(),
-            )
-        except Exception as exc:  # pragma: no cover - exercised with monkeypatched failure
-            self._load_error = f"{exc.__class__.__name__}: {exc}"
-            self._models = LoadedModelBundle()
-            self._detector_state = MODEL_STATE_ERROR
-            self._embedder_state = MODEL_STATE_ERROR
-            return self.status()
-
-        self._load_error = None
-        self._detector_state = MODEL_STATE_LOADED
-        self._embedder_state = MODEL_STATE_LOADED
+        self._detector_state, self._models.detector, self._detector_error = self._load_model(
+            asset_status=detector_asset,
+            model_name="detector",
+            path_key="path",
+            creator=self._create_detector,
+        )
+        self._embedder_state, self._models.embedder, self._embedder_error = self._load_model(
+            asset_status=embedder_asset,
+            model_name="embedder",
+            path_key="path",
+            creator=self._create_embedder,
+        )
         return self.status()
 
     def status(self) -> dict[str, object]:
@@ -142,7 +100,11 @@ class ModelRuntime:
                 "embedder": embedder_state,
             },
             "gallery": GALLERY_STATE_NOT_LOADED,
-            "load_error": self._load_error,
+            "load_error": self.load_error,
+            "errors": {
+                "detector": self._detector_error,
+                "embedder": self._embedder_error,
+            },
             "load_attempted": self._load_attempted,
             "cpu_only": self.cpu_only,
             "opencv_available": self.opencv_available,
@@ -161,33 +123,97 @@ class ModelRuntime:
             "load_error": status["load_error"],
         }
 
+    @property
+    def load_error(self) -> str | None:
+        return self._detector_error or self._embedder_error
+
+    def get_detector(self) -> Any | None:
+        return self._models.detector
+
+    def get_embedder(self) -> Any | None:
+        return self._models.embedder
+
+    def detector_state(self) -> str:
+        return self._detector_state
+
+    def embedder_state(self) -> str:
+        return self._embedder_state
+
     def _detector_state_for_asset(self, asset_status: dict[str, object]) -> str:
-        if self._load_error is not None:
-            return MODEL_STATE_ERROR
         if self._models.detector is not None:
             return MODEL_STATE_LOADED
+        if self._detector_error is not None:
+            return MODEL_STATE_ERROR
         if asset_status["checksum_status"] == CHECKSUM_FILE_MISSING:
             return MODEL_STATE_MISSING
         return MODEL_STATE_PRESENT_NOT_LOADED
 
     def _embedder_state_for_asset(self, asset_status: dict[str, object]) -> str:
-        if self._load_error is not None:
-            return MODEL_STATE_ERROR
         if self._models.embedder is not None:
             return MODEL_STATE_LOADED
+        if self._embedder_error is not None:
+            return MODEL_STATE_ERROR
         if asset_status["checksum_status"] == CHECKSUM_FILE_MISSING:
             return MODEL_STATE_MISSING
         return MODEL_STATE_PRESENT_NOT_LOADED
 
     @staticmethod
     def _summarize_models(detector_state: str, embedder_state: str) -> str:
-        if detector_state == MODEL_STATE_ERROR or embedder_state == MODEL_STATE_ERROR:
-            return MODEL_STATE_ERROR
-        if detector_state == MODEL_STATE_MISSING or embedder_state == MODEL_STATE_MISSING:
-            return MODEL_STATE_MISSING
-        if detector_state == MODEL_STATE_LOADED and embedder_state == MODEL_STATE_LOADED:
-            return MODEL_STATE_LOADED
+        if detector_state == MODEL_STATE_ERROR:
+            return "detector_error"
+        if detector_state == MODEL_STATE_MISSING:
+            return "models_missing"
+        if detector_state == MODEL_STATE_LOADED:
+            return "detector_loaded_gallery_missing"
+        if detector_state == MODEL_STATE_PRESENT_NOT_LOADED:
+            return MODEL_STATE_PRESENT_NOT_LOADED
         return MODEL_STATE_PRESENT_NOT_LOADED
+
+    def _load_model(
+        self,
+        *,
+        asset_status: dict[str, object],
+        model_name: str,
+        path_key: str,
+        creator,
+    ) -> tuple[str, Any | None, str | None]:
+        exists = bool(asset_status["exists"])
+        checksum_status = asset_status["checksum_status"]
+        if not exists or checksum_status == CHECKSUM_FILE_MISSING:
+            return MODEL_STATE_MISSING, None, None
+        if checksum_status == CHECKSUM_MISMATCH:
+            return MODEL_STATE_ERROR, None, "checksum_mismatch"
+        if not self.opencv_available:
+            return MODEL_STATE_ERROR, None, "opencv_not_available"
+
+        try:
+            model_path = Path(asset_status[path_key])
+            model = creator(model_path)
+        except Exception as exc:  # pragma: no cover - exercised with monkeypatched failure
+            error_message = f"{model_name}_load_failed: {exc.__class__.__name__}: {exc}"
+            return MODEL_STATE_ERROR, None, error_message
+
+        return MODEL_STATE_LOADED, model, None
+
+    def _create_detector(self, model_path: Path) -> Any:
+        return cv2.FaceDetectorYN.create(  # type: ignore[union-attr]
+            str(model_path),
+            "",
+            _MODEL_INPUT_SIZE,
+            0.9,
+            0.3,
+            5000,
+            _cpu_backend_id(),
+            _cpu_target_id(),
+        )
+
+    def _create_embedder(self, model_path: Path) -> Any:
+        return cv2.FaceRecognizerSF.create(  # type: ignore[union-attr]
+            str(model_path),
+            "",
+            _cpu_backend_id(),
+            _cpu_target_id(),
+        )
 
 
 def _cpu_backend_id() -> int:

@@ -15,7 +15,7 @@ def test_readyz_returns_not_ready() -> None:
         "version": "0.1.0",
         "checks": {
             "api": "ok",
-            "models": "missing",
+            "models": "models_missing",
             "gallery": "not_loaded",
             "model_assets": {
                 "manifest_path": "models/model_manifest.json",
