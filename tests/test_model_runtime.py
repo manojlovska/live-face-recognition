@@ -62,8 +62,8 @@ def test_runtime_load_failure_is_graceful(monkeypatch, tmp_path) -> None:
     status = runtime.load_models()
 
     assert status["models"]["detector"] == MODEL_STATE_ERROR
-    assert status["models"]["embedder"] == MODEL_STATE_ERROR
-    assert status["load_error"] == "RuntimeError: detector failed"
+    assert status["models"]["embedder"] == MODEL_STATE_LOADED
+    assert status["load_error"] == "detector_load_failed: RuntimeError: detector failed"
 
 
 def test_runtime_uses_cpu_backend_and_target(monkeypatch, tmp_path) -> None:

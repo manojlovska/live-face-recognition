@@ -43,7 +43,7 @@ Plain base64 strings are rejected for now.
 
 ## Current Behavior
 
-Authorized valid image requests are decoded and validated in memory, then return `503 Service Unavailable` with:
+Authorized valid image requests are decoded and validated in memory. If the YuNet detector is loaded, the endpoint returns detection-only face boxes. If the detector is missing or unavailable, the request returns `503 Service Unavailable` with:
 
 ```json
 {
@@ -52,6 +52,43 @@ Authorized valid image requests are decoded and validated in memory, then return
     "type": "service_unavailable",
     "code": "engine_not_ready"
   }
+}
+```
+
+When detection-only mode is available, the response has this shape:
+
+```json
+{
+  "object": "face_similarity.detection_result",
+  "model": "celeba-face-similarity-cpu",
+  "mode": "detection_only",
+  "faces": [
+    {
+      "box": [112, 80, 220, 220],
+      "detection_score": 0.97,
+      "landmarks": {
+        "right_eye": [150, 130],
+        "left_eye": [190, 130],
+        "nose_tip": [170, 155],
+        "right_mouth_corner": [152, 185],
+        "left_mouth_corner": [188, 185]
+      },
+      "top_matches": []
+    }
+  ],
+  "disclaimer": "Detection-only result. Similarity matching is not implemented yet."
+}
+```
+
+If no faces are detected, the response still returns HTTP `200` with:
+
+```json
+{
+  "object": "face_similarity.detection_result",
+  "model": "celeba-face-similarity-cpu",
+  "mode": "detection_only",
+  "faces": [],
+  "disclaimer": "No faces detected. Similarity matching is not implemented yet."
 }
 ```
 
@@ -90,8 +127,11 @@ When inference is implemented, the response should include the similarity result
 - Decoded images over `FACE_MAX_IMAGE_BYTES` return `image_too_large`.
 - Non-image bytes return `invalid_image`.
 - Invalid `top_k` returns validation error.
-- Valid authorized requests currently return `engine_not_ready`.
-- No face and multi-face behavior are deferred until image decoding and inference exist.
+- Valid authorized requests return detection-only results when YuNet is loaded.
+- Valid authorized requests return `engine_not_ready` when YuNet is not loaded or cannot be used.
+- Detection output never includes embeddings.
+- `top_matches` is an empty list until gallery search exists.
+- No face requests return HTTP `200` with an empty `faces` list.
 
 ## Privacy Behavior
 Uploaded image data is decoded in memory and discarded by default. No uploaded images or decoded images are stored by default.

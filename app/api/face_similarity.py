@@ -16,5 +16,4 @@ async def face_similarity(request: Request, body: FaceSimilarityRequest) -> dict
     settings = request.app.state.settings
     decoded_image = decode_data_url_image(body.image, settings.max_image_bytes)
     engine = get_engine(request)
-    engine.analyze(body, decoded_image)
-    return {}
+    return engine.analyze(body, decoded_image)

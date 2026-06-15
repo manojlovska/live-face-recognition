@@ -45,14 +45,13 @@ OpenAI-compatible endpoints should return an OpenAI-style error object where pra
 | Unsupported route | `not_found` | 404 |
 | Unsupported model | `model_not_found` | 404 |
 | Request too large | `request_too_large` | 413 |
-| No face found | `no_face_detected` | 422 or 200 with empty faces, to be decided |
+| No face found | `no_face_detected` | 200 with empty faces |
 | Too many faces | `too_many_faces` | 422 or process first face, to be decided |
 | Model not ready | `model_not_ready` | 503 |
 | Gallery not ready | `gallery_not_ready` | 503 |
 | Unsupported OpenAI feature | `unsupported_feature` | 400 |
 
 ## Open Decisions
-- Whether no-face should be an error or a successful response with `faces: []`.
 - Whether multi-face requests process all faces, the best face, or require explicit `max_faces`.
 
 These decisions must be finalized before MVP.
@@ -73,7 +72,7 @@ Authentication failures should use a compact, OpenAI-style error envelope:
 Return HTTP `401 Unauthorized` with `WWW-Authenticate: Bearer`.
 
 ## Engine Not Ready Shape
-Until model loading exists, protected similarity requests should return:
+When YuNet is unavailable or not loaded, protected similarity requests should return:
 
 ```json
 {
@@ -88,5 +87,11 @@ Until model loading exists, protected similarity requests should return:
 Return HTTP `503 Service Unavailable`.
 
 ## Readiness Model Status
-`/readyz` reports model status with the summary values `missing`, `present_not_loaded`, `loaded`, or `error`.
+`/readyz` reports model status with the summary values `models_missing`, `present_not_loaded`, `detector_loaded_gallery_missing`, or `detector_error`.
 This is operational status only and does not imply a successful similarity response while gallery loading remains unimplemented.
+
+## Detection Output
+- Detection-only results are success responses, not errors.
+- When YuNet is loaded, valid requests return HTTP `200` with `faces` and `top_matches: []`.
+- When no faces are detected, the service still returns HTTP `200` with an empty `faces` list.
+- Missing detector availability still uses `engine_not_ready`; no new error code is introduced in this work order.
