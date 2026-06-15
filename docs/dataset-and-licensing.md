@@ -37,6 +37,8 @@ Generated gallery artifacts should include a manifest recording:
 - creation timestamp;
 - checksums.
 
+The Work Order 9 sample-gallery builder is intentionally limited to a local CelebA-like sample directory and does not process the full CelebA dataset yet.
+
 ## Release Wording
 Allowed:
 - "CelebA-derived research gallery"

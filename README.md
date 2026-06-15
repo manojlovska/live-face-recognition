@@ -78,6 +78,21 @@ To test real YuNet detection manually:
 
 If you also provide the SFace ONNX file and set `MODEL_AUTO_LOAD=true`, the service will generate embeddings internally while still returning only public metadata. If you also provide a local gallery artifact and set `GALLERY_AUTO_LOAD=true`, the service can return similarity results with `top_matches`.
 
+## Build gallery
+
+Use the sample builder to create a local gallery artifact from a small CelebA-like directory:
+
+```bash
+python scripts/build_gallery.py \
+  --images-dir /path/to/sample/images \
+  --identity-file /path/to/identity_sample.txt \
+  --output-dir data/gallery \
+  --gallery-version sample-gallery-v1 \
+  --limit 100
+```
+
+This is sample-scale only. It does not process the full CelebA dataset yet.
+
 ## Quality checks
 
 ```bash

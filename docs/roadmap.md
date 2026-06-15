@@ -82,7 +82,7 @@ Revisit this roadmap if:
 - a different model stack is approved by ADR.
 
 ## Scaffold Status
-The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, and local gallery loading/search are now implemented. The next milestone is an offline CelebA gallery builder skeleton.
+The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, and an offline sample-gallery builder skeleton are now implemented. The next milestone is full CelebA dataset layout support in the builder.
 
 ## Work Order Status
 - Work Order 1: complete.
@@ -93,4 +93,5 @@ The initial scaffold work is complete. One-key authentication, readiness routing
 - Work Order 6: complete.
 - Work Order 7: complete.
 - Work Order 8: complete.
-- Work Order 9: next.
+- Work Order 9: complete.
+- Work Order 10: next.

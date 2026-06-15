@@ -28,6 +28,7 @@ If a command is not run, report it as `not run` with the reason.
 | Request validation | accepts valid JSON contract and rejects invalid `top_k`/missing fields |
 | No-face | no-face behavior is deterministic and documented |
 | Gallery | gallery loads and top-k search is deterministic on fixtures |
+| Gallery builder | sample-gallery build is deterministic on tiny fixtures |
 | OpenAI compatibility | OpenAI Python client can call local `/v1/chat/completions` |
 
 ## RC1 Test Categories
@@ -60,6 +61,9 @@ Skipped integration tests must be reported as skipped, not passed.
 - gallery artifact loading tests for manifest, metadata, dimension, and checksum validation;
 - gallery search tests for deterministic cosine top-k ranking on the tiny fixture gallery;
 - readiness tests for loaded-gallery and gallery-error states.
+- CelebA annotation parsing tests for comments, blank lines, and malformed rows;
+- gallery builder tests for writes, skips, multiple-face handling, and runtime readiness checks;
+- script tests for dry-run, missing input, existing output, and successful sample builds.
 
 ## Test Quality Rule
 For every important safety behavior, ask:
