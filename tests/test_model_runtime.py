@@ -99,6 +99,7 @@ def test_runtime_uses_cpu_backend_and_target(monkeypatch, tmp_path) -> None:
     assert runtime.cpu_only is True
     assert status["models"]["detector"] == MODEL_STATE_LOADED
     assert status["models"]["embedder"] == MODEL_STATE_LOADED
+    assert runtime.readiness_summary()["models"] == "embedding_models_loaded_gallery_missing"
     assert captured["detector"] is not None
     assert captured["embedder"] is not None
     assert captured["detector"][6] == fake_cv2.dnn.DNN_BACKEND_OPENCV

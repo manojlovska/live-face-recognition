@@ -60,7 +60,7 @@ curl -H "Authorization: Bearer change-me-local-dev-key" \
 
 ## Native similarity
 
-Valid `POST /v1/face/similarity` image requests are decoded and validated in memory. If YuNet is loaded, the service returns detection-only face boxes. Similarity matching is still not implemented.
+Valid `POST /v1/face/similarity` image requests are decoded and validated in memory. If YuNet is loaded, the service returns detection-only face boxes. If YuNet and SFace are both loaded, the service generates embeddings internally, but raw embedding vectors and CelebA matches are still not returned. Similarity matching is still not implemented.
 
 Model files are expected under `models/` by default:
 
@@ -75,6 +75,8 @@ To test real YuNet detection manually:
 3. Start the server.
 4. Send a valid `POST /v1/face/similarity` request.
 5. A detection-only result should be returned when the detector loads successfully.
+
+If you also provide the SFace ONNX file and set `MODEL_AUTO_LOAD=true`, the service will generate embeddings internally while still returning only public metadata. Raw vectors are not included in the response.
 
 ## Quality checks
 

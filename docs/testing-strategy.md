@@ -55,6 +55,7 @@ Skipped integration tests must be reported as skipped, not passed.
 - CPU-only loader skeleton tests with stubbed OpenCV objects;
 - readiness tests for missing and present-but-not-loaded model files;
 - native similarity tests for detector-missing, detection-only, and no-face responses;
+- native similarity tests for embedding-only responses, per-face embedding metadata, and raw-vector privacy;
 - native similarity tests that still return `engine_not_ready` when YuNet is unavailable.
 
 ## Test Quality Rule

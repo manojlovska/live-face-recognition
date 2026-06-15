@@ -163,9 +163,15 @@ class ModelRuntime:
             return "detector_error"
         if detector_state == MODEL_STATE_MISSING:
             return "models_missing"
+        if embedder_state == MODEL_STATE_ERROR:
+            return "embedder_error"
+        if detector_state == MODEL_STATE_LOADED and embedder_state == MODEL_STATE_LOADED:
+            return "embedding_models_loaded_gallery_missing"
         if detector_state == MODEL_STATE_LOADED:
             return "detector_loaded_gallery_missing"
         if detector_state == MODEL_STATE_PRESENT_NOT_LOADED:
+            return MODEL_STATE_PRESENT_NOT_LOADED
+        if embedder_state == MODEL_STATE_PRESENT_NOT_LOADED:
             return MODEL_STATE_PRESENT_NOT_LOADED
         return MODEL_STATE_PRESENT_NOT_LOADED
 

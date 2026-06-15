@@ -13,6 +13,9 @@ By default, the service:
 - does not retain request bodies;
 - does not create user biometric profiles;
 - does not enroll users.
+- generates embeddings only in memory when the model is available;
+- does not return raw embedding vectors in the public API by default;
+- does not persist embeddings or aligned face crops.
 
 ## Output Language
 The service returns similarity results. It must not describe results as verified identity, authentication, or proof that the subject is a specific person.
@@ -48,5 +51,6 @@ Where practical, tests should verify that normal requests do not create saved im
 ## Current Image Handling
 - Uploaded image bytes are decoded in memory only.
 - No image retention exists by default.
-- No embedding retention exists yet.
+- Embeddings are transient in memory only.
+- No embedding retention exists by default.
 - Model files are local operator-managed assets, not user data.

@@ -49,6 +49,7 @@ OpenAI-compatible endpoints should return an OpenAI-style error object where pra
 | Too many faces | `too_many_faces` | 422 or process first face, to be decided |
 | Model not ready | `model_not_ready` | 503 |
 | Gallery not ready | `gallery_not_ready` | 503 |
+| Embedding generation failed | `embedding_failed` | 200 with per-face embedding error marker |
 | Unsupported OpenAI feature | `unsupported_feature` | 400 |
 
 ## Open Decisions
@@ -87,11 +88,13 @@ When YuNet is unavailable or not loaded, protected similarity requests should re
 Return HTTP `503 Service Unavailable`.
 
 ## Readiness Model Status
-`/readyz` reports model status with the summary values `models_missing`, `present_not_loaded`, `detector_loaded_gallery_missing`, or `detector_error`.
+`/readyz` reports model status with the summary values `models_missing`, `present_not_loaded`, `detector_loaded_gallery_missing`, `embedding_models_loaded_gallery_missing`, `detector_error`, or `embedder_error`.
 This is operational status only and does not imply a successful similarity response while gallery loading remains unimplemented.
 
 ## Detection Output
 - Detection-only results are success responses, not errors.
 - When YuNet is loaded, valid requests return HTTP `200` with `faces` and `top_matches: []`.
+- When YuNet and SFace are loaded, valid requests return HTTP `200` with internal embedding metadata and `top_matches: []`.
 - When no faces are detected, the service still returns HTTP `200` with an empty `faces` list.
 - Missing detector availability still uses `engine_not_ready`; no new error code is introduced in this work order.
+- Per-face embedding failures return a success response with `embedding.generated: false` and `embedding.error: "embedding_failed"`.

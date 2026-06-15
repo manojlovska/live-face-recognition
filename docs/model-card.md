@@ -37,7 +37,9 @@ Initial planned stack:
 ## Current Output State
 - YuNet detector output exists when the detector is supplied and loaded.
 - Detection-only responses include face boxes and landmarks, but not embeddings.
-- No face-recognition output is produced yet.
+- SFace embedding output exists internally when the embedder is supplied and loaded.
+- Raw embeddings are not returned in the public API.
+- No gallery similarity output is produced yet.
 - No identity verification claim is made.
 
 ## Limitations
