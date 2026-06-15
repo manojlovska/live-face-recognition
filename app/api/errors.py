@@ -9,6 +9,24 @@ class EngineNotReadyError(Exception):
     """Raised when face-similarity inference has not been loaded yet."""
 
 
+class GalleryStateError(Exception):
+    """Raised when gallery state is inconsistent with a similarity query."""
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        code: str,
+        status_code: int = 500,
+        error_type: str = "invalid_gallery_state",
+    ) -> None:
+        super().__init__(message)
+        self.message = message
+        self.code = code
+        self.status_code = status_code
+        self.error_type = error_type
+
+
 class ImageValidationError(Exception):
     """Raised when a submitted image data URL or payload is invalid."""
 
@@ -51,6 +69,19 @@ def engine_not_ready_error_response() -> JSONResponse:
                 ),
                 "type": "service_unavailable",
                 "code": "engine_not_ready",
+            }
+        },
+    )
+
+
+def gallery_state_error_response(exc: GalleryStateError) -> JSONResponse:
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": {
+                "message": exc.message,
+                "type": exc.error_type,
+                "code": exc.code,
             }
         },
     )

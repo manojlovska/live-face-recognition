@@ -57,6 +57,9 @@ Skipped integration tests must be reported as skipped, not passed.
 - native similarity tests for detector-missing, detection-only, and no-face responses;
 - native similarity tests for embedding-only responses, per-face embedding metadata, and raw-vector privacy;
 - native similarity tests that still return `engine_not_ready` when YuNet is unavailable.
+- gallery artifact loading tests for manifest, metadata, dimension, and checksum validation;
+- gallery search tests for deterministic cosine top-k ranking on the tiny fixture gallery;
+- readiness tests for loaded-gallery and gallery-error states.
 
 ## Test Quality Rule
 For every important safety behavior, ask:

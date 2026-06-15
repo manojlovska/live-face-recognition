@@ -41,6 +41,9 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - Enforce request size limits with `FACE_MAX_IMAGE_BYTES`.
 - Model assets are operator-supplied local files; the service does not download them at runtime.
 - Model asset presence and checksum checks must not expose raw file contents.
+- Gallery embeddings and metadata are operator-supplied local files; the service does not download them at runtime.
+- Do not log query embeddings or gallery embeddings.
+- Similarity matches must come from loaded gallery metadata only.
 
 ## Logging Rules
 Do not log:
@@ -48,6 +51,7 @@ Do not log:
 - raw image bytes;
 - face embeddings;
 - raw embedding vectors;
+- gallery embedding vectors;
 - Authorization headers;
 - API keys;
 - full request bodies containing images.
@@ -62,6 +66,7 @@ Log only safe metadata such as:
 - error category.
 - image payloads or decoded bytes.
 - model asset paths or checksums unless the value is already a documented non-secret artifact.
+- gallery artifact paths or checksums unless the value is already a documented non-secret artifact.
 
 ## Request Limits
 The service should define:

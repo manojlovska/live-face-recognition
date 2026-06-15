@@ -2,7 +2,7 @@
 
 ## Purpose
 The live API must not scan CelebA images at request time. Instead, an offline build process creates gallery artifacts used by the runtime service.
-The gallery build workflow remains future work; this repository currently only manages model assets and loader status.
+The runtime gallery loader is implemented now. The full CelebA build workflow remains future work.
 
 ## Planned Inputs
 - CelebA image directory
@@ -16,7 +16,7 @@ The gallery build workflow remains future work; this repository currently only m
 ```text
 data/gallery/
   gallery_embeddings.npy
-  gallery_metadata.sqlite
+  gallery_metadata.jsonl
   gallery_manifest.json
   failed_images.csv
 ```
@@ -37,7 +37,8 @@ Exact filenames may change, but the manifest is required.
 
 ## Runtime Rule
 The runtime service loads gallery artifacts. It does not require raw CelebA images.
-Until the gallery exists, `/readyz` must continue to report `gallery: not_loaded`.
+The current implementation can use a tiny local or test gallery artifact to validate search behavior.
+Until the gallery exists, `/readyz` reports `gallery: not_loaded`.
 
 ## Failure Handling
 Some images may fail detection or decoding. The builder must report:
@@ -51,3 +52,4 @@ The build command and model versions must be documented. The manifest must inclu
 
 ## MVP Shortcut
 MVP may use a tiny synthetic or test gallery to validate API behavior. Full CelebA gallery build is required before RC1.
+The repository uses a tiny fixture gallery for tests only; it is not a CelebA build.

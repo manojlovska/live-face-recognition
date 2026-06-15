@@ -1,14 +1,14 @@
 # Current State
 
 ## Status
-Work Order 7 SFace embedding-generation implementation is complete.
+Work Order 8 local gallery-search implementation is complete.
 
 ## Current implemented state:
 - `/healthz` exists and is public.
-- `/readyz` exists and reports model status honestly while gallery remains not loaded.
+- `/readyz` exists and reports model and gallery status honestly.
 - One-key Bearer authentication exists.
 - `/v1/models` exists and is protected.
-- `/v1/face/similarity` exists as a protected JSON contract that can return detection-only face boxes or internal embeddings when the models are loaded.
+- `/v1/face/similarity` exists as a protected JSON contract that can return detection-only face boxes, internal embeddings, or gallery-backed similarity results.
 - `/v1/face/similarity` accepts authenticated JSON requests.
 - The image field must currently be a base64 data URL.
 - JPEG, PNG, and WebP are the intended supported image MIME types.
@@ -16,13 +16,17 @@ Work Order 7 SFace embedding-generation implementation is complete.
 - Model asset paths are configurable.
 - YuNet and SFace asset presence can be checked.
 - Model loading skeleton exists and YuNet detection plus internal SFace embedding generation exist.
+- A local gallery artifact can be loaded.
+- Exact cosine similarity search over a loaded gallery exists.
 - If YuNet is available and loaded, valid images can return detection-only face boxes.
 - If YuNet and SFace are available and loaded, the service can generate internal face embeddings.
+- If YuNet, SFace, and a gallery artifact are loaded, the service can return `top_matches` from the gallery.
 - Raw embeddings are not returned by the public API.
 - Detection-only mode does not return embeddings or CelebA matches.
-- top_matches remains empty because CelebA gallery search is not implemented.
-- `/readyz` remains not_ready because full similarity requires gallery loading and search.
-- SFace similarity search and gallery loading are not implemented yet.
+- top_matches is empty when no gallery artifact is loaded and populated when one is available.
+- `/readyz` returns ready only when the detector, embedder, and gallery are loaded; otherwise it remains not_ready.
+- Gallery support is artifact-based and test-gallery oriented.
+- Full CelebA gallery build is not implemented yet.
 - No uploaded images or decoded images are stored by default.
 - No OpenAI chat completions endpoint exists yet.
 
@@ -47,15 +51,14 @@ Work Order 7 SFace embedding-generation implementation is complete.
 - Image input decoding and validation
 - Model asset manager
 - CPU-only model loading skeleton
+- Gallery artifact loader and cosine search
 - Pytest-based health/config smoke tests
 - Ruff and packaging configuration
 
 ## Missing
-- Face detection
-- Embeddings
-- Gallery loading
+- Full CelebA gallery build
 - OpenAI-compatible chat endpoint
-- Model downloader/loader
+- Model downloader
 - Gallery artifacts and builder
 - Full test coverage
 - Benchmarks
@@ -75,9 +78,10 @@ Work Order 7 SFace embedding-generation implementation is complete.
 - Work Order 5: model asset management and CPU-only YuNet/SFace loading skeleton.
 - Work Order 6: YuNet face detection returning face boxes only.
 - Work Order 7: SFace face alignment and embedding generation for detected faces.
+- Work Order 8: local gallery artifact loading and exact cosine similarity search.
 
 ## Next recommended work:
-- Work Order 8: add local gallery artifact loading and exact cosine similarity search over a small test gallery, still without full CelebA build.
+- Work Order 9: add an offline CelebA gallery builder skeleton that processes a small sample directory first, not the full dataset yet.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

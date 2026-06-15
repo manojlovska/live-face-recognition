@@ -15,7 +15,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Native API | `/v1/face/similarity` tested | in progress |
 | OpenAI API | non-streaming `/v1/chat/completions` works | not started |
 | CPU inference | YuNet detection and internal SFace embeddings work without GPU | in progress |
-| Gallery | small gallery works | not started |
+| Gallery | small gallery works | in progress |
 | Privacy | no image/embedding retention by default | not started |
 | Docs | README and core docs updated | in progress |
 | Tests | `pytest` and `ruff check` pass | in progress |
@@ -40,7 +40,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 ## RC1 Allowed Claim
 Controlled-pilot-ready CPU-only research service for CelebA-based face similarity.
 
-The API now supports detector-only and embedding-only internal vision paths, but gallery search still blocks full similarity readiness.
+The API now supports detector-only, embedding-only, and gallery-backed similarity paths over a local artifact gallery, but the full CelebA gallery workflow still blocks RC1.
 
 ## RC1 Forbidden Claim
 Production biometric identification or verified celebrity recognition.

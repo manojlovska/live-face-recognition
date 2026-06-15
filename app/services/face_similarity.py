@@ -7,6 +7,7 @@ from fastapi import Request
 from pydantic import BaseModel, Field
 
 from app.api.errors import EngineNotReadyError
+from app.services.gallery import GalleryStore
 from app.services.image_input import DecodedImage
 from app.services.model_runtime import (
     MODEL_STATE_ERROR,
@@ -102,15 +103,19 @@ class FaceAnalysisResult:
     mode: str
     faces: list[AnalyzedFace]
     disclaimer: str
+    gallery: dict[str, object] | None = None
 
     def to_public_dict(self) -> dict[str, object]:
-        return {
+        body = {
             "object": self.object_name,
             "model": self.model,
             "mode": self.mode,
             "faces": [face.to_public_dict() for face in self.faces],
             "disclaimer": self.disclaimer,
         }
+        if self.gallery is not None:
+            body["gallery"] = self.gallery
+        return body
 
 
 class FaceSimilarityEngine:
@@ -118,17 +123,22 @@ class FaceSimilarityEngine:
         self._model_runtime = model_runtime
 
     def is_ready(self) -> bool:
-        return False
+        runtime = self._model_runtime
+        return bool(runtime is not None and bool(getattr(runtime, "is_ready", lambda: False)()))
 
     def mode(self) -> str:
         runtime_status = self._runtime_status()
         detector_state = self._model_state(runtime_status, "detector")
         embedder_state = self._model_state(runtime_status, "embedder")
+        gallery_state = self._gallery_state(runtime_status)
+
         if detector_state != MODEL_STATE_LOADED:
             return "engine_not_ready"
-        if embedder_state == MODEL_STATE_LOADED:
-            return "embedding_only"
-        return "detection_only"
+        if embedder_state != MODEL_STATE_LOADED:
+            return "detection_only"
+        if gallery_state == "loaded":
+            return "similarity"
+        return "embedding_only"
 
     def analyze(
         self,
@@ -152,22 +162,38 @@ class FaceSimilarityEngine:
 
         embedder_state = self._runtime_model_state(runtime, "embedder")
         embedder = getattr(runtime, "get_embedder", lambda: None)()
-        if embedder_state == MODEL_STATE_LOADED and embedder is not None:
-            analyzed_faces = [
-                AnalyzedFace(
-                    detection=face,
-                    embedding=_generate_embedding(embedder, face, bgr_image),
-                )
-                for face in detected_faces
-            ]
-            return _build_embedding_response(
+        gallery_store = getattr(runtime, "get_gallery_store", lambda: None)()
+        gallery_loaded = bool(
+            gallery_store is not None and bool(getattr(gallery_store, "is_loaded", lambda: False)())
+        )
+
+        if embedder_state != MODEL_STATE_LOADED or embedder is None:
+            return _build_detection_response(
                 model_id=runtime.model_id,
-                faces=analyzed_faces,
+                faces=[AnalyzedFace(detection=face) for face in detected_faces],
             )
 
-        return _build_detection_response(
+        analyzed_faces = [
+            _analyze_face(
+                face=face,
+                embedder=embedder,
+                bgr_image=bgr_image,
+                top_k=request.top_k,
+                gallery_store=gallery_store if gallery_loaded else None,
+            )
+            for face in detected_faces
+        ]
+
+        if gallery_loaded:
+            return _build_similarity_response(
+                model_id=runtime.model_id,
+                faces=analyzed_faces,
+                gallery=getattr(gallery_store, "summary", lambda: {})(),
+            )
+
+        return _build_embedding_response(
             model_id=runtime.model_id,
-            faces=[AnalyzedFace(detection=face) for face in detected_faces],
+            faces=analyzed_faces,
         )
 
     def status(self) -> dict[str, object]:
@@ -180,6 +206,7 @@ class FaceSimilarityEngine:
             "gallery": runtime_status["gallery"],
             "load_error": runtime_status["load_error"],
             "assets": runtime_status["assets"],
+            "gallery_details": runtime_status.get("gallery_details", {}),
             "cpu_only": runtime_status["cpu_only"],
         }
 
@@ -187,18 +214,24 @@ class FaceSimilarityEngine:
         runtime_status = self._runtime_status()
         detector_state = self._model_state(runtime_status, "detector")
         embedder_state = self._model_state(runtime_status, "embedder")
+        gallery_state = self._gallery_state(runtime_status)
+
         if detector_state == MODEL_STATE_ERROR:
             return "detector_error"
+        if embedder_state == MODEL_STATE_ERROR:
+            return "embedder_error"
+        if gallery_state == "error":
+            return "gallery_error"
         if detector_state == MODEL_STATE_MISSING:
             return "models_missing"
         if detector_state != MODEL_STATE_LOADED:
             return "engine_not_ready"
-        if embedder_state == MODEL_STATE_ERROR:
-            return "embedder_error"
+        if embedder_state == MODEL_STATE_LOADED and gallery_state == "loaded":
+            return "ready"
         if embedder_state == MODEL_STATE_LOADED:
-            return "embedding_models_loaded_gallery_missing"
-        if embedder_state == MODEL_STATE_MISSING:
-            return "detector_loaded_gallery_missing"
+            return "embedding_only"
+        if detector_state == MODEL_STATE_LOADED:
+            return "detection_only"
         if embedder_state == MODEL_STATE_PRESENT_NOT_LOADED:
             return MODEL_STATE_PRESENT_NOT_LOADED
         return "engine_not_ready"
@@ -217,9 +250,10 @@ class FaceSimilarityEngine:
                     "detector": MODEL_STATE_MISSING,
                     "embedder": MODEL_STATE_MISSING,
                 },
-                "gallery": "not_loaded",
+                "gallery": "missing",
                 "load_error": None,
                 "assets": {},
+                "gallery_details": {},
                 "cpu_only": True,
             }
 
@@ -235,6 +269,13 @@ class FaceSimilarityEngine:
         return MODEL_STATE_MISSING
 
     @staticmethod
+    def _gallery_state(runtime_status: dict[str, object]) -> str:
+        value = runtime_status.get("gallery")
+        if isinstance(value, str):
+            return value
+        return "missing"
+
+    @staticmethod
     def _runtime_model_state(runtime: ModelRuntime, key: str) -> str:
         getter_name = f"{key}_state"
         getter = getattr(runtime, getter_name, None)
@@ -247,6 +288,22 @@ class FaceSimilarityEngine:
 
 def get_engine(request: Request) -> FaceSimilarityEngine:
     return request.app.state.face_similarity_engine
+
+
+def _analyze_face(
+    *,
+    face: DetectedFace,
+    embedder: object,
+    bgr_image: np.ndarray,
+    top_k: int,
+    gallery_store: GalleryStore | None,
+) -> AnalyzedFace:
+    embedding = _generate_embedding(embedder, face, bgr_image)
+    top_matches: list[dict[str, object]] = []
+    if embedding.generated and embedding.vector is not None and gallery_store is not None:
+        matches = gallery_store.search(embedding.vector, top_k)
+        top_matches = [match.to_public_dict() for match in matches]
+    return AnalyzedFace(detection=face, embedding=embedding, top_matches=top_matches)
 
 
 def _run_yunet_detection(
@@ -390,6 +447,29 @@ def _build_embedding_response(
         mode="embedding_only",
         faces=faces,
         disclaimer=disclaimer,
+    )
+    return result.to_public_dict()
+
+
+def _build_similarity_response(
+    *,
+    model_id: str,
+    faces: list[AnalyzedFace],
+    gallery: dict[str, object],
+) -> dict[str, object]:
+    disclaimer = (
+        "Similarity result only; not identity verification."
+        if faces
+        else "No faces detected. Similarity result only; not identity verification."
+    )
+
+    result = FaceAnalysisResult(
+        object_name="face_similarity.result",
+        model=model_id,
+        mode="similarity",
+        faces=faces,
+        disclaimer=disclaimer,
+        gallery=gallery,
     )
     return result.to_public_dict()
 

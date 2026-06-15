@@ -5,6 +5,13 @@ from pathlib import Path
 from typing import Any
 
 from app.config import Settings
+from app.services.gallery import (
+    GALLERY_STATE_ERROR,
+    GALLERY_STATE_LOADED,
+    GALLERY_STATE_MISSING,
+    GALLERY_STATE_PRESENT_NOT_LOADED,
+    GalleryStore,
+)
 from app.services.model_assets import (
     CHECKSUM_FILE_MISSING,
     CHECKSUM_MISMATCH,
@@ -21,7 +28,6 @@ MODEL_STATE_MISSING = "missing"
 MODEL_STATE_PRESENT_NOT_LOADED = "present_not_loaded"
 MODEL_STATE_LOADED = "loaded"
 MODEL_STATE_ERROR = "error"
-GALLERY_STATE_NOT_LOADED = "not_loaded"
 
 _MODEL_INPUT_SIZE = (320, 320)
 
@@ -37,9 +43,11 @@ class ModelRuntime:
         self,
         settings: Settings,
         asset_manager: ModelAssetManager | None = None,
+        gallery_store: GalleryStore | None = None,
     ) -> None:
         self._settings = settings
         self._asset_manager = asset_manager or ModelAssetManager(settings)
+        self._gallery = gallery_store or GalleryStore(settings)
         self._models = LoadedModelBundle()
         self._detector_error: str | None = None
         self._embedder_error: str | None = None
@@ -48,6 +56,8 @@ class ModelRuntime:
         self._embedder_state = MODEL_STATE_MISSING
         if self._settings.model_auto_load:
             self.load_models()
+        if self._settings.gallery_auto_load:
+            self.load_gallery()
 
     @property
     def cpu_only(self) -> bool:
@@ -64,7 +74,11 @@ class ModelRuntime:
         )
 
     def is_ready(self) -> bool:
-        return False
+        return (
+            self._detector_state == MODEL_STATE_LOADED
+            and self._embedder_state == MODEL_STATE_LOADED
+            and self._gallery.is_loaded()
+        )
 
     def load_models(self) -> dict[str, object]:
         self._load_attempted = True
@@ -89,6 +103,9 @@ class ModelRuntime:
         )
         return self.status()
 
+    def load_gallery(self) -> dict[str, object]:
+        return self._gallery.load()
+
     def status(self) -> dict[str, object]:
         asset_status = self._asset_manager.status()
         detector_state = self._detector_state_for_asset(asset_status["detector"])
@@ -99,7 +116,7 @@ class ModelRuntime:
                 "detector": detector_state,
                 "embedder": embedder_state,
             },
-            "gallery": GALLERY_STATE_NOT_LOADED,
+            "gallery": self._gallery.state,
             "load_error": self.load_error,
             "errors": {
                 "detector": self._detector_error,
@@ -109,6 +126,7 @@ class ModelRuntime:
             "cpu_only": self.cpu_only,
             "opencv_available": self.opencv_available,
             "assets": asset_status,
+            "gallery_details": self._gallery.status(),
         }
 
     def readiness_summary(self) -> dict[str, object]:
@@ -117,9 +135,11 @@ class ModelRuntime:
             "models": self._summarize_models(
                 status["models"]["detector"],
                 status["models"]["embedder"],
+                status["gallery"],
             ),
-            "gallery": GALLERY_STATE_NOT_LOADED,
+            "gallery": status["gallery"],
             "assets": status["assets"],
+            "gallery_details": status["gallery_details"],
             "load_error": status["load_error"],
         }
 
@@ -132,6 +152,9 @@ class ModelRuntime:
 
     def get_embedder(self) -> Any | None:
         return self._models.embedder
+
+    def get_gallery_store(self) -> GalleryStore:
+        return self._gallery
 
     def detector_state(self) -> str:
         return self._detector_state
@@ -158,17 +181,25 @@ class ModelRuntime:
         return MODEL_STATE_PRESENT_NOT_LOADED
 
     @staticmethod
-    def _summarize_models(detector_state: str, embedder_state: str) -> str:
+    def _summarize_models(detector_state: str, embedder_state: str, gallery_state: str) -> str:
         if detector_state == MODEL_STATE_ERROR:
             return "detector_error"
-        if detector_state == MODEL_STATE_MISSING:
-            return "models_missing"
         if embedder_state == MODEL_STATE_ERROR:
             return "embedder_error"
+        if detector_state == MODEL_STATE_MISSING:
+            return "models_missing"
         if detector_state == MODEL_STATE_LOADED and embedder_state == MODEL_STATE_LOADED:
-            return "embedding_models_loaded_gallery_missing"
+            if gallery_state == GALLERY_STATE_LOADED:
+                return "loaded"
+            if gallery_state == GALLERY_STATE_ERROR:
+                return "gallery_error"
+            if gallery_state == GALLERY_STATE_MISSING:
+                return "embedding_only"
+            if gallery_state == GALLERY_STATE_PRESENT_NOT_LOADED:
+                return "present_not_loaded"
+            return "embedding_only"
         if detector_state == MODEL_STATE_LOADED:
-            return "detector_loaded_gallery_missing"
+            return "detection_only"
         if detector_state == MODEL_STATE_PRESENT_NOT_LOADED:
             return MODEL_STATE_PRESENT_NOT_LOADED
         if embedder_state == MODEL_STATE_PRESENT_NOT_LOADED:

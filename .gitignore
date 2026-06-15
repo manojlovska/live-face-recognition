@@ -206,6 +206,14 @@ cython_debug/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py
 
+# Local gallery artifacts
+data/gallery/*.npy
+data/gallery/*.json
+data/gallery/*.jsonl
+data/gallery/*.sqlite
+data/gallery/*.db
+data/gallery/*.csv
+
 # Ruff stuff:
 .ruff_cache/
 
