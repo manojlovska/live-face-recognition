@@ -1,18 +1,16 @@
 # Current State
 
 ## Status
-Work Order 1 scaffold implementation is complete and the repository layout has been repaired to root-level `docs/`.
+Work Order 3 contract layer implementation is complete and the repository layout has been repaired to root-level `docs/`.
 
 ## Current implemented state:
-- CPU-only FastAPI scaffold exists.
-- `/healthz` exists.
+- `/healthz` exists and is public.
 - `/readyz` exists and returns not_ready until models/gallery are implemented.
-- Reusable one-key Bearer authentication dependency exists.
-- Pytest and Ruff are configured.
-- No protected inference endpoints exist yet.
-- No `/v1/models` endpoint exists yet.
-- No image ingestion or inference exists yet.
-- No OpenAI-compatible chat endpoint exists yet.
+- One-key Bearer authentication exists.
+- `/v1/models` exists and is protected.
+- `/v1/face/similarity` exists as a protected JSON contract but returns engine_not_ready.
+- No image decoding or inference exists yet.
+- No OpenAI chat completions endpoint exists yet.
 
 ## Current Truth
 - Project goal is defined.
@@ -30,14 +28,14 @@ Work Order 1 scaffold implementation is complete and the repository layout has b
 - `/healthz` route
 - `/readyz` route
 - API key authentication dependency
+- `/v1/models` route contract
+- `/v1/face/similarity` contract with stub engine
 - Pytest-based health/config smoke tests
 - Ruff and packaging configuration
 
 ## Missing
-- Auth dependency
-- Readiness endpoint
-- OpenAI-compatible endpoints
-- Native face-similarity endpoint
+- Image decoding
+- OpenAI-compatible chat endpoint
 - Model downloader/loader
 - Gallery artifacts and builder
 - Full test coverage
@@ -53,9 +51,10 @@ Work Order 1 scaffold implementation is complete and the repository layout has b
 ## Last completed work:
 - Work Order 1: initial FastAPI scaffold.
 - Work Order 2: one-key Bearer authentication and `/readyz`.
+- Work Order 3: `/v1/models` and native `/v1/face/similarity` contract with stub engine.
 
 ## Next recommended work:
-- Work Order 3: add `/v1/models` and native `/v1/face/similarity` contract with a stub engine.
+- Work Order 4: add image decoding and validation for native JSON image requests, still without model inference.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

@@ -34,7 +34,7 @@ curl http://127.0.0.1:8000/readyz
 
 ## Authentication
 
-Future protected endpoints will require:
+Protected endpoints require:
 
 ```http
 Authorization: Bearer <FACE_API_KEY>
@@ -44,9 +44,18 @@ Set `FACE_API_KEY` locally in `.env` before using protected routes.
 
 ```bash
 export FACE_API_KEY="change-me-local-dev-key"
-# Future protected endpoints will use:
+# Current and future protected endpoints use:
 # curl -H "Authorization: Bearer $FACE_API_KEY" http://127.0.0.1:8000/...
 ```
+
+## Model list
+
+```bash
+curl -H "Authorization: Bearer change-me-local-dev-key" \
+  http://localhost:8000/v1/models
+```
+
+`/v1/models` is protected and lists the configured model ID. The similarity engine is still not ready.
 
 ## Quality checks
 

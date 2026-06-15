@@ -17,6 +17,12 @@ celeba-face-similarity-cpu
 ### `POST /v1/chat/completions`
 Must accept supported image-containing chat requests and return face-similarity results in the assistant message.
 
+## Current State
+
+`/v1/models` now exists and is protected by Bearer API key auth.
+
+`/v1/chat/completions` is still not implemented.
+
 ## Example Client Use
 
 ```python
@@ -48,7 +54,7 @@ response = client.chat.completions.create(
 - OpenAI Python client with custom `base_url`
 - Bearer API key
 - `/v1/models`
-- `/v1/chat/completions`
+- `/v1/chat/completions` later
 - image input using base64 data URL
 - non-streaming response
 

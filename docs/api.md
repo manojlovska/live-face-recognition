@@ -15,6 +15,9 @@ Returns process liveness. Does not require model/gallery readiness.
 ### `GET /readyz`
 Returns readiness state. Should report whether required models and gallery artifacts are loaded.
 
+### `GET /v1/models`
+Returns the configured model metadata and requires `Authorization: Bearer <FACE_API_KEY>`.
+
 ## Native Endpoint
 
 ### `POST /v1/face/similarity`
@@ -22,21 +25,12 @@ Canonical endpoint for face-similarity inference.
 
 Expected responsibilities:
 - validate API key;
-- accept an image;
-- validate image size/type;
-- detect face(s);
-- compute embeddings;
-- search gallery;
-- return top-k matches.
+- accept a JSON image request;
+- validate request shape;
+- return `engine_not_ready` until model loading exists;
+- later: validate image size/type, detect face(s), compute embeddings, search gallery, return top-k matches.
 
 ## OpenAI-Compatible Endpoints
-
-### `GET /v1/models`
-Returns available model metadata. MVP model name:
-
-```text
-celeba-face-similarity-cpu
-```
 
 ### `POST /v1/chat/completions`
 Accepts a supported OpenAI-style image request and returns an assistant message containing structured face-similarity JSON.
