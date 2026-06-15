@@ -7,12 +7,14 @@ Local CPU machine or development VM.
 Expected initial variables:
 
 ```text
-FACE_API_KEY=change-me
+FACE_API_KEY=change-me-local-dev-key
 FACE_MODEL_ID=celeba-face-similarity-cpu
 FACE_GALLERY_PATH=data/gallery
 FACE_MAX_IMAGE_BYTES=...
 FACE_MAX_IMAGE_PIXELS=...
 ```
+
+Set `FACE_API_KEY` before starting the service so protected endpoints can reject missing or wrong credentials.
 
 Exact variables must be updated once implementation exists.
 

@@ -8,9 +8,9 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Gate | Required evidence | Status |
 |---|---|---|
 | Install | documented local install works | not started |
-| Auth | one-key auth tested | not started |
-| Health | `/healthz` tested | not started |
-| Readiness | `/readyz` tested | not started |
+| Auth | one-key auth tested | in progress |
+| Health | `/healthz` tested | in progress |
+| Readiness | `/readyz` tested | in progress |
 | Models | `/v1/models` tested | not started |
 | Native API | `/v1/face/similarity` tested | not started |
 | OpenAI API | non-streaming `/v1/chat/completions` works | not started |
@@ -18,7 +18,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Gallery | small gallery works | not started |
 | Privacy | no image/embedding retention by default | not started |
 | Docs | README and core docs updated | in progress |
-| Tests | `pytest` and `ruff check` pass | not started |
+| Tests | `pytest` and `ruff check` pass | in progress |
 
 ## RC1 Gates
 

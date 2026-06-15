@@ -82,4 +82,9 @@ Revisit this roadmap if:
 - a different model stack is approved by ADR.
 
 ## Scaffold Status
-The initial scaffold work is now in progress in the repository. The next milestone is one-key authentication and readiness routing.
+The initial scaffold work is complete. One-key authentication and readiness routing are now implemented. The next milestone is the `/v1/models` scaffold.
+
+## Work Order Status
+- Work Order 1: complete.
+- Work Order 2: complete.
+- Work Order 3: next.

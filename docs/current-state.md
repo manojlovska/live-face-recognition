@@ -5,11 +5,11 @@ Work Order 1 scaffold implementation is complete and the repository layout has b
 
 ## Current implemented state:
 - CPU-only FastAPI scaffold exists.
-- Settings loader exists.
 - `/healthz` exists.
+- `/readyz` exists and returns not_ready until models/gallery are implemented.
+- Reusable one-key Bearer authentication dependency exists.
 - Pytest and Ruff are configured.
-- No auth layer exists yet.
-- No `/readyz` endpoint exists yet.
+- No protected inference endpoints exist yet.
 - No `/v1/models` endpoint exists yet.
 - No image ingestion or inference exists yet.
 - No OpenAI-compatible chat endpoint exists yet.
@@ -28,6 +28,8 @@ Work Order 1 scaffold implementation is complete and the repository layout has b
 - FastAPI application entry point
 - Basic settings loader
 - `/healthz` route
+- `/readyz` route
+- API key authentication dependency
 - Pytest-based health/config smoke tests
 - Ruff and packaging configuration
 
@@ -50,9 +52,10 @@ Work Order 1 scaffold implementation is complete and the repository layout has b
 
 ## Last completed work:
 - Work Order 1: initial FastAPI scaffold.
+- Work Order 2: one-key Bearer authentication and `/readyz`.
 
 ## Next recommended work:
-- Work Order 2: add one-key Bearer authentication and `/readyz`.
+- Work Order 3: add `/v1/models` and native `/v1/face/similarity` contract with a stub engine.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.
