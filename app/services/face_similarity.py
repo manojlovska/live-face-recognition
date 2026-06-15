@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+
 import numpy as np
 from fastapi import Request
 from pydantic import BaseModel, Field
@@ -14,11 +16,101 @@ from app.services.model_runtime import (
     ModelRuntime,
 )
 
+_EMBEDDING_MODEL_NAME = "opencv-sface"
+
 
 class FaceSimilarityRequest(BaseModel):
     image: str = Field(min_length=1)
     top_k: int = Field(default=5, ge=1, le=20)
     return_face_boxes: bool = True
+
+
+@dataclass(slots=True)
+class FaceLandmarks:
+    right_eye: tuple[float, float] | None
+    left_eye: tuple[float, float] | None
+    nose_tip: tuple[float, float] | None
+    right_mouth_corner: tuple[float, float] | None
+    left_mouth_corner: tuple[float, float] | None
+
+    def as_dict(self) -> dict[str, list[int] | None]:
+        return {
+            "right_eye": _point_to_list(self.right_eye),
+            "left_eye": _point_to_list(self.left_eye),
+            "nose_tip": _point_to_list(self.nose_tip),
+            "right_mouth_corner": _point_to_list(self.right_mouth_corner),
+            "left_mouth_corner": _point_to_list(self.left_mouth_corner),
+        }
+
+
+@dataclass(slots=True)
+class DetectedFace:
+    box: tuple[float, float, float, float]
+    detection_score: float
+    landmarks: FaceLandmarks | None
+    raw_detection_row: np.ndarray = field(repr=False, compare=False)
+
+    def to_public_dict(self) -> dict[str, object]:
+        face: dict[str, object] = {
+            "box": [int(round(value)) for value in self.box],
+            "detection_score": float(round(self.detection_score, 6)),
+            "top_matches": [],
+        }
+        face["landmarks"] = self.landmarks.as_dict() if self.landmarks is not None else None
+        return face
+
+
+@dataclass(slots=True)
+class FaceEmbedding:
+    model: str
+    generated: bool
+    returned: bool
+    dimension: int | None
+    error: str | None = None
+    vector: np.ndarray | None = field(default=None, repr=False, compare=False)
+
+    def to_public_dict(self) -> dict[str, object]:
+        public_embedding: dict[str, object] = {
+            "model": self.model,
+            "generated": self.generated,
+            "returned": self.returned,
+            "dimension": self.dimension,
+        }
+        if self.error is not None:
+            public_embedding["error"] = self.error
+        return public_embedding
+
+
+@dataclass(slots=True)
+class AnalyzedFace:
+    detection: DetectedFace
+    embedding: FaceEmbedding | None = None
+    top_matches: list[dict[str, object]] = field(default_factory=list)
+
+    def to_public_dict(self) -> dict[str, object]:
+        face = self.detection.to_public_dict()
+        if self.embedding is not None:
+            face["embedding"] = self.embedding.to_public_dict()
+        face["top_matches"] = self.top_matches
+        return face
+
+
+@dataclass(slots=True)
+class FaceAnalysisResult:
+    object_name: str
+    model: str
+    mode: str
+    faces: list[AnalyzedFace]
+    disclaimer: str
+
+    def to_public_dict(self) -> dict[str, object]:
+        return {
+            "object": self.object_name,
+            "model": self.model,
+            "mode": self.mode,
+            "faces": [face.to_public_dict() for face in self.faces],
+            "disclaimer": self.disclaimer,
+        }
 
 
 class FaceSimilarityEngine:
@@ -28,37 +120,62 @@ class FaceSimilarityEngine:
     def is_ready(self) -> bool:
         return False
 
+    def mode(self) -> str:
+        runtime_status = self._runtime_status()
+        detector_state = self._model_state(runtime_status, "detector")
+        embedder_state = self._model_state(runtime_status, "embedder")
+        if detector_state != MODEL_STATE_LOADED:
+            return "engine_not_ready"
+        if embedder_state == MODEL_STATE_LOADED:
+            return "embedding_only"
+        return "detection_only"
+
     def analyze(
         self,
         request: FaceSimilarityRequest,
         image: DecodedImage,
     ) -> dict[str, object]:
         runtime = self._require_runtime()
-        if runtime.detector_state() != MODEL_STATE_LOADED:
+        detector_state = self._runtime_model_state(runtime, "detector")
+        if detector_state != MODEL_STATE_LOADED:
             raise EngineNotReadyError
 
-        detector = runtime.get_detector()
+        detector = getattr(runtime, "get_detector", lambda: None)()
         if detector is None:
             raise EngineNotReadyError
 
+        bgr_image = image.rgb_array[:, :, ::-1].copy()
         try:
-            faces = _run_yunet_detection(detector, image)
+            detected_faces = _run_yunet_detection(detector, bgr_image, image.width, image.height)
         except Exception as exc:  # pragma: no cover - exercised via model/runtime failures
             raise EngineNotReadyError from exc
 
+        embedder_state = self._runtime_model_state(runtime, "embedder")
+        embedder = getattr(runtime, "get_embedder", lambda: None)()
+        if embedder_state == MODEL_STATE_LOADED and embedder is not None:
+            analyzed_faces = [
+                AnalyzedFace(
+                    detection=face,
+                    embedding=_generate_embedding(embedder, face, bgr_image),
+                )
+                for face in detected_faces
+            ]
+            return _build_embedding_response(
+                model_id=runtime.model_id,
+                faces=analyzed_faces,
+            )
+
         return _build_detection_response(
             model_id=runtime.model_id,
-            faces=faces,
+            faces=[AnalyzedFace(detection=face) for face in detected_faces],
         )
 
     def status(self) -> dict[str, object]:
         runtime_status = self._runtime_status()
         return {
             "state": self.state(),
+            "mode": self.mode(),
             "ready": self.is_ready(),
-            "mode": "detection_only"
-            if runtime_status["models"]["detector"] == MODEL_STATE_LOADED
-            else "not_ready",
             "models": runtime_status["models"],
             "gallery": runtime_status["gallery"],
             "load_error": runtime_status["load_error"],
@@ -68,15 +185,22 @@ class FaceSimilarityEngine:
 
     def state(self) -> str:
         runtime_status = self._runtime_status()
-        detector_state = runtime_status["models"]["detector"]
+        detector_state = self._model_state(runtime_status, "detector")
+        embedder_state = self._model_state(runtime_status, "embedder")
         if detector_state == MODEL_STATE_ERROR:
             return "detector_error"
         if detector_state == MODEL_STATE_MISSING:
             return "models_missing"
-        if detector_state == MODEL_STATE_LOADED:
-            return "detector_loaded_gallery_missing"
-        if detector_state == MODEL_STATE_PRESENT_NOT_LOADED:
+        if detector_state != MODEL_STATE_LOADED:
             return "engine_not_ready"
+        if embedder_state == MODEL_STATE_ERROR:
+            return "embedder_error"
+        if embedder_state == MODEL_STATE_LOADED:
+            return "embedding_models_loaded_gallery_missing"
+        if embedder_state == MODEL_STATE_MISSING:
+            return "detector_loaded_gallery_missing"
+        if embedder_state == MODEL_STATE_PRESENT_NOT_LOADED:
+            return MODEL_STATE_PRESENT_NOT_LOADED
         return "engine_not_ready"
 
     def _require_runtime(self) -> ModelRuntime:
@@ -101,22 +225,85 @@ class FaceSimilarityEngine:
 
         return runtime.status()
 
+    @staticmethod
+    def _model_state(runtime_status: dict[str, object], key: str) -> str:
+        models = runtime_status.get("models")
+        if isinstance(models, dict):
+            value = models.get(key)
+            if isinstance(value, str):
+                return value
+        return MODEL_STATE_MISSING
+
+    @staticmethod
+    def _runtime_model_state(runtime: ModelRuntime, key: str) -> str:
+        getter_name = f"{key}_state"
+        getter = getattr(runtime, getter_name, None)
+        if callable(getter):
+            value = getter()
+            if isinstance(value, str):
+                return value
+        return MODEL_STATE_MISSING
+
 
 def get_engine(request: Request) -> FaceSimilarityEngine:
     return request.app.state.face_similarity_engine
 
 
-def _run_yunet_detection(detector: object, image: DecodedImage) -> list[dict[str, object]]:
+def _run_yunet_detection(
+    detector: object,
+    bgr_image: np.ndarray,
+    width: int,
+    height: int,
+) -> list[DetectedFace]:
     if hasattr(detector, "setInputSize"):
-        detector.setInputSize((image.width, image.height))
+        detector.setInputSize((width, height))
 
-    bgr_image = image.rgb_array[:, :, ::-1].copy()
     detection_result = detector.detect(bgr_image)
     faces = _extract_faces_array(detection_result)
     if faces.size == 0:
         return []
 
     return [_format_face(row) for row in _reshape_face_rows(faces)]
+
+
+def _generate_embedding(
+    embedder: object,
+    face: DetectedFace,
+    bgr_image: np.ndarray,
+) -> FaceEmbedding:
+    try:
+        aligned_face = _align_face(embedder, face, bgr_image)
+        feature = _extract_feature(embedder, aligned_face)
+        vector = np.asarray(feature, dtype=np.float32).reshape(-1)
+        return FaceEmbedding(
+            model=_EMBEDDING_MODEL_NAME,
+            generated=True,
+            returned=False,
+            dimension=int(vector.size),
+            vector=vector,
+        )
+    except Exception:  # pragma: no cover - exercised via failure fakes
+        return FaceEmbedding(
+            model=_EMBEDDING_MODEL_NAME,
+            generated=False,
+            returned=False,
+            dimension=None,
+            error="embedding_failed",
+        )
+
+
+def _align_face(embedder: object, face: DetectedFace, bgr_image: np.ndarray) -> np.ndarray:
+    if hasattr(embedder, "alignCrop"):
+        detection_row = face.raw_detection_row.reshape(1, -1)
+        aligned_face = embedder.alignCrop(bgr_image, detection_row)
+        return np.asarray(aligned_face)
+    return np.asarray(bgr_image)
+
+
+def _extract_feature(embedder: object, aligned_face: np.ndarray) -> object:
+    if hasattr(embedder, "feature"):
+        return embedder.feature(aligned_face)
+    return aligned_face
 
 
 def _extract_faces_array(detection_result: object) -> np.ndarray:
@@ -144,44 +331,80 @@ def _reshape_face_rows(faces: np.ndarray) -> np.ndarray:
     return faces
 
 
-def _format_face(face: np.ndarray) -> dict[str, object]:
+def _format_face(face: np.ndarray) -> DetectedFace:
     flattened = np.asarray(face, dtype=np.float32).reshape(-1)
-    if flattened.shape[0] < 15:
-        return {
-            "box": [int(round(value)) for value in flattened[:4]],
-            "detection_score": float(round(float(flattened[-1]), 6)) if flattened.size else 0.0,
-            "landmarks": None,
-            "top_matches": [],
-        }
-
-    return {
-        "box": [int(round(value)) for value in flattened[:4]],
-        "detection_score": float(round(float(flattened[14]), 6)),
-        "landmarks": {
-            "right_eye": [int(round(flattened[4])), int(round(flattened[5]))],
-            "left_eye": [int(round(flattened[6])), int(round(flattened[7]))],
-            "nose_tip": [int(round(flattened[8])), int(round(flattened[9]))],
-            "right_mouth_corner": [int(round(flattened[10])), int(round(flattened[11]))],
-            "left_mouth_corner": [int(round(flattened[12])), int(round(flattened[13]))],
-        },
-        "top_matches": [],
-    }
+    box = tuple(float(value) for value in flattened[:4])
+    detection_score = float(flattened[14]) if flattened.size >= 15 else 0.0
+    landmarks = None
+    if flattened.size >= 15:
+        landmarks = FaceLandmarks(
+            right_eye=_point_from_flattened(flattened, 4, 5),
+            left_eye=_point_from_flattened(flattened, 6, 7),
+            nose_tip=_point_from_flattened(flattened, 8, 9),
+            right_mouth_corner=_point_from_flattened(flattened, 10, 11),
+            left_mouth_corner=_point_from_flattened(flattened, 12, 13),
+        )
+    return DetectedFace(
+        box=box,
+        detection_score=detection_score,
+        landmarks=landmarks,
+        raw_detection_row=flattened.copy(),
+    )
 
 
 def _build_detection_response(
     *,
     model_id: str,
-    faces: list[dict[str, object]],
+    faces: list[AnalyzedFace],
 ) -> dict[str, object]:
-    if faces:
-        disclaimer = "Detection-only result. Similarity matching is not implemented yet."
-    else:
-        disclaimer = "No faces detected. Similarity matching is not implemented yet."
+    disclaimer = (
+        "Detection-only result. Similarity matching is not implemented yet."
+        if faces
+        else "No faces detected. Similarity matching is not implemented yet."
+    )
 
-    return {
-        "object": "face_similarity.detection_result",
-        "model": model_id,
-        "mode": "detection_only",
-        "faces": faces,
-        "disclaimer": disclaimer,
-    }
+    result = FaceAnalysisResult(
+        object_name="face_similarity.detection_result",
+        model=model_id,
+        mode="detection_only",
+        faces=faces,
+        disclaimer=disclaimer,
+    )
+    return result.to_public_dict()
+
+
+def _build_embedding_response(
+    *,
+    model_id: str,
+    faces: list[AnalyzedFace],
+) -> dict[str, object]:
+    disclaimer = (
+        "Embeddings were generated internally. CelebA similarity matching is not implemented yet."
+        if faces
+        else "No faces detected. CelebA similarity matching is not implemented yet."
+    )
+
+    result = FaceAnalysisResult(
+        object_name="face_similarity.embedding_result",
+        model=model_id,
+        mode="embedding_only",
+        faces=faces,
+        disclaimer=disclaimer,
+    )
+    return result.to_public_dict()
+
+
+def _point_from_flattened(
+    flattened: np.ndarray,
+    x_index: int,
+    y_index: int,
+) -> tuple[float, float] | None:
+    if flattened.size <= y_index:
+        return None
+    return float(flattened[x_index]), float(flattened[y_index])
+
+
+def _point_to_list(point: tuple[float, float] | None) -> list[int] | None:
+    if point is None:
+        return None
+    return [int(round(point[0])), int(round(point[1]))]

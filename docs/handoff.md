@@ -5,7 +5,8 @@
 - Service has `/healthz`, `/readyz`, `/v1/models`, and `/v1/face/similarity` contract routes.
 - Valid `/v1/face/similarity` image requests are decoded and validated in memory.
 - Model asset paths are configurable and model presence can be checked.
-- YuNet detection-only responses can be returned when the detector is loaded.
+- YuNet detection-only responses and internal SFace embeddings can be returned when the models are loaded.
+- Raw embeddings are not returned by default.
 - Tests and Ruff passed after scaffold and repair work.
 - Documentation lives at root-level `docs/`.
 
@@ -39,7 +40,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 7: add SFace face alignment and embedding generation for detected faces, still without CelebA gallery search.
+Work Order 8: add local gallery artifact loading and exact cosine similarity search over a small test gallery, still without full CelebA build.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

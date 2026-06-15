@@ -43,7 +43,7 @@ Plain base64 strings are rejected for now.
 
 ## Current Behavior
 
-Authorized valid image requests are decoded and validated in memory. If the YuNet detector is loaded, the endpoint returns detection-only face boxes. If the detector is missing or unavailable, the request returns `503 Service Unavailable` with:
+Authorized valid image requests are decoded and validated in memory. If the YuNet detector is loaded, the endpoint returns detection-only face boxes. If YuNet and SFace are both loaded, the endpoint returns an embedding-capable result with internal embedding metadata and no raw embedding vector. If the detector is missing or unavailable, the request returns `503 Service Unavailable` with:
 
 ```json
 {
@@ -84,13 +84,46 @@ If no faces are detected, the response still returns HTTP `200` with:
 
 ```json
 {
-  "object": "face_similarity.detection_result",
+  "object": "face_similarity.embedding_result",
   "model": "celeba-face-similarity-cpu",
-  "mode": "detection_only",
+  "mode": "embedding_only",
   "faces": [],
-  "disclaimer": "No faces detected. Similarity matching is not implemented yet."
+  "disclaimer": "No faces detected. CelebA similarity matching is not implemented yet."
 }
 ```
+
+When embedding-only mode is available, the response has this shape:
+
+```json
+{
+  "object": "face_similarity.embedding_result",
+  "model": "celeba-face-similarity-cpu",
+  "mode": "embedding_only",
+  "faces": [
+    {
+      "box": [112, 80, 220, 220],
+      "detection_score": 0.97,
+      "landmarks": {
+        "right_eye": [150, 130],
+        "left_eye": [190, 130],
+        "nose_tip": [170, 155],
+        "right_mouth_corner": [152, 185],
+        "left_mouth_corner": [188, 185]
+      },
+      "embedding": {
+        "model": "opencv-sface",
+        "generated": true,
+        "returned": false,
+        "dimension": 128
+      },
+      "top_matches": []
+    }
+  ],
+  "disclaimer": "Embeddings were generated internally. CelebA similarity matching is not implemented yet."
+}
+```
+
+If embedding generation fails for a face, the `embedding` object reports `generated: false` and `error: "embedding_failed"`. Raw embedding vectors are never returned in public responses.
 
 ## Future Success Response
 
@@ -128,8 +161,10 @@ When inference is implemented, the response should include the similarity result
 - Non-image bytes return `invalid_image`.
 - Invalid `top_k` returns validation error.
 - Valid authorized requests return detection-only results when YuNet is loaded.
+- Valid authorized requests return embedding-only results when YuNet and SFace are loaded.
 - Valid authorized requests return `engine_not_ready` when YuNet is not loaded or cannot be used.
 - Detection output never includes embeddings.
+- Embedding output never includes raw vectors.
 - `top_matches` is an empty list until gallery search exists.
 - No face requests return HTTP `200` with an empty `faces` list.
 

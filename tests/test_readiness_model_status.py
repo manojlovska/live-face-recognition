@@ -95,7 +95,7 @@ def test_readyz_reports_detector_loaded_gallery_missing(monkeypatch, tmp_path) -
 
     assert response.status_code == 503
     body = response.json()
-    assert body["checks"]["models"] == "detector_loaded_gallery_missing"
+    assert body["checks"]["models"] == "embedding_models_loaded_gallery_missing"
     assert body["checks"]["gallery"] == "not_loaded"
     assert body["checks"]["model_assets"]["detector"]["exists"] is True
     assert body["checks"]["model_assets"]["embedder"]["exists"] is True

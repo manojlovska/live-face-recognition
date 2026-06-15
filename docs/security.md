@@ -47,6 +47,7 @@ Do not log:
 - base64 image payloads;
 - raw image bytes;
 - face embeddings;
+- raw embedding vectors;
 - Authorization headers;
 - API keys;
 - full request bodies containing images.
