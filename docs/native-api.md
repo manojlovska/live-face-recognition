@@ -189,3 +189,5 @@ If no faces are detected in similarity mode, the API returns HTTP `200` with `fa
 Uploaded image data is decoded in memory and discarded by default. No uploaded images or decoded images are stored by default.
 
 The OpenAI-compatible chat adapter uses the same native validation and decoding path; the only difference is whether the final response is returned as JSON or SSE chunks.
+
+The browser demo calls this endpoint once per capture button press and does not continuously stream frames.

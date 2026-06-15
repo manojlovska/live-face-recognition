@@ -18,6 +18,9 @@ Returns readiness state. Should report whether required models and gallery artif
 ### `GET /v1/models`
 Returns the configured model metadata and requires `Authorization: Bearer <FACE_API_KEY>`.
 
+### `GET /demo`
+Returns the built-in browser demo HTML page. The demo page is public, but any API request it sends still requires Bearer auth.
+
 ## Native Endpoint
 
 ### `POST /v1/face/similarity`

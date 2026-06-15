@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CelebA Face Similarity Demo</title>
+    <link rel="stylesheet" href="/static/demo.css" />
+    <script src="/static/demo.js" defer></script>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Local CPU demo</p>
+        <h1>CelebA Face Similarity Demo</h1>
+        <p class="lede">
+          Similarity only. This page captures one webcam frame on demand and sends it to the
+          local API. It does not verify identity.
+        </p>
+      </section>
+
+      <section class="panel controls" aria-label="Capture controls">
+        <label>
+          API key
+          <input
+            id="api-key"
+            name="api-key"
+            type="password"
+            autocomplete="off"
+            placeholder="change-me-local-dev-key"
+          />
+        </label>
+
+        <label>
+          top_k
+          <input id="top-k" name="top-k" type="number" min="1" max="20" value="5" />
+        </label>
+
+        <p class="endpoint-note">
+          Native endpoint: <code>/v1/face/similarity</code>
+        </p>
+
+        <div class="button-row">
+          <button id="start-camera" type="button">Start camera</button>
+          <button id="capture-frame" type="button" disabled>Capture frame</button>
+          <button id="stop-camera" type="button">Stop camera</button>
+        </div>
+
+        <p class="privacy-note">
+          Frame is sent only when you click Capture frame. No continuous streaming. The image is
+          not stored by default.
+        </p>
+      </section>
+
+      <section class="panel preview-panel" aria-label="Camera preview">
+        <video id="video" autoplay playsinline muted></video>
+      </section>
+
+      <section class="panel output" aria-label="Result output">
+        <div class="status-row">
+          <p id="status" class="status">Camera is stopped.</p>
+          <p id="http-status" class="http-status"></p>
+        </div>
+        <h2>Result</h2>
+        <pre id="result" class="result">{}</pre>
+      </section>
+
+      <section class="panel output error-panel" aria-label="Error output">
+        <h2>Error</h2>
+        <pre id="error" class="error">{}</pre>
+      </section>
+    </main>
+  </body>
+</html>
