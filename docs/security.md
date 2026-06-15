@@ -12,6 +12,12 @@ Authorization: Bearer <FACE_API_KEY>
 
 The key is loaded from environment variable `FACE_API_KEY` or a documented equivalent.
 
+- `FACE_API_KEY` is the single API key.
+- Protected endpoints must require `Authorization: Bearer <key>`.
+- `/healthz` and `/readyz` are public operational endpoints unless later changed.
+- Keys must never be logged.
+- Missing `FACE_API_KEY` fails closed for protected endpoints.
+
 ## Required Auth Behavior
 - Missing Authorization header is rejected.
 - Wrong scheme is rejected.

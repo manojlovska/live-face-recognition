@@ -35,8 +35,7 @@ OpenAI-compatible endpoints should return an OpenAI-style error object where pra
 
 | Case | Code suggestion | HTTP status |
 |---|---|---:|
-| Missing API key | `missing_api_key` | 401 |
-| Invalid API key | `invalid_api_key` | 401 |
+| Missing or invalid API key | `invalid_api_key` | 401 |
 | Unsupported route | `not_found` | 404 |
 | Unsupported model | `model_not_found` | 404 |
 | Invalid image | `invalid_image` | 400 |
@@ -53,3 +52,18 @@ OpenAI-compatible endpoints should return an OpenAI-style error object where pra
 - Whether multi-face requests process all faces, the best face, or require explicit `max_faces`.
 
 These decisions must be finalized before MVP.
+
+## Authentication Error Shape
+Authentication failures should use a compact, OpenAI-style error envelope:
+
+```json
+{
+  "error": {
+    "message": "Invalid or missing API key.",
+    "type": "authentication_error",
+    "code": "invalid_api_key"
+  }
+}
+```
+
+Return HTTP `401 Unauthorized` with `WWW-Authenticate: Bearer`.

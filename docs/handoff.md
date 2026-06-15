@@ -2,9 +2,9 @@
 
 ## Current Truth
 - Scaffold commit exists: `5bb85a8` or current equivalent.
-- Service has `/healthz` only.
-- Tests and Ruff passed after scaffold.
-- Documentation has been repaired to root-level `docs/`.
+- Service has `/healthz` and `/readyz`.
+- Tests and Ruff passed after scaffold and repair work.
+- Documentation lives at root-level `docs/`.
 
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
@@ -19,11 +19,10 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - Similarity-only language, not identity verification.
 
 ## Implemented
-- Documentation starter pack and scaffold repair.
+- Documentation starter pack, scaffold repair, and readiness/auth layer.
 
 ## Missing
-- Auth layer
-- `/readyz`
+- Protected inference endpoints
 - `/v1/models`
 - Native face-similarity endpoint
 - Inference pipeline
@@ -39,7 +38,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 2: one-key Bearer authentication and `/readyz`.
+Work Order 3: add `/v1/models` and native `/v1/face/similarity` contract with a stub engine.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.
