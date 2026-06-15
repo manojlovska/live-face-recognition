@@ -10,6 +10,7 @@
 - Tests and Ruff passed after scaffold and repair work.
 - Documentation lives at root-level `docs/`.
 - Local gallery artifacts can be loaded from `data/gallery/` or test fixtures.
+- A small CelebA-like gallery builder skeleton can process local sample directories.
 
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
@@ -24,7 +25,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - Similarity-only language, not identity verification.
 
 ## Implemented
-- Documentation starter pack, scaffold repair, readiness/auth layer, protected contract routes, image validation, model asset loading skeleton, YuNet detection-only output, internal SFace embeddings, and local gallery search over artifact fixtures.
+- Documentation starter pack, scaffold repair, readiness/auth layer, protected contract routes, image validation, model asset loading skeleton, YuNet detection-only output, internal SFace embeddings, local gallery search over artifact fixtures, and an offline sample-gallery builder skeleton.
 
 ## Missing
 - Full CelebA gallery build
@@ -38,7 +39,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 9: add an offline CelebA gallery builder skeleton that processes a small sample directory first, not the full dataset yet.
+Work Order 10: extend the gallery builder toward full CelebA dataset layout support and add builder performance/quality reporting, still without OpenAI chat completions.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

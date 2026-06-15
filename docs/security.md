@@ -44,6 +44,8 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - Gallery embeddings and metadata are operator-supplied local files; the service does not download them at runtime.
 - Do not log query embeddings or gallery embeddings.
 - Similarity matches must come from loaded gallery metadata only.
+- The offline gallery builder must not log raw image bytes or embeddings.
+- The offline gallery builder must not write aligned face crops or debug images.
 
 ## Logging Rules
 Do not log:
@@ -55,6 +57,7 @@ Do not log:
 - Authorization headers;
 - API keys;
 - full request bodies containing images.
+- raw image bytes from gallery-building inputs.
 
 Log only safe metadata such as:
 - request ID;
@@ -67,6 +70,7 @@ Log only safe metadata such as:
 - image payloads or decoded bytes.
 - model asset paths or checksums unless the value is already a documented non-secret artifact.
 - gallery artifact paths or checksums unless the value is already a documented non-secret artifact.
+- builder input or output paths unless already documented as local non-secret artifacts.
 
 ## Request Limits
 The service should define:

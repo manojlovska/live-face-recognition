@@ -232,4 +232,6 @@ models/*
 !models/.gitkeep
 data/gallery/*
 !data/gallery/.gitkeep
+# Builder reports are generated output
+data/gallery/gallery_build_report.json
 .streamlit/secrets.toml

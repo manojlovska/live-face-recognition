@@ -1,7 +1,7 @@
 # Current State
 
 ## Status
-Work Order 8 local gallery-search implementation is complete.
+Work Order 9 offline gallery-builder skeleton implementation is complete.
 
 ## Current implemented state:
 - `/healthz` exists and is public.
@@ -18,6 +18,8 @@ Work Order 8 local gallery-search implementation is complete.
 - Model loading skeleton exists and YuNet detection plus internal SFace embedding generation exist.
 - A local gallery artifact can be loaded.
 - Exact cosine similarity search over a loaded gallery exists.
+- An offline gallery builder skeleton can process a small CelebA-like sample directory.
+- The builder reads a CelebA-style identity file and writes gallery embeddings, metadata, manifest, and build report.
 - If YuNet is available and loaded, valid images can return detection-only face boxes.
 - If YuNet and SFace are available and loaded, the service can generate internal face embeddings.
 - If YuNet, SFace, and a gallery artifact are loaded, the service can return `top_matches` from the gallery.
@@ -26,7 +28,7 @@ Work Order 8 local gallery-search implementation is complete.
 - top_matches is empty when no gallery artifact is loaded and populated when one is available.
 - `/readyz` returns ready only when the detector, embedder, and gallery are loaded; otherwise it remains not_ready.
 - Gallery support is artifact-based and test-gallery oriented.
-- Full CelebA gallery build is not implemented yet.
+- The builder is sample-scale first; full CelebA processing is not implemented yet.
 - No uploaded images or decoded images are stored by default.
 - No OpenAI chat completions endpoint exists yet.
 
@@ -52,6 +54,7 @@ Work Order 8 local gallery-search implementation is complete.
 - Model asset manager
 - CPU-only model loading skeleton
 - Gallery artifact loader and cosine search
+- Offline gallery builder skeleton
 - Pytest-based health/config smoke tests
 - Ruff and packaging configuration
 
@@ -79,9 +82,10 @@ Work Order 8 local gallery-search implementation is complete.
 - Work Order 6: YuNet face detection returning face boxes only.
 - Work Order 7: SFace face alignment and embedding generation for detected faces.
 - Work Order 8: local gallery artifact loading and exact cosine similarity search.
+- Work Order 9: offline gallery builder skeleton for a CelebA-like sample directory.
 
 ## Next recommended work:
-- Work Order 9: add an offline CelebA gallery builder skeleton that processes a small sample directory first, not the full dataset yet.
+- Work Order 10: extend the gallery builder toward full CelebA dataset layout support and add builder performance/quality reporting, still without OpenAI chat completions.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.
