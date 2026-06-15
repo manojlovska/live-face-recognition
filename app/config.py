@@ -11,6 +11,11 @@ class Settings(BaseSettings):
     app_version: str = "0.1.0"
     environment: str = Field(default="development", validation_alias="APP_ENVIRONMENT")
     model_id: str = Field(default="celeba-face-similarity-cpu", validation_alias="FACE_MODEL_ID")
+    max_image_bytes: int = Field(
+        default=5 * 1024 * 1024,
+        ge=1,
+        validation_alias="FACE_MAX_IMAGE_BYTES",
+    )
     face_api_key: str | None = None
 
 

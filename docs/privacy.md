@@ -5,8 +5,10 @@ This service processes face images. Face images and face embeddings can be sensi
 
 ## Default Retention Policy
 By default, the service:
+- decodes uploaded images in memory only;
 - processes uploaded images in memory;
 - does not store uploaded user images;
+- does not store decoded images;
 - does not store user face embeddings;
 - does not retain request bodies;
 - does not create user biometric profiles;
@@ -42,3 +44,8 @@ Any real deployment involving people should be reviewed for consent, data-protec
 
 ## Privacy Tests
 Where practical, tests should verify that normal requests do not create saved image or embedding files.
+
+## Current Image Handling
+- Uploaded image bytes are decoded in memory only.
+- No image retention exists by default.
+- No embedding retention exists yet.

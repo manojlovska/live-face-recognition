@@ -3,6 +3,7 @@
 ## Current Truth
 - Scaffold commit exists: `5bb85a8` or current equivalent.
 - Service has `/healthz`, `/readyz`, `/v1/models`, and `/v1/face/similarity` contract routes.
+- Valid `/v1/face/similarity` image requests are decoded and validated in memory.
 - Tests and Ruff passed after scaffold and repair work.
 - Documentation lives at root-level `docs/`.
 
@@ -19,11 +20,11 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - Similarity-only language, not identity verification.
 
 ## Implemented
-- Documentation starter pack, scaffold repair, readiness/auth layer, and protected contract routes.
+- Documentation starter pack, scaffold repair, readiness/auth layer, protected contract routes, and image validation.
 
 ## Missing
-- Image decoding
-- Native face-similarity implementation
+- Model asset management
+- CPU-only YuNet/SFace loading skeleton
 - Inference pipeline
 - Model loader
 - Gallery builder
@@ -37,7 +38,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 4: add image decoding and validation for native JSON image requests, still without model inference.
+Work Order 5: add model asset management and CPU-only YuNet/SFace model loading skeleton, still without full inference results.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

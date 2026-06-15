@@ -4,8 +4,10 @@ from app.api import face_similarity_router, health_router, models_router, readin
 from app.api.errors import (
     AuthenticationError,
     EngineNotReadyError,
+    ImageValidationError,
     authentication_error_response,
     engine_not_ready_error_response,
+    image_validation_error_response,
 )
 from app.config import get_settings
 from app.services.face_similarity import FaceSimilarityEngine
@@ -22,6 +24,7 @@ def create_app() -> FastAPI:
     app.include_router(face_similarity_router)
     app.add_exception_handler(AuthenticationError, auth_error_handler)
     app.add_exception_handler(EngineNotReadyError, engine_not_ready_handler)
+    app.add_exception_handler(ImageValidationError, image_validation_handler)
     return app
 
 
@@ -31,6 +34,10 @@ async def auth_error_handler(_request: Request, _exc: AuthenticationError):
 
 async def engine_not_ready_handler(_request: Request, _exc: EngineNotReadyError):
     return engine_not_ready_error_response()
+
+
+async def image_validation_handler(_request: Request, exc: ImageValidationError):
+    return image_validation_error_response(exc)
 
 
 app = create_app()

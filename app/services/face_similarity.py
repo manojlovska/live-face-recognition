@@ -2,6 +2,7 @@ from fastapi import Request
 from pydantic import BaseModel, Field
 
 from app.api.errors import EngineNotReadyError
+from app.services.image_input import DecodedImage
 
 
 class FaceSimilarityRequest(BaseModel):
@@ -14,7 +15,7 @@ class FaceSimilarityEngine:
     def is_ready(self) -> bool:
         return False
 
-    def analyze(self, request: FaceSimilarityRequest) -> None:
+    def analyze(self, request: FaceSimilarityRequest, image: DecodedImage) -> None:
         raise EngineNotReadyError
 
 

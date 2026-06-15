@@ -24,6 +24,7 @@ If a command is not run, report it as `not run` with the reason.
 | Readiness | `/readyz` reflects model/gallery load state |
 | Models | `/v1/models` returns expected model ID and remains protected |
 | Native API | `/v1/face/similarity` enforces contract and reports engine-not-ready |
+| Image validation | accepts valid JPEG/PNG/WebP data URLs and rejects malformed/unsupported/oversized/non-image payloads |
 | Request validation | accepts valid JSON contract and rejects invalid `top_k`/missing fields |
 | No-face | no-face behavior is deterministic and documented |
 | Gallery | gallery loads and top-k search is deterministic on fixtures |
