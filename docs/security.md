@@ -50,6 +50,8 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - The OpenAI-compatible chat adapter must enforce the same auth, image-size, and image-format rules as the native endpoint.
 - The OpenAI-compatible chat adapter must reject remote image URLs and multiple images.
 - `stream=true` is supported as SSE response streaming only; it is not live video streaming.
+- The browser demo must not persist API keys or captured images in browser storage.
+- The browser demo must not load third-party scripts or send data to third-party origins.
 
 ## Logging Rules
 Do not log:

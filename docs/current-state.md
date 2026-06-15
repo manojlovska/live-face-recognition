@@ -1,7 +1,7 @@
 # Current State
 
 ## Status
-Work Order 12 OpenAI-compatible streaming chat adapter implementation is complete.
+Work Order 13 browser demo implementation is complete.
 
 ## Current implemented state:
 - `/healthz` exists and is public.
@@ -10,6 +10,7 @@ Work Order 12 OpenAI-compatible streaming chat adapter implementation is complet
 - `/v1/models` exists and is protected.
 - `/v1/face/similarity` exists as a protected JSON contract that can return detection-only face boxes, internal embeddings, or gallery-backed similarity results.
 - `/v1/chat/completions` supports both non-streaming and `stream=true` OpenAI-compatible image similarity requests.
+- A small built-in browser demo is available at `/demo`.
 - `/v1/face/similarity` accepts authenticated JSON requests.
 - The OpenAI chat endpoint accepts one data URL image in an OpenAI-style `image_url` content part.
 - The OpenAI chat endpoint returns assistant content as JSON text in non-streaming mode and OpenAI-style SSE chunk frames in streaming mode.
@@ -37,8 +38,10 @@ Work Order 12 OpenAI-compatible streaming chat adapter implementation is complet
 - The builder is sample-scale first; full CelebA processing is not implemented yet.
 - No uploaded images or decoded images are stored by default.
 - `stream=true` uses OpenAI-style SSE chunk frames.
-- Browser UI is not implemented yet.
-- Live camera/frame streaming is not implemented yet.
+- The browser demo can capture one webcam frame and send it to `/v1/face/similarity`.
+- The browser demo does not continuously stream video.
+- The browser demo does not store API keys, images, or embeddings.
+- Live repeated-frame processing is not implemented yet.
 - The project still does not download CelebA.
 
 ## Current Truth
@@ -95,9 +98,10 @@ Work Order 12 OpenAI-compatible streaming chat adapter implementation is complet
 - Work Order 10: CelebA layout discovery, partition parsing, and builder quality/performance reporting.
 - Work Order 11: non-streaming OpenAI-compatible `/v1/chat/completions` adapter for image similarity requests.
 - Work Order 12: OpenAI-compatible `stream=true` SSE chat completions.
+- Work Order 13: small built-in browser demo for one-frame webcam capture.
 
 ## Next recommended work:
-- Work Order 13: add a small HTML5 browser demo that captures one webcam frame and calls the existing API, without live continuous streaming yet.
+- Work Order 14: add optional client-side face-box overlay for the browser demo using the existing single-frame response, still without continuous live streaming.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

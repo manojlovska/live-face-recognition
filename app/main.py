@@ -1,7 +1,11 @@
+from pathlib import Path
+
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 
 from app.api import (
     chat_completions_router,
+    demo_router,
     face_similarity_router,
     health_router,
     models_router,
@@ -30,8 +34,11 @@ def create_app() -> FastAPI:
     app.state.settings = settings
     app.state.model_runtime = ModelRuntime(settings)
     app.state.face_similarity_engine = FaceSimilarityEngine(app.state.model_runtime)
+    static_dir = Path(__file__).resolve().parent / "static"
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
     app.include_router(health_router)
     app.include_router(readiness_router)
+    app.include_router(demo_router)
     app.include_router(models_router)
     app.include_router(face_similarity_router)
     app.include_router(chat_completions_router)

@@ -1,49 +1,49 @@
 # Browser Demo Design
 
 ## Goal
-Provide a simple HTML5 interface where a user grants camera permission, sees a live preview, sends throttled frames to the API, and sees face boxes and similarity results drawn in the same browser window.
+Provide a simple HTML5 interface where a user grants camera permission, sees a live preview, captures a single frame on demand, sends that frame to the API, and reads the JSON result in the same browser window.
 
 ## Stage
-Browser demo is not part of MVP. Target for v0.5 / RC1.
+Browser demo is a local UI shell. It is intentionally smaller than the eventual live webcam demo and does not continuously stream frames.
 
 ## Architecture
 
 ```text
 Browser camera
   -> <video> preview
-  -> <canvas> capture every 200-500 ms
-  -> compressed JPEG/WebP frame
+  -> <canvas> capture on button click
+  -> compressed JPEG frame
   -> POST /v1/face/similarity
   -> result JSON
-  -> overlay canvas draws boxes and labels
+  -> JSON result display
 ```
 
 ## UI Requirements
 - API base URL input
 - API key input
 - start/stop camera buttons
+- capture-frame button
 - video preview
-- overlay canvas
-- frame rate/throttle setting
 - top-k result display
 - privacy notice
 - error display
 
+The current implementation keeps the API endpoint fixed to the local native endpoint and does not provide a live overlay yet.
+
 ## Privacy Requirements
 - Camera permission must be explicit.
-- Frames are sent to the configured backend.
+- The frame is sent only when the user clicks Capture frame.
 - Frames are not recorded by the browser UI.
 - Backend must not store frames by default.
 
 ## Performance Requirements
-- Do not send 30 FPS by default.
-- Resize frames before sending.
-- Avoid overlapping requests by default.
-- Show last successful result while next request is pending.
+- Do not loop frames continuously.
+- Send one request per capture click.
+- Show the most recent result or error clearly.
 
 ## Non-Goals
 - React/Vue frontend in first demo
 - account login
 - video recording
-- WebRTC streaming
+- live continuous streaming
 - browser-side recognition model

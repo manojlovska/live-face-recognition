@@ -16,6 +16,14 @@ pip install -e '.[dev]'
 uvicorn app.main:app --reload
 ```
 
+Open the browser demo at:
+
+```text
+http://localhost:8000/demo
+```
+
+Browser camera access usually requires `localhost` or HTTPS.
+
 ## Health check
 
 ```bash
@@ -132,6 +140,10 @@ for chunk in stream:
 ```
 
 `stream=True` returns SSE chat-completion chunks, not live video streaming.
+
+## Browser demo
+
+The built-in browser demo captures one webcam frame on demand and sends it to the native API. It does not continuously stream video and it does not store API keys or images in browser storage.
 
 ## Build gallery
 

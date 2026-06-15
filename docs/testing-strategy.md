@@ -68,6 +68,7 @@ Skipped integration tests must be reported as skipped, not passed.
 - script tests for dry-run, missing input, existing output, and successful sample builds.
 - OpenAI chat-completions tests for HTTP contract coverage, native error passthrough, and Python client compatibility against a local `base_url`.
 - OpenAI chat-completions streaming tests for SSE chunk shape, `[DONE]`, and Python client streaming compatibility against a local `base_url`.
+- Browser demo tests for `/demo`, local static assets, and no-storage/no-CDN script checks.
 
 ## Test Quality Rule
 For every important safety behavior, ask:

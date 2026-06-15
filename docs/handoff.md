@@ -14,6 +14,7 @@
 - The builder now understands common CelebA-style layouts and partition files.
 - The builder records quality and performance reporting for local runs.
 - The OpenAI chat adapter now supports both non-streaming responses and `stream=true` SSE chunks.
+- A small built-in browser demo now captures one webcam frame on demand and sends it to the native API.
 
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
@@ -42,7 +43,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 13: add a small HTML5 browser demo that captures one webcam frame and calls the existing API, without live continuous streaming yet.
+Work Order 14: add optional client-side face-box overlay for the browser demo using the existing single-frame response, still without continuous live streaming.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

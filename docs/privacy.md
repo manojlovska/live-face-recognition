@@ -33,8 +33,7 @@ Similarity result only; not identity verification.
 ## Browser Demo Privacy
 The browser demo must:
 - request camera permission explicitly;
-- explain that frames are sent to the configured API server;
-- throttle frame sending;
+- explain that one captured frame is sent only when the user clicks Capture frame;
 - not record video;
 - not store frames by default.
 

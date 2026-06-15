@@ -9,7 +9,7 @@
 | v0.2 | Full gallery | Reproducible CelebA gallery build and validation |
 | v0.3 | OpenAI compatibility | Minimal chat completions compatibility and SSE response streaming |
 | v0.4 | Live API | Repeated-frame API suitable for webcam workflows |
-| v0.5 | Browser demo | HTML5 camera interface with overlay |
+| v0.5 | Browser demo | HTML5 one-frame camera interface with overlay |
 | v0.6 | Hardening | Benchmarks, tests, docs, security, packaging |
 | v1.0-rc1 | RC1 | Controlled-pilot-ready research service |
 
@@ -46,7 +46,7 @@ RC1 is a controlled-pilot-ready research service with:
 
 - full/reproducible CelebA gallery workflow
 - OpenAI-compatible response streaming
-- browser webcam demo with frame throttling
+- browser webcam demo with one-frame capture
 - benchmark results on CPU
 - privacy/security/model documentation
 - expanded tests
@@ -83,7 +83,7 @@ Revisit this roadmap if:
 - a different model stack is approved by ADR.
 
 ## Scaffold Status
-The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, an offline sample-gallery builder skeleton, and an OpenAI-compatible chat adapter with non-streaming and SSE streaming support are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. The next milestone is the browser demo.
+The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, an offline sample-gallery builder skeleton, an OpenAI-compatible chat adapter with non-streaming and SSE streaming support, and a small built-in browser demo are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. The next milestone is client-side overlay polish.
 
 ## Work Order Status
 - Work Order 1: complete.
@@ -98,4 +98,5 @@ The initial scaffold work is complete. One-key authentication, readiness routing
 - Work Order 10: complete.
 - Work Order 11: complete.
 - Work Order 12: complete.
-- Work Order 13: next.
+- Work Order 13: complete.
+- Work Order 14: next.
