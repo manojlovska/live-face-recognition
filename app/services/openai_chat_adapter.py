@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import uuid
+from collections.abc import Iterator
 from dataclasses import dataclass
 from urllib.parse import urlparse
 
@@ -20,6 +21,7 @@ class OpenAIChatSimilarityRequest:
     model: str
     image_data_url: str
     top_k: int
+    stream: bool = False
 
 
 def analyze_chat_completion_request(
@@ -28,11 +30,25 @@ def analyze_chat_completion_request(
     settings: Settings,
     engine: FaceSimilarityEngine,
 ) -> dict[str, object]:
+    request, native_result = analyze_chat_completion_native_result(
+        payload,
+        settings=settings,
+        engine=engine,
+    )
+    return build_chat_completion_response(native_result, model=request.model)
+
+
+def analyze_chat_completion_native_result(
+    payload: object,
+    *,
+    settings: Settings,
+    engine: FaceSimilarityEngine,
+) -> tuple[OpenAIChatSimilarityRequest, dict[str, object]]:
     request = parse_chat_completion_request(payload, settings=settings)
     native_request = _build_native_request(request)
     decoded_image = decode_data_url_image(request.image_data_url, settings.max_image_bytes)
     native_result = engine.analyze(native_request, decoded_image)
-    return build_chat_completion_response(native_result, model=request.model)
+    return request, native_result
 
 
 def parse_chat_completion_request(
@@ -52,12 +68,6 @@ def parse_chat_completion_request(
         raise ChatCompletionsError(
             message="The stream field must be a boolean when provided.",
             code="invalid_chat_message",
-            status_code=400,
-        )
-    if stream is True:
-        raise ChatCompletionsError(
-            message="Streaming chat completions are not implemented yet.",
-            code="streaming_not_implemented",
             status_code=400,
         )
 
@@ -174,6 +184,7 @@ def parse_chat_completion_request(
             model=model,
             image_data_url=image_data_url,
             top_k=top_k_value,
+            stream=bool(stream),
         )
     except ValidationError as exc:
         raise ChatCompletionsError(
@@ -188,18 +199,7 @@ def build_chat_completion_response(
     *,
     model: str,
 ) -> dict[str, object]:
-    content_payload = {
-        "result_type": "face_similarity",
-        "model": native_result.get("model", model),
-        "mode": native_result.get("mode"),
-        "faces": native_result.get("faces", []),
-        "disclaimer": native_result.get(
-            "disclaimer",
-            "Similarity result only; not identity verification.",
-        ),
-    }
-    if "gallery" in native_result:
-        content_payload["gallery"] = native_result["gallery"]
+    content_payload = build_chat_completion_content(native_result, model=model)
 
     return {
         "id": f"chatcmpl-local-{uuid.uuid4().hex}",
@@ -229,12 +229,128 @@ def build_chat_completion_response(
     }
 
 
+def build_chat_completion_content(
+    native_result: dict[str, object],
+    *,
+    model: str,
+) -> dict[str, object]:
+    content_payload = {
+        "result_type": "face_similarity",
+        "model": native_result.get("model", model),
+        "mode": native_result.get("mode"),
+        "faces": native_result.get("faces", []),
+        "disclaimer": native_result.get(
+            "disclaimer",
+            "Similarity result only; not identity verification.",
+        ),
+    }
+    if "gallery" in native_result:
+        content_payload["gallery"] = native_result["gallery"]
+    return content_payload
+
+
+def iter_chat_completion_chunks(
+    native_result: dict[str, object],
+    *,
+    model: str,
+) -> Iterator[str]:
+    stream_id = f"chatcmpl-local-{uuid.uuid4().hex}"
+    try:
+        yield _sse_event(
+            _build_chat_completion_chunk(
+                stream_id=stream_id,
+                model=model,
+                delta={"role": "assistant"},
+                finish_reason=None,
+            )
+        )
+        content_payload = build_chat_completion_content(native_result, model=model)
+        yield _sse_event(
+            _build_chat_completion_chunk(
+                stream_id=stream_id,
+                model=model,
+                delta={
+                    "content": json.dumps(
+                        content_payload,
+                        ensure_ascii=False,
+                        sort_keys=True,
+                        separators=(",", ":"),
+                    )
+                },
+                finish_reason=None,
+            )
+        )
+        yield _sse_event(
+            _build_chat_completion_chunk(
+                stream_id=stream_id,
+                model=model,
+                delta={},
+                finish_reason="stop",
+            )
+        )
+    except Exception:
+        yield _sse_event(
+            _build_chat_completion_chunk(
+                stream_id=stream_id,
+                model=model,
+                delta={
+                    "content": json.dumps(
+                        {
+                            "error": {
+                                "message": "Streaming response failed.",
+                                "type": "server_error",
+                                "code": "streaming_response_error",
+                            }
+                        },
+                        ensure_ascii=False,
+                        sort_keys=True,
+                        separators=(",", ":"),
+                    )
+                },
+                finish_reason="stop",
+            )
+        )
+    finally:
+        yield "data: [DONE]\n\n"
+
+
 def _build_native_request(request: OpenAIChatSimilarityRequest) -> FaceSimilarityRequest:
     return FaceSimilarityRequest(
         image=request.image_data_url,
         top_k=request.top_k,
         return_face_boxes=True,
     )
+
+
+def _build_chat_completion_chunk(
+    *,
+    stream_id: str,
+    model: str,
+    delta: dict[str, object],
+    finish_reason: str | None,
+) -> dict[str, object]:
+    choice: dict[str, object] = {
+        "index": 0,
+        "delta": delta,
+        "finish_reason": finish_reason,
+    }
+    return {
+        "id": stream_id,
+        "object": "chat.completion.chunk",
+        "created": 0,
+        "model": model,
+        "choices": [choice],
+    }
+
+
+def _sse_event(payload: dict[str, object]) -> str:
+    serialized = json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return f"data: {serialized}\n\n"
 
 
 def _validate_message_shape(message: object) -> None:

@@ -107,7 +107,31 @@ response = client.chat.completions.create(
 )
 ```
 
-`stream=true` is not implemented yet.
+`stream=true` is supported and returns SSE chat-completion chunks.
+
+```python
+stream = client.chat.completions.create(
+    model="celeba-face-similarity-cpu",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Who is this face most similar to?"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "data:image/jpeg;base64,..."},
+                },
+            ],
+        }
+    ],
+    stream=True,
+)
+
+for chunk in stream:
+    print(chunk.choices[0].delta)
+```
+
+`stream=True` returns SSE chat-completion chunks, not live video streaming.
 
 ## Build gallery
 

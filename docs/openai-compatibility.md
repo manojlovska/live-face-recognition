@@ -17,9 +17,7 @@ Returns face-similarity results in the assistant message for supported image req
 
 `/v1/models` exists and is protected by Bearer API key auth.
 
-`/v1/chat/completions` exists and supports non-streaming image similarity requests.
-
-`stream=true` is not implemented yet.
+`/v1/chat/completions` exists and supports both non-streaming and `stream=true` image similarity requests.
 
 ## Supported Request Shape
 
@@ -56,6 +54,7 @@ Supported behavior:
 - optional text parts, which are ignored for now
 - optional local extension `top_k`
 - `stream` omitted or `false`
+- `stream=true` for SSE response streaming
 
 Unsupported behavior:
 - remote image URLs
@@ -65,13 +64,44 @@ Unsupported behavior:
 - function calls
 - audio
 - files
-- `stream=true` until Work Order 12
 
 ## Local `top_k` Extension
 `top_k` is a local extension, not standard OpenAI API behavior. If supplied, it is validated the same way as the native endpoint and defaults to `5`.
 
-## Response Content
+## Non-Streaming Response Content
 The assistant message content is JSON text containing face-similarity results. It must include or preserve the disclaimer that the result is similarity-only and not identity verification.
+
+## Streaming Response Content
+When `stream=true`, the endpoint returns `text/event-stream` and emits OpenAI-style `chat.completion.chunk` frames.
+
+Recommended streaming pattern:
+
+```text
+data: {"id":"chatcmpl-local-...","object":"chat.completion.chunk",...}
+
+data: {"id":"chatcmpl-local-...","object":"chat.completion.chunk",...}
+
+data: {"id":"chatcmpl-local-...","object":"chat.completion.chunk",...}
+
+data: [DONE]
+```
+
+Recommended chunk sequence:
+- first chunk sets `delta.role = "assistant"`
+- content chunk streams the JSON face-similarity payload as a string
+- final chunk sets `finish_reason = "stop"`
+- final SSE frame is `data: [DONE]`
+
+The streamed content is the same privacy-filtered face-similarity payload used by the non-streaming adapter. It is response streaming, not live video streaming, and token-level generation is not implemented.
+
+## Limitations
+- no tool calls
+- no function calls
+- no remote image URLs
+- one image only
+- no token-level model generation
+- `stream=true` is response streaming only
+- no live webcam streaming
 
 ## Compatibility Test Requirement
 At least one test instantiates the OpenAI Python client and calls the local service through `base_url`.
