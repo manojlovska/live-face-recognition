@@ -25,10 +25,11 @@ Canonical endpoint for face-similarity inference.
 
 Expected responsibilities:
 - validate API key;
-- accept a JSON image request;
+- accept a JSON data-URL image request;
 - validate request shape;
+- decode and validate the image in memory;
 - return `engine_not_ready` until model loading exists;
-- later: validate image size/type, detect face(s), compute embeddings, search gallery, return top-k matches.
+- later: detect face(s), compute embeddings, search gallery, return top-k matches.
 
 ## OpenAI-Compatible Endpoints
 

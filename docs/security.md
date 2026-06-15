@@ -38,6 +38,7 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - Decode images defensively.
 - Do not trust client-provided MIME type alone.
 - Do not write uploaded images to disk by default.
+- Enforce request size limits with `FACE_MAX_IMAGE_BYTES`.
 
 ## Logging Rules
 Do not log:
@@ -56,6 +57,7 @@ Log only safe metadata such as:
 - image dimensions after validation;
 - number of faces detected;
 - error category.
+- image payloads or decoded bytes.
 
 ## Request Limits
 The service should define:

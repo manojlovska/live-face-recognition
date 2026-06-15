@@ -57,6 +57,10 @@ curl -H "Authorization: Bearer change-me-local-dev-key" \
 
 `/v1/models` is protected and lists the configured model ID. The similarity engine is still not ready.
 
+## Native similarity
+
+Valid `POST /v1/face/similarity` image requests are now decoded and validated in memory, but they still return `503 engine_not_ready` until inference exists.
+
 ## Quality checks
 
 ```bash

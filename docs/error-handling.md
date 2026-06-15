@@ -37,10 +37,13 @@ OpenAI-compatible endpoints should return an OpenAI-style error object where pra
 |---|---|---:|
 | Missing or invalid API key | `invalid_api_key` | 401 |
 | Engine not ready | `engine_not_ready` | 503 |
+| Malformed data URL | `invalid_image_data_url` | 400 |
+| Unsupported image type | `unsupported_image_type` | 415 |
+| Invalid base64 | `invalid_image_base64` | 400 |
+| Decoded image too large | `image_too_large` | 413 |
+| Invalid image bytes | `invalid_image` | 400 |
 | Unsupported route | `not_found` | 404 |
 | Unsupported model | `model_not_found` | 404 |
-| Invalid image | `invalid_image` | 400 |
-| Unsupported image type | `unsupported_image_type` | 415 |
 | Request too large | `request_too_large` | 413 |
 | No face found | `no_face_detected` | 422 or 200 with empty faces, to be decided |
 | Too many faces | `too_many_faces` | 422 or process first face, to be decided |

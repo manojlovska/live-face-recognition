@@ -10,7 +10,7 @@ Expected initial variables:
 FACE_API_KEY=change-me-local-dev-key
 FACE_MODEL_ID=celeba-face-similarity-cpu
 FACE_GALLERY_PATH=data/gallery
-FACE_MAX_IMAGE_BYTES=...
+FACE_MAX_IMAGE_BYTES=5242880
 FACE_MAX_IMAGE_PIXELS=...
 ```
 

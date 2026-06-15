@@ -9,6 +9,24 @@ class EngineNotReadyError(Exception):
     """Raised when face-similarity inference has not been loaded yet."""
 
 
+class ImageValidationError(Exception):
+    """Raised when a submitted image data URL or payload is invalid."""
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        code: str,
+        status_code: int,
+        error_type: str = "invalid_request_error",
+    ) -> None:
+        super().__init__(message)
+        self.message = message
+        self.code = code
+        self.status_code = status_code
+        self.error_type = error_type
+
+
 def authentication_error_response() -> JSONResponse:
     return JSONResponse(
         status_code=401,
@@ -33,6 +51,19 @@ def engine_not_ready_error_response() -> JSONResponse:
                 ),
                 "type": "service_unavailable",
                 "code": "engine_not_ready",
+            }
+        },
+    )
+
+
+def image_validation_error_response(exc: ImageValidationError) -> JSONResponse:
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": {
+                "message": exc.message,
+                "type": exc.error_type,
+                "code": exc.code,
             }
         },
     )

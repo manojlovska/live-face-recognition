@@ -5,6 +5,8 @@ from app.api.errors import EngineNotReadyError
 from app.config import get_settings
 from app.main import create_app
 from app.services.face_similarity import FaceSimilarityEngine, FaceSimilarityRequest
+from app.services.image_input import decode_data_url_image
+from tests.image_helpers import make_image_data_url
 
 
 def build_app() -> object:
@@ -65,13 +67,14 @@ def test_face_similarity_invalid_top_k_is_rejected(monkeypatch) -> None:
 
 def test_face_similarity_valid_request_returns_engine_not_ready(monkeypatch) -> None:
     monkeypatch.setenv("FACE_API_KEY", "local-dev-key")
+    monkeypatch.setenv("FACE_MAX_IMAGE_BYTES", "1024")
     client = TestClient(build_app())
 
     response = client.post(
         "/v1/face/similarity",
         headers={"Authorization": "Bearer local-dev-key"},
         json={
-            "image": "data:image/jpeg;base64,AAA",
+            "image": make_image_data_url("JPEG"),
             "top_k": 5,
             "return_face_boxes": True,
         },
@@ -95,10 +98,14 @@ def test_stub_engine_reports_not_ready() -> None:
 
 def test_stub_engine_analyze_raises_not_ready() -> None:
     engine = FaceSimilarityEngine()
+    decoded_image = decode_data_url_image(make_image_data_url("JPEG"), 1024)
 
     with pytest.raises(EngineNotReadyError):
         engine.analyze(
             FaceSimilarityRequest(
-                image="data:image/jpeg;base64,AAA", top_k=5, return_face_boxes=True
+                image=make_image_data_url("JPEG"),
+                top_k=5,
+                return_face_boxes=True,
             ),
+            decoded_image,
         )
