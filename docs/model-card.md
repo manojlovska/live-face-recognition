@@ -5,7 +5,7 @@ Initial planned stack:
 
 - Face detector: OpenCV YuNet
 - Face embedder: OpenCV SFace
-- Similarity gallery: CelebA-derived embeddings
+- Similarity gallery: local gallery artifacts, later CelebA-derived embeddings
 - Runtime: CPU-only Python service
 - Model assets are loaded from local paths under `models/` by default.
 
@@ -30,7 +30,7 @@ Initial planned stack:
 ## Outputs
 - Face bounding boxes
 - Detection scores
-- Top-k similar CelebA identity IDs
+- Top-k similar gallery item IDs
 - Similarity scores
 - Disclaimer
 
@@ -39,7 +39,8 @@ Initial planned stack:
 - Detection-only responses include face boxes and landmarks, but not embeddings.
 - SFace embedding output exists internally when the embedder is supplied and loaded.
 - Raw embeddings are not returned in the public API.
-- No gallery similarity output is produced yet.
+- Local gallery artifact search exists when the gallery is supplied and loaded.
+- Similarity responses include `top_matches` built from loaded gallery metadata.
 - No identity verification claim is made.
 
 ## Limitations
@@ -51,6 +52,7 @@ Initial planned stack:
 
 ## Safety and Privacy
 Uploaded images and user embeddings are not stored by default. Logs must not contain raw images or embeddings.
+Gallery embeddings are operator-managed local artifacts, not user enrollment data.
 
 ## Performance
 Actual performance must be recorded in `docs/benchmark-results.md`. Do not invent latency or FPS numbers.

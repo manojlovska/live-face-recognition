@@ -49,6 +49,8 @@ OpenAI-compatible endpoints should return an OpenAI-style error object where pra
 | Too many faces | `too_many_faces` | 422 or process first face, to be decided |
 | Model not ready | `model_not_ready` | 503 |
 | Gallery not ready | `gallery_not_ready` | 503 |
+| Gallery missing or not loaded | `gallery_not_loaded` | 503 |
+| Gallery/query embedding dimension mismatch | `embedding_dimension_mismatch` | 500 |
 | Embedding generation failed | `embedding_failed` | 200 with per-face embedding error marker |
 | Unsupported OpenAI feature | `unsupported_feature` | 400 |
 
@@ -88,13 +90,15 @@ When YuNet is unavailable or not loaded, protected similarity requests should re
 Return HTTP `503 Service Unavailable`.
 
 ## Readiness Model Status
-`/readyz` reports model status with the summary values `models_missing`, `present_not_loaded`, `detector_loaded_gallery_missing`, `embedding_models_loaded_gallery_missing`, `detector_error`, or `embedder_error`.
-This is operational status only and does not imply a successful similarity response while gallery loading remains unimplemented.
+`/readyz` reports model status with the summary values `models_missing`, `present_not_loaded`, `detector_loaded_gallery_missing`, `embedding_models_loaded_gallery_missing`, `gallery_error`, `detector_error`, `embedder_error`, `loaded`, or `ready`.
+This is operational status only and does not imply a successful similarity response when gallery artifacts are missing or corrupt.
 
 ## Detection Output
 - Detection-only results are success responses, not errors.
 - When YuNet is loaded, valid requests return HTTP `200` with `faces` and `top_matches: []`.
 - When YuNet and SFace are loaded, valid requests return HTTP `200` with internal embedding metadata and `top_matches: []`.
+- When YuNet, SFace, and a gallery artifact are loaded, valid requests return HTTP `200` with similarity matches in `top_matches`.
 - When no faces are detected, the service still returns HTTP `200` with an empty `faces` list.
 - Missing detector availability still uses `engine_not_ready`; no new error code is introduced in this work order.
 - Per-face embedding failures return a success response with `embedding.generated: false` and `embedding.error: "embedding_failed"`.
+- Gallery dimension mismatch returns HTTP `500` with `invalid_gallery_state` and `embedding_dimension_mismatch`.

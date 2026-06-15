@@ -16,7 +16,7 @@ def test_readyz_returns_not_ready() -> None:
         "checks": {
             "api": "ok",
             "models": "models_missing",
-            "gallery": "not_loaded",
+            "gallery": "missing",
             "model_assets": {
                 "manifest_path": "models/model_manifest.json",
                 "manifest_state": "missing",
@@ -38,6 +38,20 @@ def test_readyz_returns_not_ready() -> None:
                     "expected_sha256": None,
                     "source": None,
                 },
+            },
+            "gallery_details": {
+                "state": "missing",
+                "loaded": False,
+                "load_attempted": False,
+                "error": None,
+                "error_code": None,
+                "manifest_state": "missing",
+                "manifest_path": "data/gallery/gallery_manifest.json",
+                "embeddings_path": "data/gallery/gallery_embeddings.npy",
+                "metadata_path": "data/gallery/gallery_metadata.jsonl",
+                "version": None,
+                "item_count": 0,
+                "embedding_dim": None,
             },
         },
     }

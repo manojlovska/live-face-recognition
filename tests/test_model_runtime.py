@@ -31,7 +31,7 @@ def test_missing_model_files_do_not_crash(tmp_path) -> None:
     assert runtime.is_ready() is False
     assert status["models"]["detector"] == MODEL_STATE_MISSING
     assert status["models"]["embedder"] == MODEL_STATE_MISSING
-    assert status["gallery"] == "not_loaded"
+    assert status["gallery"] == "missing"
     assert status["cpu_only"] is True
 
 
@@ -99,7 +99,8 @@ def test_runtime_uses_cpu_backend_and_target(monkeypatch, tmp_path) -> None:
     assert runtime.cpu_only is True
     assert status["models"]["detector"] == MODEL_STATE_LOADED
     assert status["models"]["embedder"] == MODEL_STATE_LOADED
-    assert runtime.readiness_summary()["models"] == "embedding_models_loaded_gallery_missing"
+    assert status["gallery"] == "missing"
+    assert runtime.readiness_summary()["models"] == "embedding_only"
     assert captured["detector"] is not None
     assert captured["embedder"] is not None
     assert captured["detector"][6] == fake_cv2.dnn.DNN_BACKEND_OPENCV
@@ -119,4 +120,5 @@ def test_present_files_without_auto_load_are_not_loaded(tmp_path) -> None:
 
     assert status["models"]["detector"] == MODEL_STATE_PRESENT_NOT_LOADED
     assert status["models"]["embedder"] == MODEL_STATE_PRESENT_NOT_LOADED
+    assert status["gallery"] == "missing"
     assert runtime.is_ready() is False

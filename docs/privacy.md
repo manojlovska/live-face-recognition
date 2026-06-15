@@ -16,6 +16,9 @@ By default, the service:
 - generates embeddings only in memory when the model is available;
 - does not return raw embedding vectors in the public API by default;
 - does not persist embeddings or aligned face crops.
+- treats gallery embeddings as local model artifacts that are loaded from disk, not user data;
+- does not retain gallery search queries beyond the request;
+- does not create a user enrollment store.
 
 ## Output Language
 The service returns similarity results. It must not describe results as verified identity, authentication, or proof that the subject is a specific person.
@@ -54,3 +57,5 @@ Where practical, tests should verify that normal requests do not create saved im
 - Embeddings are transient in memory only.
 - No embedding retention exists by default.
 - Model files are local operator-managed assets, not user data.
+- Gallery embeddings are local operator-managed model artifacts.
+- Public API responses do not include raw query embeddings.

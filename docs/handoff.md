@@ -5,10 +5,11 @@
 - Service has `/healthz`, `/readyz`, `/v1/models`, and `/v1/face/similarity` contract routes.
 - Valid `/v1/face/similarity` image requests are decoded and validated in memory.
 - Model asset paths are configurable and model presence can be checked.
-- YuNet detection-only responses and internal SFace embeddings can be returned when the models are loaded.
+- YuNet detection-only responses, internal SFace embeddings, and gallery-backed similarity results can be returned when the runtime pieces are loaded.
 - Raw embeddings are not returned by default.
 - Tests and Ruff passed after scaffold and repair work.
 - Documentation lives at root-level `docs/`.
+- Local gallery artifacts can be loaded from `data/gallery/` or test fixtures.
 
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
@@ -23,13 +24,10 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - Similarity-only language, not identity verification.
 
 ## Implemented
-- Documentation starter pack, scaffold repair, readiness/auth layer, protected contract routes, image validation, model asset loading skeleton, and YuNet detection-only output.
+- Documentation starter pack, scaffold repair, readiness/auth layer, protected contract routes, image validation, model asset loading skeleton, YuNet detection-only output, internal SFace embeddings, and local gallery search over artifact fixtures.
 
 ## Missing
-- SFace embeddings
-- Gallery loading
-- Full similarity scoring
-- Model loader
+- Full CelebA gallery build
 - Benchmarks
 - Browser demo
 
@@ -40,7 +38,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 8: add local gallery artifact loading and exact cosine similarity search over a small test gallery, still without full CelebA build.
+Work Order 9: add an offline CelebA gallery builder skeleton that processes a small sample directory first, not the full dataset yet.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

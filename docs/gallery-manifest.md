@@ -4,42 +4,20 @@
 The gallery manifest records how a gallery artifact was built. It protects reproducibility and prevents confusion between incompatible embeddings.
 This is separate from the model asset manifest used to record YuNet/SFace model file checksums.
 
+The current runtime supports a v1 local gallery artifact format for tests and small local deployments. It does not require a CelebA-specific SQLite database.
+
 ## Required Fields
 
 ```json
 {
-  "gallery_version": "celeba-sface-v1",
-  "created_at": "ISO-8601 timestamp",
-  "dataset": {
-    "name": "CelebA",
-    "source": "local path or documented source",
-    "image_count_attempted": 0,
-    "image_count_succeeded": 0,
-    "image_count_failed": 0,
-    "identity_count": 0
-  },
-  "detector": {
-    "name": "YuNet",
-    "file": "models/...",
-    "checksum": "..."
-  },
-  "embedder": {
-    "name": "SFace",
-    "file": "models/...",
-    "checksum": "...",
-    "embedding_dim": 0
-  },
-  "preprocessing": {
-    "image_size": null,
-    "alignment": "...",
-    "normalization": "..."
-  },
-  "artifacts": {
-    "embeddings": "data/gallery/gallery_embeddings.npy",
-    "metadata": "data/gallery/gallery_metadata.sqlite",
-    "failed_images": "data/gallery/failed_images.csv"
-  },
-  "notes": "Similarity result only; not identity verification."
+  "gallery_version": "test-gallery-v1",
+  "embedding_model": "opencv-sface",
+  "embedding_dim": 128,
+  "distance": "cosine",
+  "metadata_format": "jsonl",
+  "item_count": 3,
+  "created_by": "test_fixture",
+  "notes": "Tiny gallery for tests; not CelebA."
 }
 ```
 
@@ -56,5 +34,5 @@ Whenever gallery format changes, update this file and add or update tests.
 
 ## Model Manifest Distinction
 - The model manifest documents detector/embedder asset provenance and checksums.
-- The gallery manifest documents gallery artifact provenance and checksums.
+- The gallery manifest documents gallery artifact provenance and runtime search assumptions.
 - Do not mix model asset metadata into the gallery manifest.

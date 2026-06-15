@@ -30,6 +30,20 @@ class Settings(BaseSettings):
         validation_alias="MODEL_MANIFEST_PATH",
     )
     model_auto_load: bool = Field(default=False, validation_alias="MODEL_AUTO_LOAD")
+    gallery_dir: str = Field(default="data/gallery", validation_alias="GALLERY_DIR")
+    gallery_embeddings_path: str = Field(
+        default="data/gallery/gallery_embeddings.npy",
+        validation_alias="GALLERY_EMBEDDINGS_PATH",
+    )
+    gallery_metadata_path: str = Field(
+        default="data/gallery/gallery_metadata.jsonl",
+        validation_alias="GALLERY_METADATA_PATH",
+    )
+    gallery_manifest_path: str = Field(
+        default="data/gallery/gallery_manifest.json",
+        validation_alias="GALLERY_MANIFEST_PATH",
+    )
+    gallery_auto_load: bool = Field(default=False, validation_alias="GALLERY_AUTO_LOAD")
     max_image_bytes: int = Field(
         default=5 * 1024 * 1024,
         ge=1,

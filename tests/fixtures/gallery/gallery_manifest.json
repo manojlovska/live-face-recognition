@@ -1,0 +1,10 @@
+{
+  "gallery_version": "test-gallery-v1",
+  "embedding_model": "opencv-sface",
+  "embedding_dim": 128,
+  "distance": "cosine",
+  "metadata_format": "jsonl",
+  "item_count": 3,
+  "created_by": "test_fixture",
+  "notes": "Tiny gallery for tests; not CelebA."
+}

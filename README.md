@@ -30,8 +30,8 @@ curl http://127.0.0.1:8000/healthz
 curl http://127.0.0.1:8000/readyz
 ```
 
-`/readyz` is public too, but it currently returns `503 not_ready` until models and gallery loading exist.
-The response now includes model-asset status so you can tell whether YuNet and SFace files are missing, present, loaded, or in error.
+`/readyz` is public too, but it currently returns `503 not_ready` until the detector, embedder, and gallery are all loaded.
+The response now includes model-asset and gallery status so you can tell whether YuNet and SFace files are missing, present, loaded, or in error.
 
 ## Authentication
 
@@ -56,11 +56,11 @@ curl -H "Authorization: Bearer change-me-local-dev-key" \
   http://localhost:8000/v1/models
 ```
 
-`/v1/models` is protected and lists the configured model ID. The similarity engine is still not ready.
+`/v1/models` is protected and lists the configured model ID. The similarity engine is still not fully ready until the gallery loads.
 
 ## Native similarity
 
-Valid `POST /v1/face/similarity` image requests are decoded and validated in memory. If YuNet is loaded, the service returns detection-only face boxes. If YuNet and SFace are both loaded, the service generates embeddings internally, but raw embedding vectors and CelebA matches are still not returned. Similarity matching is still not implemented.
+Valid `POST /v1/face/similarity` image requests are decoded and validated in memory. If YuNet is loaded, the service returns detection-only face boxes. If YuNet and SFace are both loaded, the service generates embeddings internally, and if a local gallery artifact is also loaded the service returns gallery-backed `top_matches`. Raw embedding vectors are still never returned. The current gallery support is artifact-based and uses a tiny local fixture gallery for tests; it is not a full CelebA build.
 
 Model files are expected under `models/` by default:
 
@@ -76,7 +76,7 @@ To test real YuNet detection manually:
 4. Send a valid `POST /v1/face/similarity` request.
 5. A detection-only result should be returned when the detector loads successfully.
 
-If you also provide the SFace ONNX file and set `MODEL_AUTO_LOAD=true`, the service will generate embeddings internally while still returning only public metadata. Raw vectors are not included in the response.
+If you also provide the SFace ONNX file and set `MODEL_AUTO_LOAD=true`, the service will generate embeddings internally while still returning only public metadata. If you also provide a local gallery artifact and set `GALLERY_AUTO_LOAD=true`, the service can return similarity results with `top_matches`.
 
 ## Quality checks
 

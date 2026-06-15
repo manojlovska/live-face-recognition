@@ -43,7 +43,7 @@ Plain base64 strings are rejected for now.
 
 ## Current Behavior
 
-Authorized valid image requests are decoded and validated in memory. If the YuNet detector is loaded, the endpoint returns detection-only face boxes. If YuNet and SFace are both loaded, the endpoint returns an embedding-capable result with internal embedding metadata and no raw embedding vector. If the detector is missing or unavailable, the request returns `503 Service Unavailable` with:
+Authorized valid image requests are decoded and validated in memory. If the YuNet detector is loaded, the endpoint returns detection-only face boxes. If YuNet and SFace are both loaded, the endpoint returns an embedding-capable result with internal embedding metadata and no raw embedding vector. If YuNet, SFace, and a gallery artifact are loaded, the endpoint returns similarity results with gallery-backed `top_matches`. If the detector is missing or unavailable, the request returns `503 Service Unavailable` with:
 
 ```json
 {
@@ -125,31 +125,45 @@ When embedding-only mode is available, the response has this shape:
 
 If embedding generation fails for a face, the `embedding` object reports `generated: false` and `error: "embedding_failed"`. Raw embedding vectors are never returned in public responses.
 
-## Future Success Response
+## Similarity Response
 
-When inference is implemented, the response should include the similarity result contract with detected faces, top matches, a model field, and the required disclaimer.
+When a gallery artifact is loaded, the response includes similarity matches for each detected face. The API still does not claim identity verification.
 
 ```json
 {
   "object": "face_similarity.result",
   "model": "celeba-face-similarity-cpu",
+  "mode": "similarity",
   "faces": [
     {
       "box": [112, 80, 220, 220],
       "detection_score": 0.97,
+      "embedding": {
+        "model": "opencv-sface",
+        "generated": true,
+        "returned": false,
+        "dimension": 128
+      },
       "top_matches": [
         {
           "rank": 1,
-          "celeba_identity_id": "004321",
+          "celeba_identity_id": "test_identity_001",
           "display_name": null,
-          "similarity": 0.742
+          "similarity": 0.998,
+          "source_image": null
         }
       ]
     }
   ],
+  "gallery": {
+    "version": "test-gallery-v1",
+    "item_count": 3
+  },
   "disclaimer": "Similarity result only; not identity verification."
 }
 ```
+
+If no faces are detected in similarity mode, the API returns HTTP `200` with `faces: []` and the same gallery summary.
 
 ## Required Behaviors
 - Invalid/missing API key returns authentication error.
@@ -162,10 +176,11 @@ When inference is implemented, the response should include the similarity result
 - Invalid `top_k` returns validation error.
 - Valid authorized requests return detection-only results when YuNet is loaded.
 - Valid authorized requests return embedding-only results when YuNet and SFace are loaded.
+- Valid authorized requests return similarity results when YuNet, SFace, and a gallery artifact are loaded.
 - Valid authorized requests return `engine_not_ready` when YuNet is not loaded or cannot be used.
 - Detection output never includes embeddings.
 - Embedding output never includes raw vectors.
-- `top_matches` is an empty list until gallery search exists.
+- `top_matches` is an empty list until a gallery artifact is loaded.
 - No face requests return HTTP `200` with an empty `faces` list.
 
 ## Privacy Behavior
