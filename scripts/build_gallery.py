@@ -15,10 +15,26 @@ def _build_runtime(settings: Settings) -> ModelRuntime:
     return ModelRuntime(settings)
 
 
+def _parse_include_partitions(values: list[str] | None) -> list[str] | None:
+    if values is None:
+        return None
+    partitions: list[str] = []
+    for value in values:
+        for item in value.split(","):
+            normalized = item.strip()
+            if normalized:
+                partitions.append(normalized)
+    return partitions or None
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Build a local face gallery artifact.")
-    parser.add_argument("--images-dir", required=True)
-    parser.add_argument("--identity-file", required=True)
+    parser.add_argument("--celeba-root")
+    parser.add_argument("--images-dir")
+    parser.add_argument("--identity-file")
+    parser.add_argument("--partition-file")
+    parser.add_argument("--include-partitions", nargs="*")
+    parser.add_argument("--start-after")
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--gallery-version", required=True)
     parser.add_argument("--limit", type=int, default=None)
@@ -36,13 +52,23 @@ def main(
 ) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.celeba_root is None and (args.images_dir is None or args.identity_file is None):
+        print(
+            "either --celeba-root or both --images-dir and --identity-file are required",
+            file=sys.stderr,
+        )
+        return 1
     settings = get_settings()
     runtime = runtime_factory(settings) if runtime_factory is not None else _build_runtime(settings)
 
     try:
         result = build_gallery(
-            images_dir=Path(args.images_dir),
-            identity_file=Path(args.identity_file),
+            celeba_root=Path(args.celeba_root) if args.celeba_root is not None else None,
+            images_dir=Path(args.images_dir) if args.images_dir is not None else None,
+            identity_file=Path(args.identity_file) if args.identity_file is not None else None,
+            partition_file=(Path(args.partition_file) if args.partition_file is not None else None),
+            include_partitions=_parse_include_partitions(args.include_partitions),
+            start_after=args.start_after,
             output_dir=Path(args.output_dir),
             gallery_version=args.gallery_version,
             runtime=runtime,

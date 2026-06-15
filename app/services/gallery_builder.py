@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -9,9 +10,17 @@ from PIL import Image, UnidentifiedImageError
 
 from app.config import Settings, get_settings
 from app.services.celeba_annotations import (
+    CelebaAnnotationError,
+    CelebAIdentityAnnotation,
     load_celeba_identity_annotations,
+    load_celeba_partition_annotations,
 )
-from app.services.face_similarity import DetectedFace, _generate_embedding, _run_yunet_detection
+from app.services.celeba_layout import CelebaLayout, CelebaLayoutError, discover_celeba_layout
+from app.services.face_similarity import (
+    DetectedFace,
+    _generate_embedding,
+    _run_yunet_detection,
+)
 from app.services.image_input import DecodedImage
 from app.services.model_runtime import MODEL_STATE_LOADED, ModelRuntime
 
@@ -33,6 +42,9 @@ class GalleryBuildReport:
     skipped: int = 0
     skip_reasons: dict[str, int] = field(default_factory=dict)
     warnings: dict[str, int] = field(default_factory=dict)
+    detection_scores: list[float] = field(default_factory=list, repr=False)
+    quality: dict[str, object] = field(default_factory=dict)
+    performance: dict[str, object] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -41,6 +53,8 @@ class GalleryBuildReport:
             "skipped": self.skipped,
             "skip_reasons": dict(self.skip_reasons),
             "warnings": dict(self.warnings),
+            "quality": dict(self.quality),
+            "performance": dict(self.performance),
         }
 
 
@@ -87,8 +101,12 @@ class GalleryBuilder:
     def build(
         self,
         *,
-        images_dir: str | Path,
-        identity_file: str | Path,
+        images_dir: str | Path | None = None,
+        identity_file: str | Path | None = None,
+        celeba_root: str | Path | None = None,
+        partition_file: str | Path | None = None,
+        include_partitions: list[str] | None = None,
+        start_after: str | None = None,
         output_dir: str | Path,
         gallery_version: str,
         limit: int | None = None,
@@ -97,20 +115,8 @@ class GalleryBuilder:
         fail_on_empty: bool = False,
         min_det_score: float = 0.0,
     ) -> GalleryBuildResult:
-        images_path = Path(images_dir)
-        identity_path = Path(identity_file)
         output_path = Path(output_dir)
 
-        if not images_path.is_dir():
-            raise GalleryBuildError(
-                message="Images directory does not exist.",
-                code="images_dir_missing",
-            )
-        if not identity_path.is_file():
-            raise GalleryBuildError(
-                message="Identity annotation file does not exist.",
-                code="identity_file_missing",
-            )
         if limit is not None and limit <= 0:
             raise GalleryBuildError(
                 message="Limit must be positive when provided.",
@@ -122,17 +128,46 @@ class GalleryBuilder:
                 code="invalid_min_det_score",
             )
 
-        annotations = load_celeba_identity_annotations(identity_path)
+        resolved_layout = self._resolve_inputs(
+            celeba_root=celeba_root,
+            images_dir=images_dir,
+            identity_file=identity_file,
+            partition_file=partition_file,
+        )
+        images_path = resolved_layout.images_dir
+        identity_path = resolved_layout.identity_file
+        partition_path = resolved_layout.partition_file
+        if include_partitions is not None and partition_path is None:
+            raise GalleryBuildError(
+                message="Partition filtering requires a partition file.",
+                code="partition_filter_requires_partition_file",
+            )
+
+        normalized_partitions = self._normalize_partitions(include_partitions)
+        try:
+            annotations = load_celeba_identity_annotations(identity_path)
+            partition_map = self._load_partition_map(partition_path)
+        except CelebaAnnotationError as exc:
+            raise GalleryBuildError(message=exc.message, code=exc.code) from exc
+        annotations_to_process = self._select_annotations(
+            annotations=annotations,
+            partition_map=partition_map,
+            default_split="sample" if resolved_layout.layout_kind == "explicit" else "unknown",
+            include_partitions=normalized_partitions,
+            start_after=start_after,
+            sort_by_filename=resolved_layout.layout_kind != "explicit" or start_after is not None,
+        )
         if limit is not None:
-            annotations = annotations[:limit]
+            annotations_to_process = annotations_to_process[:limit]
 
         detector, embedder = self._prepare_runtime()
         report = GalleryBuildReport()
         embeddings: list[np.ndarray] = []
         metadata_rows: list[dict[str, object]] = []
         identity_ids: set[str] = set()
+        started_at = datetime.now(UTC)
 
-        for annotation in annotations:
+        for annotation, split in annotations_to_process:
             report.attempted += 1
             image_path = images_path / annotation.image_filename
             if not image_path.is_file():
@@ -156,9 +191,9 @@ class GalleryBuilder:
                 self._record_skip(report, "no_face")
                 continue
 
-            chosen_face, warnings = self._choose_face(detected_faces, min_det_score)
+            chosen_face, warnings, low_score = self._choose_face(detected_faces, min_det_score)
             if chosen_face is None:
-                self._record_skip(report, "no_face")
+                self._record_skip(report, "low_detection_score" if low_score else "no_face")
                 continue
 
             if warnings:
@@ -173,13 +208,14 @@ class GalleryBuilder:
             row_index = len(embeddings)
             embeddings.append(np.asarray(embedding.vector, dtype=np.float32).reshape(-1))
             identity_ids.add(annotation.identity_id)
+            report.detection_scores.append(float(chosen_face.detection_score))
             metadata_rows.append(
                 {
                     "row": row_index,
                     "celeba_identity_id": annotation.identity_id,
                     "display_name": None,
                     "source_image": annotation.image_filename,
-                    "split": "sample",
+                    "split": split,
                     "detection_score": float(round(chosen_face.detection_score, 6)),
                     "face_box": [int(round(value)) for value in chosen_face.box],
                     "warnings": warnings,
@@ -188,8 +224,15 @@ class GalleryBuilder:
             report.succeeded += 1
 
         report.skipped = report.attempted - report.succeeded
+        finished_at = datetime.now(UTC)
+        self._finalize_report(
+            report,
+            started_at=started_at,
+            finished_at=finished_at,
+            identity_count=len(identity_ids),
+        )
 
-        if not dry_run and report.succeeded == 0:
+        if not dry_run and (report.succeeded == 0 or (fail_on_empty and report.attempted == 0)):
             raise GalleryBuildError(
                 message="Gallery builder produced no usable embeddings.",
                 code="gallery_empty",
@@ -199,8 +242,11 @@ class GalleryBuilder:
             gallery_version=gallery_version,
             embeddings=embeddings,
             identity_count=len(identity_ids),
-            images_dir=images_path,
-            identity_file=identity_path,
+            layout=resolved_layout,
+            limit=limit,
+            include_partitions=normalized_partitions,
+            start_after=start_after,
+            min_det_score=min_det_score,
         )
         result = GalleryBuildResult(
             output_dir=output_path,
@@ -227,6 +273,121 @@ class GalleryBuilder:
             metadata_rows=metadata_rows,
         )
         return result
+
+    def _resolve_inputs(
+        self,
+        *,
+        celeba_root: str | Path | None,
+        images_dir: str | Path | None,
+        identity_file: str | Path | None,
+        partition_file: str | Path | None,
+    ) -> CelebaLayout:
+        if celeba_root is not None:
+            try:
+                layout = discover_celeba_layout(
+                    celeba_root,
+                    images_dir=images_dir,
+                    identity_file=identity_file,
+                    partition_file=partition_file,
+                )
+            except CelebaLayoutError as exc:
+                raise GalleryBuildError(message=exc.message, code=exc.code) from exc
+            return CelebaLayout(
+                celeba_root=layout.celeba_root,
+                images_dir=layout.images_dir,
+                identity_file=layout.identity_file,
+                partition_file=layout.partition_file,
+                layout_kind=layout.layout_kind,
+            )
+
+        if images_dir is None or identity_file is None:
+            raise GalleryBuildError(
+                message=(
+                    "Explicit images_dir and identity_file are required "
+                    "when celeba_root is not provided."
+                ),
+                code="input_mode_invalid",
+            )
+
+        images_path = Path(images_dir)
+        identity_path = Path(identity_file)
+        if not images_path.is_dir():
+            raise GalleryBuildError(
+                message="Images directory does not exist.",
+                code="images_dir_missing",
+            )
+        if not identity_path.is_file():
+            raise GalleryBuildError(
+                message="Identity annotation file does not exist.",
+                code="identity_file_missing",
+            )
+        partition_path = Path(partition_file) if partition_file is not None else None
+        if partition_path is not None and not partition_path.is_file():
+            raise GalleryBuildError(
+                message="Partition annotation file does not exist.",
+                code="partition_file_missing",
+            )
+        return CelebaLayout(
+            celeba_root=images_path.parent,
+            images_dir=images_path,
+            identity_file=identity_path,
+            partition_file=partition_path,
+            layout_kind="explicit",
+        )
+
+    def _select_annotations(
+        self,
+        *,
+        annotations: list[CelebAIdentityAnnotation],
+        partition_map: dict[str, str],
+        default_split: str,
+        include_partitions: list[str] | None,
+        start_after: str | None,
+        sort_by_filename: bool,
+    ) -> list[tuple[CelebAIdentityAnnotation, str]]:
+        selected_annotations = list(annotations)
+        if sort_by_filename:
+            selected_annotations = sorted(
+                selected_annotations, key=lambda item: item.image_filename
+            )
+
+        allowed_partitions = set(include_partitions) if include_partitions is not None else None
+        selected: list[tuple[CelebAIdentityAnnotation, str]] = []
+        for annotation in selected_annotations:
+            if start_after is not None and annotation.image_filename <= start_after:
+                continue
+
+            split = partition_map.get(annotation.image_filename, default_split)
+            if allowed_partitions is not None and split not in allowed_partitions:
+                continue
+
+            selected.append((annotation, split))
+        return selected
+
+    @staticmethod
+    def _normalize_partitions(include_partitions: list[str] | None) -> list[str] | None:
+        if include_partitions is None:
+            return None
+        normalized = []
+        for partition in include_partitions:
+            value = partition.strip().lower()
+            if value not in {"train", "val", "test"}:
+                raise GalleryBuildError(
+                    message="include_partitions must contain train, val, or test.",
+                    code="invalid_include_partitions",
+                )
+            if value not in normalized:
+                normalized.append(value)
+        return normalized
+
+    @staticmethod
+    def _load_partition_map(partition_path: Path | None) -> dict[str, str]:
+        if partition_path is None:
+            return {}
+        partition_annotations = load_celeba_partition_annotations(partition_path)
+        return {
+            annotation.image_filename: annotation.partition for annotation in partition_annotations
+        }
 
     def _prepare_runtime(self) -> tuple[object, object]:
         load_models = getattr(self._runtime, "load_models", None)
@@ -261,12 +422,22 @@ class GalleryBuilder:
         gallery_version: str,
         embeddings: list[np.ndarray],
         identity_count: int,
-        images_dir: Path,
-        identity_file: Path,
+        layout: CelebaLayout,
+        limit: int | None,
+        include_partitions: list[str] | None,
+        start_after: str | None,
+        min_det_score: float,
     ) -> dict[str, object]:
         embedding_dim = embeddings[0].size if embeddings else 0
+        gallery_scope = self._summarize_gallery_scope(
+            layout=layout,
+            limit=limit,
+            include_partitions=include_partitions,
+            start_after=start_after,
+        )
         return {
             "gallery_version": gallery_version,
+            "gallery_scope": gallery_scope,
             "embedding_model": "opencv-sface",
             "detector_model": "opencv-yunet",
             "embedding_dim": int(embedding_dim),
@@ -275,13 +446,42 @@ class GalleryBuilder:
             "item_count": len(embeddings),
             "identity_count": identity_count,
             "created_by": self._created_by,
+            "dataset": {
+                "name": "CelebA" if layout.layout_kind != "explicit" else DEFAULT_DATASET_NAME,
+                "source": "local_user_supplied",
+                "root": str(layout.celeba_root.resolve()) if layout.celeba_root else None,
+                "identity_file": str(layout.identity_file.resolve()),
+                "partition_file": (
+                    str(layout.partition_file.resolve()) if layout.partition_file else None
+                ),
+            },
             "source": {
-                "dataset": DEFAULT_DATASET_NAME,
-                "images_dir": str(images_dir.resolve()),
-                "identity_file": str(identity_file.resolve()),
+                "dataset": DEFAULT_DATASET_NAME if layout.layout_kind == "explicit" else "CelebA",
+                "images_dir": str(layout.images_dir.resolve()),
+                "identity_file": str(layout.identity_file.resolve()),
+            },
+            "filters": {
+                "limit": limit,
+                "include_partitions": include_partitions,
+                "start_after": start_after,
+                "min_detection_score": min_det_score,
             },
             "notes": "Sample gallery; not full CelebA.",
         }
+
+    @staticmethod
+    def _summarize_gallery_scope(
+        *,
+        layout: CelebaLayout,
+        limit: int | None,
+        include_partitions: list[str] | None,
+        start_after: str | None,
+    ) -> str:
+        if layout.layout_kind == "explicit":
+            return "sample"
+        if limit is not None or start_after is not None or include_partitions is not None:
+            return "partial"
+        return "full"
 
     def _ensure_output_dir(self, output_dir: Path, *, overwrite: bool) -> None:
         if output_dir.exists():
@@ -324,17 +524,17 @@ class GalleryBuilder:
         self,
         detected_faces: list[DetectedFace],
         min_det_score: float,
-    ) -> tuple[DetectedFace | None, list[str]]:
+    ) -> tuple[DetectedFace | None, list[str], bool]:
         if not detected_faces:
-            return None, []
+            return None, [], False
 
         chosen_face = max(detected_faces, key=lambda face: face.detection_score)
         warnings: list[str] = []
         if len(detected_faces) > 1:
             warnings.append("multiple_faces_used_best")
         if chosen_face.detection_score < min_det_score:
-            return None, warnings
-        return chosen_face, warnings
+            return None, warnings, True
+        return chosen_face, warnings, False
 
     @staticmethod
     def _load_local_image(path: Path) -> DecodedImage:
@@ -367,11 +567,60 @@ class GalleryBuilder:
     def _record_skip(report: GalleryBuildReport, reason: str) -> None:
         report.skip_reasons[reason] = report.skip_reasons.get(reason, 0) + 1
 
+    @staticmethod
+    def _finalize_report(
+        report: GalleryBuildReport,
+        *,
+        started_at: datetime,
+        finished_at: datetime,
+        identity_count: int,
+    ) -> None:
+        duration_seconds = max((finished_at - started_at).total_seconds(), 0.0)
+        if report.attempted > 0:
+            success_rate: float | None = report.succeeded / report.attempted
+            images_per_second: float | None = (
+                report.attempted / duration_seconds if duration_seconds > 0 else None
+            )
+            mean_image_seconds: float | None = duration_seconds / report.attempted
+        else:
+            success_rate = None
+            images_per_second = None
+            mean_image_seconds = None
+
+        if report.detection_scores:
+            score_array = np.asarray(report.detection_scores, dtype=np.float32)
+            min_detection_score: float | None = float(np.min(score_array))
+            mean_detection_score: float | None = float(np.mean(score_array))
+            median_detection_score: float | None = float(np.median(score_array))
+        else:
+            min_detection_score = None
+            mean_detection_score = None
+            median_detection_score = None
+
+        report.quality = {
+            "success_rate": success_rate,
+            "identity_count": identity_count,
+            "min_detection_score": min_detection_score,
+            "mean_detection_score": mean_detection_score,
+            "median_detection_score": median_detection_score,
+        }
+        report.performance = {
+            "started_at": started_at.isoformat(),
+            "finished_at": finished_at.isoformat(),
+            "duration_seconds": duration_seconds,
+            "images_per_second": images_per_second,
+            "mean_image_seconds": mean_image_seconds,
+        }
+
 
 def build_gallery(
     *,
-    images_dir: str | Path,
-    identity_file: str | Path,
+    images_dir: str | Path | None = None,
+    identity_file: str | Path | None = None,
+    celeba_root: str | Path | None = None,
+    partition_file: str | Path | None = None,
+    include_partitions: list[str] | None = None,
+    start_after: str | None = None,
     output_dir: str | Path,
     gallery_version: str,
     runtime: object | None = None,
@@ -385,6 +634,10 @@ def build_gallery(
     result = builder.build(
         images_dir=images_dir,
         identity_file=identity_file,
+        celeba_root=celeba_root,
+        partition_file=partition_file,
+        include_partitions=include_partitions,
+        start_after=start_after,
         output_dir=output_dir,
         gallery_version=gallery_version,
         limit=limit,

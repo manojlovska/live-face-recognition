@@ -62,7 +62,9 @@ Skipped integration tests must be reported as skipped, not passed.
 - gallery search tests for deterministic cosine top-k ranking on the tiny fixture gallery;
 - readiness tests for loaded-gallery and gallery-error states.
 - CelebA annotation parsing tests for comments, blank lines, and malformed rows;
-- gallery builder tests for writes, skips, multiple-face handling, and runtime readiness checks;
+- CelebA layout discovery tests for flat and nested `img_align_celeba/` layouts;
+- CelebA partition parsing tests for `train`, `val`, and `test` mapping;
+- gallery builder tests for writes, skips, multiple-face handling, runtime readiness checks, and reporting;
 - script tests for dry-run, missing input, existing output, and successful sample builds.
 
 ## Test Quality Rule

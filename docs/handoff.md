@@ -11,6 +11,8 @@
 - Documentation lives at root-level `docs/`.
 - Local gallery artifacts can be loaded from `data/gallery/` or test fixtures.
 - A small CelebA-like gallery builder skeleton can process local sample directories.
+- The builder now understands common CelebA-style layouts and partition files.
+- The builder records quality and performance reporting for local runs.
 
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
@@ -39,7 +41,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 10: extend the gallery builder toward full CelebA dataset layout support and add builder performance/quality reporting, still without OpenAI chat completions.
+Work Order 11: add non-streaming OpenAI-compatible `/v1/chat/completions` adapter for image similarity requests.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

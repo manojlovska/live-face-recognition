@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import numpy as np
@@ -71,6 +72,13 @@ def _write_sample_image(path: Path) -> None:
     Image.new("RGB", (8, 8), color=(255, 0, 0)).save(path)
 
 
+def _write_celeba_root(root: Path) -> None:
+    images_dir = root / "img_align_celeba"
+    images_dir.mkdir(parents=True)
+    _write_sample_image(images_dir / "000001.jpg")
+    (root / "identity_CelebA.txt").write_text("000001.jpg 2880\n", encoding="utf-8")
+
+
 def test_gallery_builder_script_dry_run_and_success(tmp_path: Path) -> None:
     images_dir = tmp_path / "images"
     images_dir.mkdir()
@@ -116,6 +124,32 @@ def test_gallery_builder_script_dry_run_and_success(tmp_path: Path) -> None:
     assert (output_dir / "gallery_metadata.jsonl").is_file()
     assert (output_dir / "gallery_manifest.json").is_file()
     assert (output_dir / "gallery_build_report.json").is_file()
+
+
+def test_gallery_builder_script_supports_celeba_root_mode(tmp_path: Path) -> None:
+    celeba_root = tmp_path / "celeba"
+    _write_celeba_root(celeba_root)
+    output_dir = tmp_path / "gallery"
+
+    exit_code = main(
+        [
+            "--celeba-root",
+            str(celeba_root),
+            "--output-dir",
+            str(output_dir),
+            "--gallery-version",
+            "celeba-local-v1",
+        ],
+        runtime_factory=lambda _settings: ScriptFakeRuntime(),
+    )
+
+    assert exit_code == 0
+    assert (output_dir / "gallery_embeddings.npy").is_file()
+    assert (output_dir / "gallery_metadata.jsonl").is_file()
+    assert (output_dir / "gallery_manifest.json").is_file()
+    assert (output_dir / "gallery_build_report.json").is_file()
+    manifest = json.loads((output_dir / "gallery_manifest.json").read_text(encoding="utf-8"))
+    assert manifest["gallery_scope"] == "full"
 
 
 def test_gallery_builder_script_rejects_missing_input_dir(tmp_path: Path) -> None:
@@ -164,3 +198,32 @@ def test_gallery_builder_script_rejects_existing_output_without_overwrite(tmp_pa
     )
 
     assert exit_code == 1
+
+
+def test_gallery_builder_script_allows_overwrite(tmp_path: Path) -> None:
+    images_dir = tmp_path / "images"
+    images_dir.mkdir()
+    _write_sample_image(images_dir / "000001.jpg")
+    identity_file = tmp_path / "identity.txt"
+    identity_file.write_text("000001.jpg 2880\n", encoding="utf-8")
+    output_dir = tmp_path / "gallery"
+    output_dir.mkdir()
+    (output_dir / "gallery_embeddings.npy").write_bytes(b"existing")
+
+    exit_code = main(
+        [
+            "--images-dir",
+            str(images_dir),
+            "--identity-file",
+            str(identity_file),
+            "--output-dir",
+            str(output_dir),
+            "--gallery-version",
+            "sample-gallery-v1",
+            "--overwrite",
+        ],
+        runtime_factory=lambda _settings: ScriptFakeRuntime(),
+    )
+
+    assert exit_code == 0
+    assert (output_dir / "gallery_embeddings.npy").is_file()

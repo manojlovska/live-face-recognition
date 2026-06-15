@@ -46,6 +46,7 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - Similarity matches must come from loaded gallery metadata only.
 - The offline gallery builder must not log raw image bytes or embeddings.
 - The offline gallery builder must not write aligned face crops or debug images.
+- The offline gallery builder may log safe dataset metadata, but it must not log raw source image bytes or derived embeddings.
 
 ## Logging Rules
 Do not log:

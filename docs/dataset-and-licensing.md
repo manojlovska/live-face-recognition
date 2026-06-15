@@ -4,6 +4,7 @@
 The intended gallery base is CelebA.
 
 CelebA provides many celebrity face images and identity annotations. This project uses CelebA to build a face-similarity gallery.
+The repository does not download or redistribute CelebA data. Operators must supply local dataset files themselves.
 
 ## Use Limitation
 CelebA must be treated cautiously. Do not claim commercial readiness or broad public deployment unless dataset licensing and image rights are reviewed.
@@ -38,6 +39,7 @@ Generated gallery artifacts should include a manifest recording:
 - checksums.
 
 The Work Order 9 sample-gallery builder is intentionally limited to a local CelebA-like sample directory and does not process the full CelebA dataset yet.
+The Work Order 10 builder adds local CelebA-root discovery, partition filtering, and quality/performance reporting, but it still relies on user-supplied local data and does not download CelebA.
 
 ## Release Wording
 Allowed:
