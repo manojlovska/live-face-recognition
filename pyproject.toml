@@ -21,6 +21,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "httpx",
+  "openai",
   "pytest",
   "pytest-asyncio",
   "pytest-cov",

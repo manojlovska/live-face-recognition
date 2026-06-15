@@ -1,7 +1,7 @@
 # Current State
 
 ## Status
-Work Order 10 builder layout and reporting extension is complete.
+Work Order 11 non-streaming OpenAI chat adapter implementation is complete.
 
 ## Current implemented state:
 - `/healthz` exists and is public.
@@ -9,7 +9,10 @@ Work Order 10 builder layout and reporting extension is complete.
 - One-key Bearer authentication exists.
 - `/v1/models` exists and is protected.
 - `/v1/face/similarity` exists as a protected JSON contract that can return detection-only face boxes, internal embeddings, or gallery-backed similarity results.
+- Non-streaming `/v1/chat/completions` exists for OpenAI-compatible image similarity requests.
 - `/v1/face/similarity` accepts authenticated JSON requests.
+- The OpenAI chat endpoint accepts one data URL image in an OpenAI-style `image_url` content part.
+- The OpenAI chat endpoint returns an assistant message whose content is JSON text containing face-similarity results.
 - The image field must currently be a base64 data URL.
 - JPEG, PNG, and WebP are the intended supported image MIME types.
 - Image input is decoded and validated in memory.
@@ -33,7 +36,8 @@ Work Order 10 builder layout and reporting extension is complete.
 - Gallery support is artifact-based and test-gallery oriented.
 - The builder is sample-scale first; full CelebA processing is not implemented yet.
 - No uploaded images or decoded images are stored by default.
-- No OpenAI chat completions endpoint exists yet.
+- `stream=true` is not implemented yet.
+- Browser UI is not implemented yet.
 - The project still does not download CelebA.
 
 ## Current Truth
@@ -88,9 +92,10 @@ Work Order 10 builder layout and reporting extension is complete.
 - Work Order 8: local gallery artifact loading and exact cosine similarity search.
 - Work Order 9: offline gallery builder skeleton for a CelebA-like sample directory.
 - Work Order 10: CelebA layout discovery, partition parsing, and builder quality/performance reporting.
+- Work Order 11: non-streaming OpenAI-compatible `/v1/chat/completions` adapter for image similarity requests.
 
 ## Next recommended work:
-- Work Order 11: add non-streaming OpenAI-compatible `/v1/chat/completions` adapter for image similarity requests.
+- Work Order 12: add OpenAI-compatible `stream=true` SSE response streaming for chat completions.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

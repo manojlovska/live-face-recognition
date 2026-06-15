@@ -13,6 +13,7 @@
 - A small CelebA-like gallery builder skeleton can process local sample directories.
 - The builder now understands common CelebA-style layouts and partition files.
 - The builder records quality and performance reporting for local runs.
+- The non-streaming OpenAI chat adapter now returns image-similarity results as assistant JSON text.
 
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
@@ -41,7 +42,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 11: add non-streaming OpenAI-compatible `/v1/chat/completions` adapter for image similarity requests.
+Work Order 12: add OpenAI-compatible `stream=true` SSE response streaming for chat completions.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

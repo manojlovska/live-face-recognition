@@ -42,8 +42,13 @@ OpenAI-compatible endpoints should return an OpenAI-style error object where pra
 | Invalid base64 | `invalid_image_base64` | 400 |
 | Decoded image too large | `image_too_large` | 413 |
 | Invalid image bytes | `invalid_image` | 400 |
+| Unsupported OpenAI model | `model_not_found` | 404 |
+| Streaming not implemented | `streaming_not_implemented` | 400 |
+| Missing image in chat request | `image_required` | 400 |
+| Multiple images in chat request | `multiple_images_not_supported` | 400 |
+| Remote image URL in chat request | `remote_image_url_not_supported` | 400 |
+| Malformed chat message | `invalid_chat_message` | 400 or 422 |
 | Unsupported route | `not_found` | 404 |
-| Unsupported model | `model_not_found` | 404 |
 | Request too large | `request_too_large` | 413 |
 | No face found | `no_face_detected` | 200 with empty faces |
 | Too many faces | `too_many_faces` | 422 or process first face, to be decided |
@@ -89,6 +94,8 @@ When YuNet is unavailable or not loaded, protected similarity requests should re
 
 Return HTTP `503 Service Unavailable`.
 
+The OpenAI chat completions adapter uses the same error envelope and codes for its supported failure cases.
+
 ## Readiness Model Status
 `/readyz` reports model status with the summary values `models_missing`, `present_not_loaded`, `detector_loaded_gallery_missing`, `embedding_models_loaded_gallery_missing`, `gallery_error`, `detector_error`, `embedder_error`, `loaded`, or `ready`.
 This is operational status only and does not imply a successful similarity response when gallery artifacts are missing or corrupt.
@@ -102,3 +109,26 @@ This is operational status only and does not imply a successful similarity respo
 - Missing detector availability still uses `engine_not_ready`; no new error code is introduced in this work order.
 - Per-face embedding failures return a success response with `embedding.generated: false` and `embedding.error: "embedding_failed"`.
 - Gallery dimension mismatch returns HTTP `500` with `invalid_gallery_state` and `embedding_dimension_mismatch`.
+
+## Chat Completions Error Shape
+The OpenAI-compatible `/v1/chat/completions` adapter uses the same JSON envelope for supported failures:
+
+```json
+{
+  "error": {
+    "message": "The requested model is not available.",
+    "type": "invalid_request_error",
+    "code": "model_not_found"
+  }
+}
+```
+
+Required chat-completions error codes:
+- `model_not_found` for unsupported models;
+- `streaming_not_implemented` for `stream: true`;
+- `image_required` when no usable user image is present;
+- `multiple_images_not_supported` for more than one image;
+- `remote_image_url_not_supported` for remote URLs;
+- `invalid_chat_message` for malformed message shapes.
+
+Native image-validation errors are passed through unchanged so the adapter and native endpoint stay aligned.

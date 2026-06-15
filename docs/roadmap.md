@@ -7,7 +7,7 @@
 | v0.0 | Scaffold | Constitution, docs, FastAPI skeleton, health endpoints |
 | v0.1 | MVP | End-to-end CPU single-image similarity service |
 | v0.2 | Full gallery | Reproducible CelebA gallery build and validation |
-| v0.3 | OpenAI compatibility | Stronger chat completions compatibility and response streaming |
+| v0.3 | OpenAI compatibility | Minimal chat completions compatibility and response streaming |
 | v0.4 | Live API | Repeated-frame API suitable for webcam workflows |
 | v0.5 | Browser demo | HTML5 camera interface with overlay |
 | v0.6 | Hardening | Benchmarks, tests, docs, security, packaging |
@@ -82,7 +82,7 @@ Revisit this roadmap if:
 - a different model stack is approved by ADR.
 
 ## Scaffold Status
-The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, and an offline sample-gallery builder skeleton are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. The next milestone is OpenAI chat compatibility.
+The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, an offline sample-gallery builder skeleton, and a non-streaming OpenAI-compatible chat adapter are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. The next milestone is streaming OpenAI compatibility.
 
 ## Work Order Status
 - Work Order 1: complete.
@@ -95,4 +95,5 @@ The initial scaffold work is complete. One-key authentication, readiness routing
 - Work Order 8: complete.
 - Work Order 9: complete.
 - Work Order 10: complete.
-- Work Order 11: next.
+- Work Order 11: complete.
+- Work Order 12: next.

@@ -1,29 +1,27 @@
 # OpenAI Compatibility
 
 ## Purpose
-The project offers OpenAI-compatible endpoints so users can reuse OpenAI SDK patterns with a custom `base_url`.
+The project offers a minimal OpenAI-compatible surface so users can reuse OpenAI SDK patterns with a custom `base_url`.
 
-This service is not a general LLM. Compatibility is limited to the documented vision request path.
+This service is not a general LLM. Compatibility is limited to the documented image-similarity path.
 
-## Required MVP Endpoints
+## Required Endpoints
 
 ### `GET /v1/models`
-Must return an OpenAI-style model list containing:
-
-```text
-celeba-face-similarity-cpu
-```
+Returns an OpenAI-style model list containing `celeba-face-similarity-cpu`.
 
 ### `POST /v1/chat/completions`
-Must accept supported image-containing chat requests and return face-similarity results in the assistant message.
+Returns face-similarity results in the assistant message for supported image requests.
 
 ## Current State
 
-`/v1/models` now exists and is protected by Bearer API key auth.
+`/v1/models` exists and is protected by Bearer API key auth.
 
-`/v1/chat/completions` is still not implemented.
+`/v1/chat/completions` exists and supports non-streaming image similarity requests.
 
-## Example Client Use
+`stream=true` is not implemented yet.
+
+## Supported Request Shape
 
 ```python
 from openai import OpenAI
@@ -50,33 +48,30 @@ response = client.chat.completions.create(
 )
 ```
 
-## Supported in MVP
-- OpenAI Python client with custom `base_url`
-- Bearer API key
-- `/v1/models`
-- `/v1/chat/completions` later
-- image input using base64 data URL
-- non-streaming response
+Supported behavior:
+- `model`
+- `messages`
+- a user message with `content` as a list
+- one `image_url` part whose `url` is a data URL
+- optional text parts, which are ignored for now
+- optional local extension `top_k`
+- `stream` omitted or `false`
 
-## Target by RC1
-- `stream=true` response streaming using SSE
-- OpenAI-style error objects
-- compatibility tests using the OpenAI Python package
+Unsupported behavior:
+- remote image URLs
+- multiple images per request
+- plain base64 without a data URL prefix
+- tool calls
+- function calls
+- audio
+- files
+- `stream=true` until Work Order 12
 
-## Not Supported
-- General text generation
-- Model reasoning
-- Tool calls
-- Function calls
-- Audio
-- Files API
-- Assistants API
-- Fine-tuning
-- Embeddings API
-- Persistent conversations
+## Local `top_k` Extension
+`top_k` is a local extension, not standard OpenAI API behavior. If supplied, it is validated the same way as the native endpoint and defaults to `5`.
 
 ## Response Content
-The assistant message should contain structured JSON text with face-similarity results. It must include or preserve a disclaimer that the result is similarity-only and not identity verification.
+The assistant message content is JSON text containing face-similarity results. It must include or preserve the disclaimer that the result is similarity-only and not identity verification.
 
 ## Compatibility Test Requirement
-At least one test or example must instantiate the OpenAI Python client and call the local service through `base_url`.
+At least one test instantiates the OpenAI Python client and calls the local service through `base_url`.

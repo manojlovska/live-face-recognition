@@ -9,6 +9,26 @@ class EngineNotReadyError(Exception):
     """Raised when face-similarity inference has not been loaded yet."""
 
 
+class ChatCompletionsError(Exception):
+    """Raised when an OpenAI-style chat request is invalid or unsupported."""
+
+    def __init__(
+        self,
+        *,
+        message: str,
+        code: str,
+        status_code: int,
+        error_type: str = "invalid_request_error",
+        param: str | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.message = message
+        self.code = code
+        self.status_code = status_code
+        self.error_type = error_type
+        self.param = param
+
+
 class GalleryStateError(Exception):
     """Raised when gallery state is inconsistent with a similarity query."""
 
@@ -97,4 +117,19 @@ def image_validation_error_response(exc: ImageValidationError) -> JSONResponse:
                 "code": exc.code,
             }
         },
+    )
+
+
+def chat_completions_error_response(exc: ChatCompletionsError) -> JSONResponse:
+    error_body = {
+        "message": exc.message,
+        "type": exc.error_type,
+        "code": exc.code,
+    }
+    if exc.param is not None:
+        error_body["param"] = exc.param
+
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": error_body},
     )

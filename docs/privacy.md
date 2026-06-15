@@ -62,3 +62,4 @@ Where practical, tests should verify that normal requests do not create saved im
 - Public API responses do not include raw query embeddings.
 - Builder outputs are local model artifacts, not user data.
 - The offline gallery builder writes only derived local artifacts and build reports; it does not retain source images or embeddings beyond the build process.
+- The OpenAI-compatible chat adapter decodes images in memory only and reuses the native pipeline; it does not echo base64 payloads or retain request images.
