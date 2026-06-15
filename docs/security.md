@@ -39,6 +39,8 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - Do not trust client-provided MIME type alone.
 - Do not write uploaded images to disk by default.
 - Enforce request size limits with `FACE_MAX_IMAGE_BYTES`.
+- Model assets are operator-supplied local files; the service does not download them at runtime.
+- Model asset presence and checksum checks must not expose raw file contents.
 
 ## Logging Rules
 Do not log:
@@ -58,6 +60,7 @@ Log only safe metadata such as:
 - number of faces detected;
 - error category.
 - image payloads or decoded bytes.
+- model asset paths or checksums unless the value is already a documented non-secret artifact.
 
 ## Request Limits
 The service should define:

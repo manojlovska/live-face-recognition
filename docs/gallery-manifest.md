@@ -2,6 +2,7 @@
 
 ## Purpose
 The gallery manifest records how a gallery artifact was built. It protects reproducibility and prevents confusion between incompatible embeddings.
+This is separate from the model asset manifest used to record YuNet/SFace model file checksums.
 
 ## Required Fields
 
@@ -52,3 +53,8 @@ At startup, the service should validate that:
 
 ## Update Rule
 Whenever gallery format changes, update this file and add or update tests.
+
+## Model Manifest Distinction
+- The model manifest documents detector/embedder asset provenance and checksums.
+- The gallery manifest documents gallery artifact provenance and checksums.
+- Do not mix model asset metadata into the gallery manifest.

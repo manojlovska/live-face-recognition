@@ -9,9 +9,12 @@ Expected initial variables:
 ```text
 FACE_API_KEY=change-me-local-dev-key
 FACE_MODEL_ID=celeba-face-similarity-cpu
-FACE_GALLERY_PATH=data/gallery
+MODEL_ASSET_DIR=models
+YUNET_MODEL_PATH=models/face_detection_yunet.onnx
+SFACE_MODEL_PATH=models/face_recognition_sface.onnx
+MODEL_MANIFEST_PATH=models/model_manifest.json
+MODEL_AUTO_LOAD=false
 FACE_MAX_IMAGE_BYTES=5242880
-FACE_MAX_IMAGE_PIXELS=...
 ```
 
 Set `FACE_API_KEY` before starting the service so protected endpoints can reject missing or wrong credentials.

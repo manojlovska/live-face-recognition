@@ -1,11 +1,11 @@
 # Current State
 
 ## Status
-Work Order 4 image validation implementation is complete and the repository layout has been repaired to root-level `docs/`.
+Work Order 5 model asset management and loader skeleton implementation is complete.
 
 ## Current implemented state:
 - `/healthz` exists and is public.
-- `/readyz` exists and returns not_ready until models/gallery are implemented.
+- `/readyz` exists and reports model status honestly while gallery remains not loaded.
 - One-key Bearer authentication exists.
 - `/v1/models` exists and is protected.
 - `/v1/face/similarity` exists as a protected JSON contract but returns engine_not_ready.
@@ -13,6 +13,9 @@ Work Order 4 image validation implementation is complete and the repository layo
 - The image field must currently be a base64 data URL.
 - JPEG, PNG, and WebP are the intended supported image MIME types.
 - Image input is decoded and validated in memory.
+- Model asset paths are configurable.
+- YuNet and SFace asset presence can be checked.
+- Model loading skeleton exists but real inference is not implemented.
 - Valid images still return engine_not_ready because inference is not implemented.
 - No uploaded images or decoded images are stored by default.
 - No OpenAI chat completions endpoint exists yet.
@@ -36,12 +39,13 @@ Work Order 4 image validation implementation is complete and the repository layo
 - `/v1/models` route contract
 - `/v1/face/similarity` contract with stub engine
 - Image input decoding and validation
+- Model asset manager
+- CPU-only model loading skeleton
 - Pytest-based health/config smoke tests
 - Ruff and packaging configuration
 
 ## Missing
 - Face detection
-- Model loading
 - Embeddings
 - Gallery loading
 - OpenAI-compatible chat endpoint
@@ -62,9 +66,10 @@ Work Order 4 image validation implementation is complete and the repository layo
 - Work Order 2: one-key Bearer authentication and `/readyz`.
 - Work Order 3: `/v1/models` and native `/v1/face/similarity` contract with stub engine.
 - Work Order 4: image decoding and validation for native JSON image requests.
+- Work Order 5: model asset management and CPU-only YuNet/SFace loading skeleton.
 
 ## Next recommended work:
-- Work Order 5: add model asset management and CPU-only YuNet/SFace model loading skeleton, still without full inference results.
+- Work Order 6: add real YuNet face detection using loaded detector, returning face boxes only, still without SFace embeddings or gallery search.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

@@ -218,4 +218,10 @@ marimo/_lsp/
 __marimo__/
 
 # Streamlit
+
+# Local model assets and gallery artifacts
+models/*
+!models/.gitkeep
+data/gallery/*
+!data/gallery/.gitkeep
 .streamlit/secrets.toml
