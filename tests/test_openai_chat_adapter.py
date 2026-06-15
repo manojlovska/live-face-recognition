@@ -344,7 +344,7 @@ def test_chat_completion_contract_rejects_wrong_auth(monkeypatch) -> None:
     assert response.status_code == 401
 
 
-def test_chat_completion_contract_rejects_stream_true(monkeypatch) -> None:
+def test_chat_completion_contract_preserves_stream_false(monkeypatch) -> None:
     monkeypatch.setenv("FACE_API_KEY", "local-dev-key")
     client = TestClient(
         _build_app(
@@ -359,11 +359,11 @@ def test_chat_completion_contract_rejects_stream_true(monkeypatch) -> None:
     response = client.post(
         "/v1/chat/completions",
         headers=_auth_headers(),
-        json=_chat_request(make_image_data_url("JPEG"), stream=True),
+        json=_chat_request(make_image_data_url("JPEG"), stream=False),
     )
 
-    assert response.status_code == 400
-    assert response.json()["error"]["code"] == "streaming_not_implemented"
+    assert response.status_code == 200
+    assert response.json()["object"] == "chat.completion"
 
 
 def test_chat_completion_contract_rejects_remote_image_url(monkeypatch) -> None:

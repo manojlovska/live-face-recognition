@@ -43,7 +43,6 @@ OpenAI-compatible endpoints should return an OpenAI-style error object where pra
 | Decoded image too large | `image_too_large` | 413 |
 | Invalid image bytes | `invalid_image` | 400 |
 | Unsupported OpenAI model | `model_not_found` | 404 |
-| Streaming not implemented | `streaming_not_implemented` | 400 |
 | Missing image in chat request | `image_required` | 400 |
 | Multiple images in chat request | `multiple_images_not_supported` | 400 |
 | Remote image URL in chat request | `remote_image_url_not_supported` | 400 |
@@ -125,7 +124,6 @@ The OpenAI-compatible `/v1/chat/completions` adapter uses the same JSON envelope
 
 Required chat-completions error codes:
 - `model_not_found` for unsupported models;
-- `streaming_not_implemented` for `stream: true`;
 - `image_required` when no usable user image is present;
 - `multiple_images_not_supported` for more than one image;
 - `remote_image_url_not_supported` for remote URLs;

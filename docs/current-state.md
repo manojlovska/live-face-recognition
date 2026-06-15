@@ -1,7 +1,7 @@
 # Current State
 
 ## Status
-Work Order 11 non-streaming OpenAI chat adapter implementation is complete.
+Work Order 12 OpenAI-compatible streaming chat adapter implementation is complete.
 
 ## Current implemented state:
 - `/healthz` exists and is public.
@@ -9,10 +9,10 @@ Work Order 11 non-streaming OpenAI chat adapter implementation is complete.
 - One-key Bearer authentication exists.
 - `/v1/models` exists and is protected.
 - `/v1/face/similarity` exists as a protected JSON contract that can return detection-only face boxes, internal embeddings, or gallery-backed similarity results.
-- Non-streaming `/v1/chat/completions` exists for OpenAI-compatible image similarity requests.
+- `/v1/chat/completions` supports both non-streaming and `stream=true` OpenAI-compatible image similarity requests.
 - `/v1/face/similarity` accepts authenticated JSON requests.
 - The OpenAI chat endpoint accepts one data URL image in an OpenAI-style `image_url` content part.
-- The OpenAI chat endpoint returns an assistant message whose content is JSON text containing face-similarity results.
+- The OpenAI chat endpoint returns assistant content as JSON text in non-streaming mode and OpenAI-style SSE chunk frames in streaming mode.
 - The image field must currently be a base64 data URL.
 - JPEG, PNG, and WebP are the intended supported image MIME types.
 - Image input is decoded and validated in memory.
@@ -36,8 +36,9 @@ Work Order 11 non-streaming OpenAI chat adapter implementation is complete.
 - Gallery support is artifact-based and test-gallery oriented.
 - The builder is sample-scale first; full CelebA processing is not implemented yet.
 - No uploaded images or decoded images are stored by default.
-- `stream=true` is not implemented yet.
+- `stream=true` uses OpenAI-style SSE chunk frames.
 - Browser UI is not implemented yet.
+- Live camera/frame streaming is not implemented yet.
 - The project still does not download CelebA.
 
 ## Current Truth
@@ -93,9 +94,10 @@ Work Order 11 non-streaming OpenAI chat adapter implementation is complete.
 - Work Order 9: offline gallery builder skeleton for a CelebA-like sample directory.
 - Work Order 10: CelebA layout discovery, partition parsing, and builder quality/performance reporting.
 - Work Order 11: non-streaming OpenAI-compatible `/v1/chat/completions` adapter for image similarity requests.
+- Work Order 12: OpenAI-compatible `stream=true` SSE chat completions.
 
 ## Next recommended work:
-- Work Order 12: add OpenAI-compatible `stream=true` SSE response streaming for chat completions.
+- Work Order 13: add a small HTML5 browser demo that captures one webcam frame and calls the existing API, without live continuous streaming yet.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

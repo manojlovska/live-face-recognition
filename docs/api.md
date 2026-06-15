@@ -34,8 +34,8 @@ Expected responsibilities:
 ## OpenAI-Compatible Endpoints
 
 ### `POST /v1/chat/completions`
-Accepts a supported OpenAI-style image request and returns an assistant message containing structured face-similarity JSON.
-The adapter is non-streaming only and reuses the native face-similarity pipeline.
+Accepts a supported OpenAI-style image request and returns an assistant message containing structured face-similarity JSON, or OpenAI-style SSE chunks when `stream=true`.
+The adapter reuses the native face-similarity pipeline.
 
 ## Versioning
 API version is currently represented by `/v1` path prefix and model/gallery manifest versions.
