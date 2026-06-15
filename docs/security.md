@@ -47,6 +47,8 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - The offline gallery builder must not log raw image bytes or embeddings.
 - The offline gallery builder must not write aligned face crops or debug images.
 - The offline gallery builder may log safe dataset metadata, but it must not log raw source image bytes or derived embeddings.
+- The OpenAI-compatible chat adapter must enforce the same auth, image-size, and image-format rules as the native endpoint.
+- The OpenAI-compatible chat adapter must reject remote image URLs, multiple images, and `stream=true` in this work order.
 
 ## Logging Rules
 Do not log:
@@ -72,6 +74,7 @@ Log only safe metadata such as:
 - model asset paths or checksums unless the value is already a documented non-secret artifact.
 - gallery artifact paths or checksums unless the value is already a documented non-secret artifact.
 - builder input or output paths unless already documented as local non-secret artifacts.
+- OpenAI message contents that include raw image payloads or decoded bytes.
 
 ## Request Limits
 The service should define:

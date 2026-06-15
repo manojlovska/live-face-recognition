@@ -55,6 +55,8 @@ Authorized valid image requests are decoded and validated in memory. If the YuNe
 }
 ```
 
+The non-streaming OpenAI chat adapter reuses this same native pipeline and image-validation behavior.
+
 When detection-only mode is available, the response has this shape:
 
 ```json

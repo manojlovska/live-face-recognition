@@ -35,6 +35,7 @@ Expected responsibilities:
 
 ### `POST /v1/chat/completions`
 Accepts a supported OpenAI-style image request and returns an assistant message containing structured face-similarity JSON.
+The adapter is non-streaming only and reuses the native face-similarity pipeline.
 
 ## Versioning
 API version is currently represented by `/v1` path prefix and model/gallery manifest versions.

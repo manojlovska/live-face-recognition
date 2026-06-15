@@ -66,6 +66,7 @@ Skipped integration tests must be reported as skipped, not passed.
 - CelebA partition parsing tests for `train`, `val`, and `test` mapping;
 - gallery builder tests for writes, skips, multiple-face handling, runtime readiness checks, and reporting;
 - script tests for dry-run, missing input, existing output, and successful sample builds.
+- OpenAI chat-completions tests for HTTP contract coverage, native error passthrough, and Python client compatibility against a local `base_url`.
 
 ## Test Quality Rule
 For every important safety behavior, ask:

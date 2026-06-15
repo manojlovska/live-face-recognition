@@ -78,6 +78,37 @@ To test real YuNet detection manually:
 
 If you also provide the SFace ONNX file and set `MODEL_AUTO_LOAD=true`, the service will generate embeddings internally while still returning only public metadata. If you also provide a local gallery artifact and set `GALLERY_AUTO_LOAD=true`, the service can return similarity results with `top_matches`.
 
+## OpenAI-compatible chat completions
+
+The service also exposes a minimal non-streaming OpenAI-compatible adapter for image similarity requests. The adapter reuses the same native pipeline and returns the similarity result as JSON text in the assistant message.
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="change-me-local-dev-key",
+    base_url="http://localhost:8000/v1",
+)
+
+response = client.chat.completions.create(
+    model="celeba-face-similarity-cpu",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Who is this face most similar to?"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "data:image/jpeg;base64,..."},
+                },
+            ],
+        }
+    ],
+)
+```
+
+`stream=true` is not implemented yet.
+
 ## Build gallery
 
 Use the sample builder to create a local gallery artifact from a small CelebA-like directory:
