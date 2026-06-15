@@ -36,6 +36,7 @@ OpenAI-compatible endpoints should return an OpenAI-style error object where pra
 | Case | Code suggestion | HTTP status |
 |---|---|---:|
 | Missing or invalid API key | `invalid_api_key` | 401 |
+| Engine not ready | `engine_not_ready` | 503 |
 | Unsupported route | `not_found` | 404 |
 | Unsupported model | `model_not_found` | 404 |
 | Invalid image | `invalid_image` | 400 |
@@ -67,3 +68,18 @@ Authentication failures should use a compact, OpenAI-style error envelope:
 ```
 
 Return HTTP `401 Unauthorized` with `WWW-Authenticate: Bearer`.
+
+## Engine Not Ready Shape
+Until model loading exists, protected similarity requests should return:
+
+```json
+{
+  "error": {
+    "message": "Face similarity engine is not ready. Models and gallery are not loaded.",
+    "type": "service_unavailable",
+    "code": "engine_not_ready"
+  }
+}
+```
+
+Return HTTP `503 Service Unavailable`.

@@ -11,8 +11,8 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Auth | one-key auth tested | in progress |
 | Health | `/healthz` tested | in progress |
 | Readiness | `/readyz` tested | in progress |
-| Models | `/v1/models` tested | not started |
-| Native API | `/v1/face/similarity` tested | not started |
+| Models | `/v1/models` tested | in progress |
+| Native API | `/v1/face/similarity` tested | in progress |
 | OpenAI API | non-streaming `/v1/chat/completions` works | not started |
 | CPU inference | YuNet/SFace path works without GPU | not started |
 | Gallery | small gallery works | not started |
@@ -33,7 +33,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Privacy | no-retention policy documented and tested where practical | not started |
 | Model card | complete and honest | initial draft |
 | Dataset licensing | limitations documented | initial draft |
-| Error handling | structured errors documented/tested | not started |
+| Error handling | structured errors documented/tested | in progress |
 | Compatibility | OpenAI Python client compatibility test | not started |
 | Release language | no overclaims | in progress |
 
