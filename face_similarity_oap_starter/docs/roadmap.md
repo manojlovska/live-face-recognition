@@ -80,3 +80,6 @@ Revisit this roadmap if:
 - OpenAI compatibility requirements change substantially;
 - browser live mode requires WebSocket earlier than expected;
 - a different model stack is approved by ADR.
+
+## Scaffold Status
+The initial scaffold work is now in progress in the repository. The next milestone is one-key authentication and readiness routing.

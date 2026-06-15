@@ -1,7 +1,7 @@
 # Current State
 
 ## Status
-Initial strategic documentation state. Implementation has not started.
+Scaffold implementation has started. The repo now has a minimal executable FastAPI package, config loader, health route, and test setup.
 
 ## Current Truth
 - Project goal is defined.
@@ -13,19 +13,21 @@ Initial strategic documentation state. Implementation has not started.
 - No image or embedding retention by default is accepted.
 
 ## Implemented
-- No code implemented yet in this initial state.
+- Python package scaffold
+- FastAPI application entry point
+- Basic settings loader
+- `/healthz` route
+- Pytest-based health/config smoke tests
+- Ruff and packaging configuration
 
 ## Missing
-- Repository scaffold
-- Python package setup
-- FastAPI app
 - Auth dependency
-- Health/readiness endpoints
+- Readiness endpoint
 - OpenAI-compatible endpoints
 - Native face-similarity endpoint
 - Model downloader/loader
 - Gallery artifacts and builder
-- Tests
+- Full test coverage
 - Benchmarks
 - Browser demo
 
@@ -36,14 +38,7 @@ Initial strategic documentation state. Implementation has not started.
 - OpenAI compatibility must be explicitly scoped; this is not a general LLM API.
 
 ## Next Recommended Task
-Create the project scaffold:
-- `pyproject.toml`
-- minimal `app/main.py`
-- config model
-- `/healthz`
-- test setup
-- ruff setup
-- README quickstart
+Add one-key authentication, readiness, and `/v1/models` routing on top of the scaffold.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.
