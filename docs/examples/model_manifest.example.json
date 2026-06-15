@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "name": "opencv-yunet",
+    "path": "models/face_detection_yunet.onnx",
+    "sha256": "replace-with-verified-detector-sha256",
+    "source": "replace-with-verified-detector-source-note"
+  },
+  "embedder": {
+    "name": "opencv-sface",
+    "path": "models/face_recognition_sface.onnx",
+    "sha256": "replace-with-verified-embedder-sha256",
+    "source": "replace-with-verified-embedder-source-note"
+  }
+}

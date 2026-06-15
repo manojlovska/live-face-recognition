@@ -82,11 +82,12 @@ Revisit this roadmap if:
 - a different model stack is approved by ADR.
 
 ## Scaffold Status
-The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, and image decoding/validation are now implemented. The next milestone is model asset management and CPU-only YuNet/SFace model loading skeleton.
+The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, and model asset management / CPU-only YuNet-SFace loading skeleton are now implemented. The next milestone is real YuNet face detection using the loaded detector.
 
 ## Work Order Status
 - Work Order 1: complete.
 - Work Order 2: complete.
 - Work Order 3: complete.
 - Work Order 4: complete.
-- Work Order 5: next.
+- Work Order 5: complete.
+- Work Order 6: next.

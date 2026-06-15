@@ -11,13 +11,15 @@ from app.api.errors import (
 )
 from app.config import get_settings
 from app.services.face_similarity import FaceSimilarityEngine
+from app.services.model_runtime import ModelRuntime
 
 
 def create_app() -> FastAPI:
     settings = get_settings()
     app = FastAPI(title=settings.app_name, version=settings.app_version)
     app.state.settings = settings
-    app.state.face_similarity_engine = FaceSimilarityEngine()
+    app.state.model_runtime = ModelRuntime(settings)
+    app.state.face_similarity_engine = FaceSimilarityEngine(app.state.model_runtime)
     app.include_router(health_router)
     app.include_router(readiness_router)
     app.include_router(models_router)

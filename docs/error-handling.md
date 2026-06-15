@@ -86,3 +86,7 @@ Until model loading exists, protected similarity requests should return:
 ```
 
 Return HTTP `503 Service Unavailable`.
+
+## Readiness Model Status
+`/readyz` reports model status with the summary values `missing`, `present_not_loaded`, `loaded`, or `error`.
+This is operational status only and does not imply a successful similarity response while gallery loading remains unimplemented.

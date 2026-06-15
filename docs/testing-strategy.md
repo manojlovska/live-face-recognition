@@ -50,6 +50,12 @@ Where real model files are unavailable in CI, tests should distinguish:
 
 Skipped integration tests must be reported as skipped, not passed.
 
+## Current Model Work Coverage
+- model asset manager checksum and presence tests;
+- CPU-only loader skeleton tests with stubbed OpenCV objects;
+- readiness tests for missing and present-but-not-loaded model files;
+- native similarity tests that still return `engine_not_ready` for valid images.
+
 ## Test Quality Rule
 For every important safety behavior, ask:
 

@@ -31,6 +31,7 @@ curl http://127.0.0.1:8000/readyz
 ```
 
 `/readyz` is public too, but it currently returns `503 not_ready` until models and gallery loading exist.
+The response now includes model-asset status so you can tell whether YuNet and SFace files are missing, present, loaded, or in error.
 
 ## Authentication
 
@@ -60,6 +61,12 @@ curl -H "Authorization: Bearer change-me-local-dev-key" \
 ## Native similarity
 
 Valid `POST /v1/face/similarity` image requests are now decoded and validated in memory, but they still return `503 engine_not_ready` until inference exists.
+
+Model files are expected under `models/` by default:
+
+- `models/face_detection_yunet.onnx`
+- `models/face_recognition_sface.onnx`
+- `models/model_manifest.json`
 
 ## Quality checks
 

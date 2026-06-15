@@ -14,7 +14,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Models | `/v1/models` tested | in progress |
 | Native API | `/v1/face/similarity` tested | in progress |
 | OpenAI API | non-streaming `/v1/chat/completions` works | not started |
-| CPU inference | YuNet/SFace path works without GPU | not started |
+| CPU inference | YuNet/SFace path works without GPU | in progress |
 | Gallery | small gallery works | not started |
 | Privacy | no image/embedding retention by default | not started |
 | Docs | README and core docs updated | in progress |

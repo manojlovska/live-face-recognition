@@ -49,3 +49,4 @@ Where practical, tests should verify that normal requests do not create saved im
 - Uploaded image bytes are decoded in memory only.
 - No image retention exists by default.
 - No embedding retention exists yet.
+- Model files are local operator-managed assets, not user data.

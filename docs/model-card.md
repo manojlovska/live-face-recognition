@@ -7,6 +7,7 @@ Initial planned stack:
 - Face embedder: OpenCV SFace
 - Similarity gallery: CelebA-derived embeddings
 - Runtime: CPU-only Python service
+- Model assets are loaded from local paths under `models/` by default.
 
 ## Intended Use
 - Research/demo face-similarity service
@@ -32,6 +33,10 @@ Initial planned stack:
 - Top-k similar CelebA identity IDs
 - Similarity scores
 - Disclaimer
+
+## Current Output State
+- No face-recognition output is produced yet.
+- No identity verification claim is made.
 
 ## Limitations
 - Similarity score is not identity proof.
