@@ -52,6 +52,7 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - `stream=true` is supported as SSE response streaming only; it is not live video streaming.
 - The browser demo must not persist API keys or captured images in browser storage.
 - The browser demo must not load third-party scripts or send data to third-party origins.
+- The browser demo overlay must be drawn locally from the API response and must not perform browser-side recognition.
 
 ## Logging Rules
 Do not log:

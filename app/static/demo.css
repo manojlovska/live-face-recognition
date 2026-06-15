@@ -123,6 +123,65 @@ button:disabled {
   place-items: center;
 }
 
+.capture-panel {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.panel-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.panel-heading h2 {
+  margin: 0;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.toggle input {
+  width: auto;
+}
+
+.help-text {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.capture-stage {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.capture-stage canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+
+#frame-canvas {
+  background: #140f0c;
+}
+
+#overlay-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 video {
   width: 100%;
   max-height: 420px;

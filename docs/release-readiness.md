@@ -40,7 +40,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 ## RC1 Allowed Claim
 Controlled-pilot-ready CPU-only research service for CelebA-based face similarity.
 
-The API now supports detector-only, embedding-only, and gallery-backed similarity paths over a local artifact gallery, it has a sample-gallery builder plus CelebA-style local layout discovery, it exposes a minimal OpenAI-compatible chat-completions adapter for image similarity requests with both non-streaming and SSE streaming responses, and it includes a small built-in browser demo for one-frame webcam capture. The full CelebA gallery workflow still blocks RC1.
+The API now supports detector-only, embedding-only, and gallery-backed similarity paths over a local artifact gallery, it has a sample-gallery builder plus CelebA-style local layout discovery, it exposes a minimal OpenAI-compatible chat-completions adapter for image similarity requests with both non-streaming and SSE streaming responses, and it includes a small built-in browser demo for one-frame webcam capture with optional face-box overlays. The full CelebA gallery workflow still blocks RC1.
 
 ## RC1 Forbidden Claim
 Production biometric identification or verified celebrity recognition.

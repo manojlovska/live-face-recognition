@@ -191,3 +191,4 @@ Uploaded image data is decoded in memory and discarded by default. No uploaded i
 The OpenAI-compatible chat adapter uses the same native validation and decoding path; the only difference is whether the final response is returned as JSON or SSE chunks.
 
 The browser demo calls this endpoint once per capture button press and does not continuously stream frames.
+When the demo overlay is enabled, it draws the returned `faces[].box` values on a local canvas using the captured frame's pixel dimensions as the coordinate basis.

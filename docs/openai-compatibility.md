@@ -103,6 +103,7 @@ The streamed content is the same privacy-filtered face-similarity payload used b
 - `stream=true` is response streaming only
 - no live webcam streaming
 - the built-in browser demo calls the native `/v1/face/similarity` endpoint instead of the OpenAI adapter
+- the built-in browser demo can optionally draw boxes from the native endpoint response, but it still sends one request per click
 
 ## Compatibility Test Requirement
 At least one test instantiates the OpenAI Python client and calls the local service through `base_url`.

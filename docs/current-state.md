@@ -1,7 +1,7 @@
 # Current State
 
 ## Status
-Work Order 13 browser demo implementation is complete.
+Work Order 14 browser overlay implementation is complete.
 
 ## Current implemented state:
 - `/healthz` exists and is public.
@@ -39,9 +39,10 @@ Work Order 13 browser demo implementation is complete.
 - No uploaded images or decoded images are stored by default.
 - `stream=true` uses OpenAI-style SSE chunk frames.
 - The browser demo can capture one webcam frame and send it to `/v1/face/similarity`.
-- The browser demo does not continuously stream video.
-- The browser demo does not store API keys, images, or embeddings.
-- Live repeated-frame processing is not implemented yet.
+- The browser demo can optionally draw face boxes from the captured-frame API response.
+- The browser demo still sends only one request per capture click.
+- Continuous live frame processing is not implemented yet.
+- WebSockets are not implemented.
 - The project still does not download CelebA.
 
 ## Current Truth
@@ -99,9 +100,10 @@ Work Order 13 browser demo implementation is complete.
 - Work Order 11: non-streaming OpenAI-compatible `/v1/chat/completions` adapter for image similarity requests.
 - Work Order 12: OpenAI-compatible `stream=true` SSE chat completions.
 - Work Order 13: small built-in browser demo for one-frame webcam capture.
+- Work Order 14: optional client-side face-box overlay for the browser demo.
 
 ## Next recommended work:
-- Work Order 14: add optional client-side face-box overlay for the browser demo using the existing single-frame response, still without continuous live streaming.
+- Work Order 15: add an explicit low-rate live polling mode to the browser demo using the existing API, with start/stop controls and client-side throttling.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.
