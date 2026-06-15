@@ -1,0 +1,56 @@
+# Model Card
+
+## Model Stack
+Initial planned stack:
+
+- Face detector: OpenCV YuNet
+- Face embedder: OpenCV SFace
+- Similarity gallery: CelebA-derived embeddings
+- Runtime: CPU-only Python service
+
+## Intended Use
+- Research/demo face-similarity service
+- OpenAI-compatible API experiments
+- Controlled internal or workshop use
+- CPU-only computer vision service example
+
+## Not Intended For
+- Identity verification
+- Authentication
+- Law enforcement
+- Surveillance
+- Production biometric identification
+- Commercial CelebA-backed deployment without legal review
+
+## Inputs
+- JPEG/PNG/WebP image, subject to implemented validation rules
+- One or more visible faces
+
+## Outputs
+- Face bounding boxes
+- Detection scores
+- Top-k similar CelebA identity IDs
+- Similarity scores
+- Disclaimer
+
+## Limitations
+- Similarity score is not identity proof.
+- CelebA may have demographic and image-source biases.
+- Results depend on detector and embedding quality.
+- CPU latency depends on hardware, image size, and gallery size.
+- Display names are not provided unless a legal mapping is added.
+
+## Safety and Privacy
+Uploaded images and user embeddings are not stored by default. Logs must not contain raw images or embeddings.
+
+## Performance
+Actual performance must be recorded in `docs/benchmark-results.md`. Do not invent latency or FPS numbers.
+
+## Evaluation Plan
+At minimum:
+- no-face behavior;
+- one-face behavior;
+- multi-face behavior;
+- repeated-frame latency;
+- gallery search correctness on known fixtures;
+- OpenAI client compatibility.
