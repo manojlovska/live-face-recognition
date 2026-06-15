@@ -1,7 +1,18 @@
 # Current State
 
 ## Status
-Scaffold implementation has started. The repo now has a minimal executable FastAPI package, config loader, health route, and test setup.
+Work Order 1 scaffold implementation is complete and the repository layout has been repaired to root-level `docs/`.
+
+## Current implemented state:
+- CPU-only FastAPI scaffold exists.
+- Settings loader exists.
+- `/healthz` exists.
+- Pytest and Ruff are configured.
+- No auth layer exists yet.
+- No `/readyz` endpoint exists yet.
+- No `/v1/models` endpoint exists yet.
+- No image ingestion or inference exists yet.
+- No OpenAI-compatible chat endpoint exists yet.
 
 ## Current Truth
 - Project goal is defined.
@@ -37,8 +48,11 @@ Scaffold implementation has started. The repo now has a minimal executable FastA
 - CPU performance must be measured, not assumed.
 - OpenAI compatibility must be explicitly scoped; this is not a general LLM API.
 
-## Next Recommended Task
-Add one-key authentication, readiness, and `/v1/models` routing on top of the scaffold.
+## Last completed work:
+- Work Order 1: initial FastAPI scaffold.
+
+## Next recommended work:
+- Work Order 2: add one-key Bearer authentication and `/readyz`.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.
