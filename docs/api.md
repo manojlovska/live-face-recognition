@@ -20,6 +20,7 @@ Returns the configured model metadata and requires `Authorization: Bearer <FACE_
 
 ### `GET /demo`
 Returns the built-in browser demo HTML page. The demo page is public, but any API request it sends still requires Bearer auth.
+The demo can show optional face-box overlays from a single captured frame, but it still sends only one request per capture click.
 
 ## Native Endpoint
 

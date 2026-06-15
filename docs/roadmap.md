@@ -83,7 +83,7 @@ Revisit this roadmap if:
 - a different model stack is approved by ADR.
 
 ## Scaffold Status
-The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, an offline sample-gallery builder skeleton, an OpenAI-compatible chat adapter with non-streaming and SSE streaming support, and a small built-in browser demo are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. The next milestone is client-side overlay polish.
+The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, an offline sample-gallery builder skeleton, an OpenAI-compatible chat adapter with non-streaming and SSE streaming support, and a small built-in browser demo with optional face-box overlays are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. The next milestone is low-rate live polling.
 
 ## Work Order Status
 - Work Order 1: complete.
@@ -99,4 +99,5 @@ The initial scaffold work is complete. One-key authentication, readiness routing
 - Work Order 11: complete.
 - Work Order 12: complete.
 - Work Order 13: complete.
-- Work Order 14: next.
+- Work Order 14: complete.
+- Work Order 15: next.

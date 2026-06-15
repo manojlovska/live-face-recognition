@@ -18,6 +18,8 @@ def test_demo_route_is_public_and_serves_local_assets() -> None:
 
     assert response.status_code == 200
     assert "CelebA Face Similarity Demo" in response.text
+    assert 'id="show-face-boxes"' in response.text
+    assert 'id="overlay-canvas"' in response.text
     assert 'href="/static/demo.css"' in response.text
     assert 'src="/static/demo.js"' in response.text
     assert "https://" not in response.text
@@ -43,8 +45,11 @@ def test_static_assets_exist_and_stay_framework_free() -> None:
     assert (STATIC_DIR / "demo.css").exists()
     assert "navigator.mediaDevices.getUserMedia" in js
     assert "/v1/face/similarity" in js
+    assert "drawFaceBoxes" in js
+    assert "faces" in js
     assert "localStorage" not in js
     assert "sessionStorage" not in js
     assert "innerHTML" not in js
+    assert "setInterval" not in js
     assert "https://" not in html
     assert "cdn" not in html.lower()

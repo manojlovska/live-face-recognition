@@ -69,6 +69,7 @@ Skipped integration tests must be reported as skipped, not passed.
 - OpenAI chat-completions tests for HTTP contract coverage, native error passthrough, and Python client compatibility against a local `base_url`.
 - OpenAI chat-completions streaming tests for SSE chunk shape, `[DONE]`, and Python client streaming compatibility against a local `base_url`.
 - Browser demo tests for `/demo`, local static assets, and no-storage/no-CDN script checks.
+- Browser overlay tests for optional face-box drawing logic, local canvas usage, and no continuous polling indicators.
 
 ## Test Quality Rule
 For every important safety behavior, ask:

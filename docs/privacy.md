@@ -36,6 +36,7 @@ The browser demo must:
 - explain that one captured frame is sent only when the user clicks Capture frame;
 - not record video;
 - not store frames by default.
+- when face boxes are shown, draw them locally from the API response only.
 
 ## Debug Mode
 If a future debug mode saves images, it must be:
