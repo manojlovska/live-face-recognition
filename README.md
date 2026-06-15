@@ -34,4 +34,4 @@ pytest
 
 Copy `.env.example` to `.env` if you want to override defaults locally.
 
-Project documentation lives under `face_similarity_oap_starter/docs/`.
+Project documentation lives under `docs/`.

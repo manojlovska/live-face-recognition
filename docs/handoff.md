@@ -1,7 +1,10 @@
 # Project Handoff
 
 ## Current Truth
-Initial OAP documentation pack has been created. No implementation exists yet unless a later commit adds it.
+- Scaffold commit exists: `5bb85a8` or current equivalent.
+- Service has `/healthz` only.
+- Tests and Ruff passed after scaffold.
+- Documentation has been repaired to root-level `docs/`.
 
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
@@ -16,12 +19,14 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - Similarity-only language, not identity verification.
 
 ## Implemented
-- Documentation starter pack only.
+- Documentation starter pack and scaffold repair.
 
 ## Missing
-- Code scaffold
-- Tests
-- API implementation
+- Auth layer
+- `/readyz`
+- `/v1/models`
+- Native face-similarity endpoint
+- Inference pipeline
 - Model loader
 - Gallery builder
 - Benchmarks
@@ -34,21 +39,10 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Create project scaffold:
-- `pyproject.toml`
-- app package
-- FastAPI `app.main:app`
-- settings model
-- `/healthz`
-- minimal tests
-- ruff configuration
-- README quickstart
+Work Order 2: one-key Bearer authentication and `/readyz`.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.
 - Do not add browser demo yet.
 - Do not process full CelebA yet.
 - Do not add GPU, database server, or user accounts.
-
-## Last Updated
-Initial generated state.
