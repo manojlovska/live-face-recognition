@@ -1,7 +1,7 @@
 # Current State
 
 ## Status
-Work Order 9 offline gallery-builder skeleton implementation is complete.
+Work Order 10 builder layout and reporting extension is complete.
 
 ## Current implemented state:
 - `/healthz` exists and is public.
@@ -19,7 +19,10 @@ Work Order 9 offline gallery-builder skeleton implementation is complete.
 - A local gallery artifact can be loaded.
 - Exact cosine similarity search over a loaded gallery exists.
 - An offline gallery builder skeleton can process a small CelebA-like sample directory.
+- The gallery builder can discover common local CelebA-style layouts.
+- Optional partition-file parsing exists.
 - The builder reads a CelebA-style identity file and writes gallery embeddings, metadata, manifest, and build report.
+- The builder writes quality and performance reporting into `gallery_build_report.json`.
 - If YuNet is available and loaded, valid images can return detection-only face boxes.
 - If YuNet and SFace are available and loaded, the service can generate internal face embeddings.
 - If YuNet, SFace, and a gallery artifact are loaded, the service can return `top_matches` from the gallery.
@@ -31,6 +34,7 @@ Work Order 9 offline gallery-builder skeleton implementation is complete.
 - The builder is sample-scale first; full CelebA processing is not implemented yet.
 - No uploaded images or decoded images are stored by default.
 - No OpenAI chat completions endpoint exists yet.
+- The project still does not download CelebA.
 
 ## Current Truth
 - Project goal is defined.
@@ -83,12 +87,12 @@ Work Order 9 offline gallery-builder skeleton implementation is complete.
 - Work Order 7: SFace face alignment and embedding generation for detected faces.
 - Work Order 8: local gallery artifact loading and exact cosine similarity search.
 - Work Order 9: offline gallery builder skeleton for a CelebA-like sample directory.
+- Work Order 10: CelebA layout discovery, partition parsing, and builder quality/performance reporting.
 
 ## Next recommended work:
-- Work Order 10: extend the gallery builder toward full CelebA dataset layout support and add builder performance/quality reporting, still without OpenAI chat completions.
+- Work Order 11: add non-streaming OpenAI-compatible `/v1/chat/completions` adapter for image similarity requests.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.
-- Do not process the full CelebA dataset before the gallery-builder design is implemented.
 - Do not add GPU dependencies.
 - Do not claim production readiness.

@@ -43,6 +43,8 @@ Initial planned stack:
 - Similarity responses include `top_matches` built from loaded gallery metadata.
 - No identity verification claim is made.
 - A sample-gallery builder can produce runtime gallery artifacts from local sample directories.
+- The builder also understands common local CelebA-style layouts and partition files.
+- Builder reports include quality and performance summaries.
 
 ## Limitations
 - Similarity score is not identity proof.
@@ -55,6 +57,7 @@ Initial planned stack:
 Uploaded images and user embeddings are not stored by default. Logs must not contain raw images or embeddings.
 Gallery embeddings are operator-managed local artifacts, not user enrollment data.
 The sample-gallery builder processes local image files only and does not download dataset images at runtime.
+The local-layout builder extension still does not download CelebA or return raw embedding vectors.
 
 ## Performance
 Actual performance must be recorded in `docs/benchmark-results.md`. Do not invent latency or FPS numbers.

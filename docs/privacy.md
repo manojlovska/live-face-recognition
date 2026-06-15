@@ -61,3 +61,4 @@ Where practical, tests should verify that normal requests do not create saved im
 - Gallery embeddings are local operator-managed model artifacts.
 - Public API responses do not include raw query embeddings.
 - Builder outputs are local model artifacts, not user data.
+- The offline gallery builder writes only derived local artifacts and build reports; it does not retain source images or embeddings beyond the build process.

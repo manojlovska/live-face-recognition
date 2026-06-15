@@ -93,6 +93,19 @@ python scripts/build_gallery.py \
 
 This is sample-scale only. It does not process the full CelebA dataset yet.
 
+For a local CelebA-style directory layout, you can also use:
+
+```bash
+python scripts/build_gallery.py \
+  --celeba-root /path/to/celeba \
+  --output-dir data/gallery \
+  --gallery-version celeba-local-v1 \
+  --limit 1000 \
+  --include-partitions train,val
+```
+
+The builder discovers `img_align_celeba/`, `identity_CelebA.txt`, and an optional `list_eval_partition.txt` under that root. It stays local-only and does not download CelebA.
+
 ## Quality checks
 
 ```bash

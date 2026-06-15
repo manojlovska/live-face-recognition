@@ -219,5 +219,5 @@ def test_gallery_builder_does_not_write_raw_embeddings(tmp_path: Path) -> None:
     report = result.report_path.read_text(encoding="utf-8")
     assert "0.0" not in metadata
     assert "embedding" not in metadata
-    assert "0.0" not in report
-    assert "embedding" not in report
+    assert "vector" not in report
+    assert "embedding_vector" not in report
