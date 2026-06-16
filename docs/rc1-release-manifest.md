@@ -17,6 +17,8 @@
 - `docs/pilot-readiness-checklist.md`
 - `docs/operator-runbook.md`
 - `docs/release-readiness.md`
+- `docs/rc1-post-publication-verification.md`
+- `docs/pilot-operator-onboarding.md`
 - `docs/release-notes-rc1.md`
 - `docs/rc1-signoff-request.md`
 - `docs/rc1-approval-decision-template.md`
@@ -49,6 +51,7 @@
 - `/readyz` returned `200 ready` in the mounted-assets validation run.
 - Native, chat, and chat-stream ready-path benchmarks were measured locally.
 - The benchmark numbers are local-machine-specific and not general performance claims.
+- The published GitHub Release remains a release candidate and does not claim final release.
 
 ## Remaining human gates
 
@@ -69,4 +72,4 @@ python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key "$FAC
 
 - This manifest is for an RC1 candidate, not a final release.
 - No secrets, raw reports, embeddings, or base64 payloads are included here.
-- The GitHub Release publication is approved for the RC1 controlled-pilot scope documented in the human approval notes.
+- The GitHub Release has been published for the RC1 controlled-pilot scope documented in the human approval notes.

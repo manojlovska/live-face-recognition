@@ -43,4 +43,4 @@ def test_rc1_release_package_stays_candidate_only() -> None:
     assert "v0.1.0-rc1" in manifest
     assert "excluded artifacts" in manifest
     assert "approved for internal controlled-pilot rc publication" in release_readiness
-    assert "work order 31" in handoff
+    assert "work order 32" in handoff

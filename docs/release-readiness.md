@@ -12,12 +12,14 @@ Runtime validation has been completed locally, and the human approval notes reco
 - [RC1 sign-off request](rc1-signoff-request.md)
 - [RC1 approval decision template](rc1-approval-decision-template.md)
 - [RC1 review comment template](rc1-review-comment-template.md)
+- [RC1 post-publication verification](rc1-post-publication-verification.md)
+- [Pilot-operator onboarding](pilot-operator-onboarding.md)
 - [RC1 release checklist](rc1-release-checklist.md)
 - [RC1 release manifest](rc1-release-manifest.md)
 - [RC1 release notes draft](release-notes-rc1.md)
 - [Benchmark results](benchmark-results.md)
 - [Pilot readiness checklist](pilot-readiness-checklist.md)
-- RC1 publication has been approved for the controlled-pilot scope documented in the human approval notes.
+- RC1 publication is published and remains limited to the controlled-pilot scope documented in the human approval notes.
 
 ## WO24R Validation Status
 
@@ -27,7 +29,7 @@ Runtime validation has been completed locally, and the human approval notes reco
 - Real YuNet/SFace model files were mounted and a small local gallery was built from a permitted sample set.
 - The smoke script ran against the asset-mounted container and reported `ready` with sanitized diagnostics.
 - The benchmark script measured ready-path native, chat, and chat-stream latency using a representative local face image.
-- The worktree is runtime-ready for a controlled pilot candidate, and the RC1 publication scope has been approved.
+- The worktree is runtime-ready for a controlled pilot candidate, the RC1 publication has been published, and post-publication verification documentation exists.
 
 ## Release Documents
 
