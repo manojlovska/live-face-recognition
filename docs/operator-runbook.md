@@ -84,6 +84,7 @@ python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key "$FAC
 ```
 
 Run this from the repository root as well. When model or gallery assets are unavailable, the benchmark will still produce a measured `engine_not_ready` baseline that should not be treated as a pilot benchmark.
+This repository state also records that the WO22 ready-path validation remains blocked without Docker and the real model/gallery assets.
 
 ## Using the native API
 

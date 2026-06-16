@@ -4,6 +4,7 @@
 
 Draft for controlled-pilot review only. This is not a final release note and does not claim commercial readiness.
 This worktree has a measured local smoke/benchmark baseline, but full RC validation is still blocked here because Docker and the real model/gallery assets were unavailable.
+WO22 did not add ready-path evidence; the RC1 draft remains gated on a Docker-capable machine with real model assets and a small local gallery.
 
 ## What is included
 

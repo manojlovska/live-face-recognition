@@ -13,6 +13,15 @@ This repository is ready for a controlled pilot only after the pilot checklist i
 - Real model/gallery RC validation is blocked in this environment because the required assets are unavailable locally.
 - This worktree is not ready for a controlled pilot yet.
 
+## WO22 Ready-Path Status
+
+- The ready-path RC validation run is still blocked in this environment.
+- Docker CLI/daemon are unavailable here, so the container build and container smoke checks could not be performed.
+- The real YuNet and SFace model assets are unavailable locally.
+- No local gallery artifacts or sample set were available to build a ready-path gallery.
+- As a result, `/readyz` could not be verified on a ready path and no ready-path benchmark numbers were recorded.
+- This worktree remains blocked rather than partially ready.
+
 ## Release Documents
 
 - [Pilot readiness checklist](pilot-readiness-checklist.md)
@@ -65,6 +74,7 @@ Controlled-pilot-ready CPU-only research service for CelebA-based face similarit
 The API now supports detector-only, embedding-only, and gallery-backed similarity paths over a local artifact gallery, it has a sample-gallery builder plus CelebA-style local layout discovery, it exposes a minimal OpenAI-compatible chat-completions adapter for image similarity requests with both non-streaming and SSE streaming responses, and it includes a small built-in browser demo for one-frame webcam capture with optional face-box overlays. The full CelebA gallery workflow still blocks RC1.
 The browser demo also includes explicit low-rate live polling, but that remains client-side polling rather than a server-side repeated-frame API.
 This worktree has a measured local smoke/benchmark baseline, but it is not yet an authoritative pilot validation because Docker and the real model/gallery assets were unavailable here.
+WO22 did not produce ready-path results; the release remains blocked until a Docker-capable machine with real model assets and a small local gallery is available.
 
 ## Local Release Checks
 
@@ -120,6 +130,7 @@ Before a pilot release, at minimum:
 - no privacy or security rule in this repository may be violated;
 - the release notes must not claim production biometric identification.
 - The pilot checklist must be completed.
+- The release still cannot be marked ready while WO22 remains blocked.
 
 ## RC1 Forbidden Claim
 Production biometric identification or verified celebrity recognition.
