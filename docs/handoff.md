@@ -45,7 +45,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 19: add release-candidate cleanup by resolving the Starlette/TestClient deprecation warning and tightening test/runtime dependency versions.
+Work Order 20: perform release-candidate documentation pass and produce a pilot-readiness checklist.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

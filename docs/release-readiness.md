@@ -18,7 +18,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Gallery | small gallery works | complete |
 | Privacy | no image/embedding retention by default | not started |
 | Docs | README and core docs updated | in progress |
-| Tests | `pytest` and `ruff check` pass | in progress |
+| Tests | warning-free `pytest`, `ruff check`, and `pytest -W error` pass | in progress |
 
 ## RC1 Gates
 
@@ -33,6 +33,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Privacy | no-retention policy documented and tested where practical | not started |
 | Packaging | CPU-only Docker image and container smoke checks | in progress |
 | Configuration | startup validation and sanitized diagnostics | in progress |
+| Dependencies | runtime/test dependency bounds reviewed for CPU-only RC use | in progress |
 | Model card | complete and honest | initial draft |
 | Dataset licensing | limitations documented | initial draft |
 | Error handling | structured errors documented/tested | in progress |
@@ -60,6 +61,12 @@ Run the sequential local benchmark suite:
 python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --endpoint all --requests 20
 ```
 
+Run the strict release-candidate test pass:
+
+```bash
+python3.12 -m pytest -W error
+```
+
 Expected local behavior when assets are missing:
 - `/readyz` may return `503` with `status: not_ready`.
 - The smoke script should still pass if the service responds correctly to health, auth, native, chat, and demo checks.
@@ -80,6 +87,9 @@ Production configuration checks before a pilot release:
 - confirm `STARTUP_VALIDATE_ASSETS` is set to the intended operating mode.
 
 Before a pilot release, at minimum:
+- the dependency policy must be reviewed and kept CPU-only;
+- the test suite must pass without warnings;
+- the Docker image must build successfully;
 - the smoke script must pass against the release target;
 - the release target must report ready if it is expected to serve similarity results;
 - at least one benchmark report must be recorded and reviewed;

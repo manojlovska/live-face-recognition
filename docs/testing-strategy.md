@@ -44,6 +44,34 @@ If a command is not run, report it as `not run` with the reason.
 - security scan or secret-pattern check;
 - error object compatibility.
 
+## Warning Policy
+- The previous `StarletteDeprecationWarning` came from the Starlette/FastAPI TestClient fallback to `httpx`.
+- The test dependency set now installs `httpx2`, so `fastapi.testclient.TestClient` takes the non-deprecated Starlette path.
+- Release-candidate runs should fail on warnings with `python3.12 -m pytest -W error`.
+- If a future warning must be filtered, it should be a narrow, documented exception rather than a blanket ignore.
+
+## Dependency Policy
+- Runtime dependencies are bounded for CPU-only release-candidate use.
+- Local scripts use `httpx` from the `dev` extra.
+- Tests use the `test` extra, which provides `httpx2`, `openai`, and pytest tooling.
+- No GPU, database, Redis, Celery, or frontend build dependencies are included.
+
+## Release-Candidate Pass
+Install the local development and test extras, then run the strict release-candidate test pass:
+
+```bash
+pip install -e '.[dev,test]'
+python3.12 -m pytest -W error
+```
+
+Use the normal lint/test commands as well:
+
+```bash
+python3.12 -m ruff check .
+python3.12 -m ruff format --check .
+python3.12 -m pytest
+```
+
 ## Fixtures
 Use tiny synthetic or legally safe fixtures. Do not commit CelebA images unless the repository policy explicitly permits it.
 
@@ -78,6 +106,7 @@ Skipped integration tests must be reported as skipped, not passed.
 - Release smoke-test tests for generated image data URLs, readiness classification, auth checks, demo-page checks, and redacted output.
 - Benchmark script tests for latency summaries, status counts, result-mode extraction, CLI parsing, and JSON report writing.
 - Docker packaging tests for a CPU-only image, non-root runtime user, and build-context exclusions.
+- Dependency-policy tests for bounded runtime/test extras, no forbidden GPU packages, and a warning-free Starlette TestClient import path.
 
 ## Test Quality Rule
 For every important safety behavior, ask:
