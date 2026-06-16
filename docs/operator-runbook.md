@@ -81,9 +81,11 @@ Run this from the repository root; the script now resolves the project package p
 
 ```bash
 python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key "$FACE_API_KEY" --endpoint all --requests 20
+python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key "$FACE_API_KEY" --endpoint all --requests 20 --warmup 3 --image-file /path/to/representative/image.jpg
 ```
 
 Run this from the repository root as well. When model or gallery assets are unavailable, the benchmark will still produce a measured `engine_not_ready` baseline that should not be treated as a pilot benchmark.
+When a real model/gallery runtime is mounted, use a representative face image so the benchmark measures the ready similarity path.
 
 ## Using the native API
 

@@ -25,11 +25,11 @@ Status legend:
 
 ## Docker checks
 
-- [!] `docker build -t live-face-recognition:local .` passes on a Docker-capable machine.
-- [!] The container runs as a non-root user.
-- [!] The container exposes port 8000.
-- [!] `models/`, `data/gallery/`, `reports/`, and `.env` are not baked into the image.
-- [!] Model and gallery artifacts are mounted read-only for serving.
+- [x] `docker build -t live-face-recognition:local .` passes on a Docker-capable machine.
+- [x] The container runs as a non-root user.
+- [x] The container exposes port 8000.
+- [x] `models/`, `data/gallery/`, `reports/`, and `.env` are not baked into the image.
+- [x] Model and gallery artifacts are mounted read-only for serving.
 
 ## Configuration checks
 
@@ -44,29 +44,29 @@ Status legend:
 
 Required before any pilot that expects live similarity:
 
-- [!] YuNet model file is present.
-- [!] SFace model file is present.
-- [!] Model manifest is present and consistent.
-- [~] `GET /readyz` reports the expected model status.
+- [x] YuNet model file is present.
+- [x] SFace model file is present.
+- [x] Model manifest is present and consistent.
+- [x] `GET /readyz` reports the expected model status.
 - [x] `GET /v1/diagnostics/startup` reports no unsafe configuration errors.
 
 ## Gallery artifact checks
 
 Required before any pilot that expects similarity results from a gallery:
 
-- [!] Gallery embeddings file is present.
-- [!] Gallery metadata file is present.
-- [!] Gallery manifest is present.
-- [!] Gallery embedding dimension matches the model output dimension.
+- [x] Gallery embeddings file is present.
+- [x] Gallery metadata file is present.
+- [x] Gallery manifest is present.
+- [x] Gallery embedding dimension matches the model output dimension.
 - [x] Gallery scope and filters are documented.
-- [!] Local gallery artifacts are user-supplied and not bundled into the repo.
+- [x] Local gallery artifacts are user-supplied and not bundled into the repo.
 
 ## API checks
 
 Required before any pilot:
 
 - [x] `/healthz` returns 200.
-- [~] `/readyz` returns 200 when the runtime is expected to serve similarity results.
+- [x] `/readyz` returns 200 when the runtime is expected to serve similarity results.
 - [x] `/v1/models` remains protected and returns the expected model ID.
 - [x] `/v1/face/similarity` accepts a valid authenticated request.
 - [x] `/v1/chat/completions` accepts the documented OpenAI-compatible image request.
@@ -77,7 +77,7 @@ Required before any pilot:
 Required before any pilot using OpenAI-style clients:
 
 - [x] Non-streaming chat completions work with the documented image request.
-- [~] `stream=true` returns SSE chunks and no fake LLM output.
+- [x] `stream=true` returns SSE chunks and no fake LLM output.
 - [x] Unsupported OpenAI features fail with structured errors.
 - [x] OpenAI client compatibility tests pass.
 
@@ -121,7 +121,7 @@ Required before any external or commercial use:
 ## Benchmark checks
 
 - [x] [benchmark-plan.md](benchmark-plan.md) has been reviewed.
-- [!] Benchmarks were measured on the intended runtime.
+- [x] Benchmarks were measured on the intended runtime.
 - [x] [benchmark-results.md](benchmark-results.md) contains only measured results.
 - [x] No fabricated benchmark numbers are present.
 - [x] The benchmark report notes the model/gallery asset set that was used.
@@ -130,7 +130,7 @@ Required before any external or commercial use:
 
 - The project is still a research/demo face-similarity service.
 - The full CelebA workflow is not bundled in the repo.
-- Benchmark results are local and not yet authoritative for a pilot because the intended Docker/model/gallery runtime was unavailable.
+- Benchmark results are local and remain subject to the target machine and gallery asset set.
 - Legal and dataset review are required before any broader use.
 
 ## Go / no-go decision

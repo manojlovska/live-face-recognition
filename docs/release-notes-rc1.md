@@ -3,7 +3,7 @@
 ## Status
 
 Draft for controlled-pilot review only. This is not a final release note and does not claim commercial readiness.
-This worktree has a measured local smoke/benchmark baseline, but full RC validation is still blocked here because Docker and the real model/gallery assets were unavailable.
+This worktree now has measured local not-ready and ready-path validation runs, but it is still not a final release note and does not claim commercial readiness.
 
 ## What is included
 
@@ -58,7 +58,7 @@ This worktree has a measured local smoke/benchmark baseline, but full RC validat
 - Smoke tests against the intended runtime
 - Docker build verification on a Docker-capable machine
 - Benchmarks measured and recorded in [benchmark-results.md](benchmark-results.md)
-  - The current recorded benchmark is a local not-ready baseline, not a pilot benchmark.
+  - The current recorded benchmarks include both a local not-ready baseline and a ready-path validation run.
 
 ## Known limitations
 
@@ -66,6 +66,7 @@ This worktree has a measured local smoke/benchmark baseline, but full RC validat
 - The full CelebA workflow is not bundled in the repository.
 - Benchmark numbers are environment-specific and must be measured.
 - The browser demo is client-side polling, not server-side video streaming.
+- Dataset/legal approval is still required before any broader use.
 
 ## Not included
 
@@ -79,7 +80,7 @@ This worktree has a measured local smoke/benchmark baseline, but full RC validat
 
 ## Required manual verification before tagging
 
-- Verify model assets and gallery artifacts on the target machine.
+- Verify model assets and gallery artifacts on the target machine if the release target differs from the validated local runtime.
 - Verify `/healthz`, `/readyz`, `/v1/models`, `/v1/face/similarity`, `/v1/chat/completions`, and `/v1/diagnostics/startup`.
 - Verify the browser demo in the intended browser environment.
 - Verify the Docker image build on a Docker-capable machine.

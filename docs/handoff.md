@@ -30,6 +30,12 @@
 - Docker validation and real model/gallery RC validation remain blocked in this environment.
 - Benchmark results are recorded, but they reflect the not-ready local runtime rather than a full pilot target.
 
+## Current State After Work Order 24R
+- Ready-path RC validation was completed on a Docker-capable machine with mounted YuNet/SFace models and a small local gallery.
+- Smoke checks passed for both no-assets and mounted-assets container runs.
+- Ready-path benchmark results were recorded for native, chat, and chat-stream paths using a representative local face image.
+- The remaining release blocker is human legal/dataset approval, not runtime readiness.
+
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
 
@@ -56,7 +62,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 22: resolve RC validation blockers found during Docker/model/gallery benchmark pass.
+Work Order 25: prepare RC1 tag, release package, and final human approval notes.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

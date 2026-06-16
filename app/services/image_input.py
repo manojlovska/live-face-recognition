@@ -9,7 +9,7 @@ from typing import Final
 import numpy as np
 from PIL import Image, UnidentifiedImageError
 
-from app.api.errors import ImageValidationError
+from app.core.errors import ImageValidationError
 
 ALLOWED_IMAGE_MIME_TYPES: Final = {
     "image/jpeg",

@@ -1,14 +1,14 @@
 # Current State
 
 ## Status
-Work Order 21 validation produced warning-free tests and a local smoke/benchmark baseline, but full Docker/model/gallery RC validation is blocked in this environment.
+Work Order 24R validation recorded a ready-path Docker/model/gallery run, and the repository now has both not-ready and ready-path local validation evidence. The project is still not a final commercial release and does not claim identity verification.
 
 ## Current implemented state:
 - Release-candidate documentation has been consolidated.
 - A pilot-readiness checklist exists.
 - An operator runbook exists.
 - RC1 release notes are drafted.
-- Benchmark results now include a dated local validation baseline, but they are not yet an authoritative pilot benchmark.
+- Benchmark results now include dated local not-ready and ready-path validation runs, but they are still local evidence rather than a final commercial release claim.
 - The project is still not a final commercial release and does not claim identity verification.
 - Startup configuration validation exists.
 - The app distinguishes development, test, and production configuration modes.
@@ -72,7 +72,7 @@ Work Order 21 validation produced warning-free tests and a local smoke/benchmark
 - The browser demo keeps live polling client-side, opt-in, and single-flight.
 - Local smoke-test tooling and sequential local benchmark tooling are now implemented.
 - The smoke and benchmark scripts now run directly from the repository root without extra `PYTHONPATH` setup.
-- The local validation baseline here used the not-ready runtime because Docker and real model/gallery assets were unavailable.
+- A real ready-path RC validation run has been recorded with Docker, mounted YuNet/SFace models, a small local gallery, smoke checks, and ready-path benchmarks.
 - WebSockets are not implemented.
 - The project still does not download CelebA.
 
@@ -138,9 +138,10 @@ Work Order 21 validation produced warning-free tests and a local smoke/benchmark
 - Work Order 18: production configuration validation and startup diagnostics.
 - Work Order 19: release-candidate cleanup for test warnings and dependency bounds.
 - Work Order 20: release-candidate documentation pass and pilot-readiness checklist.
+- Work Order 24R: sudo-provisioned ready-path validation with Docker, mounted models/gallery, smoke checks, and ready-path benchmarks.
 
 ## Next recommended work:
-- Work Order 22: resolve RC validation blockers found during Docker/model/gallery benchmark pass.
+- Work Order 25: prepare RC1 tag, release package, and final human approval notes.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

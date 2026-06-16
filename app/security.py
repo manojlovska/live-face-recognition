@@ -2,8 +2,8 @@ import secrets
 
 from fastapi import Header
 
-from app.api.errors import AuthenticationError
 from app.config import get_settings
+from app.core.errors import AuthenticationError
 
 
 def require_api_key(authorization: str | None = Header(default=None)) -> None:

@@ -8,8 +8,8 @@ from urllib.parse import urlparse
 
 from pydantic import ValidationError
 
-from app.api.errors import ChatCompletionsError
 from app.config import Settings
+from app.core.errors import ChatCompletionsError
 from app.services.face_similarity import FaceSimilarityEngine, FaceSimilarityRequest
 from app.services.image_input import decode_data_url_image
 

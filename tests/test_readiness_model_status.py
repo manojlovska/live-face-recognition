@@ -15,7 +15,26 @@ def build_app() -> object:
     return create_app()
 
 
-def test_readyz_reports_missing_models_by_default() -> None:
+def test_readyz_reports_missing_models_by_default(monkeypatch, tmp_path) -> None:
+    monkeypatch.setenv("MODEL_ASSET_DIR", str(tmp_path))
+    monkeypatch.setenv("YUNET_MODEL_PATH", str(tmp_path / "face_detection_yunet.onnx"))
+    monkeypatch.setenv("SFACE_MODEL_PATH", str(tmp_path / "face_recognition_sface.onnx"))
+    monkeypatch.setenv("MODEL_MANIFEST_PATH", str(tmp_path / "model_manifest.json"))
+    monkeypatch.setenv("MODEL_AUTO_LOAD", "false")
+    monkeypatch.setenv("GALLERY_DIR", str(tmp_path / "gallery"))
+    monkeypatch.setenv(
+        "GALLERY_EMBEDDINGS_PATH",
+        str(tmp_path / "gallery" / "gallery_embeddings.npy"),
+    )
+    monkeypatch.setenv(
+        "GALLERY_METADATA_PATH",
+        str(tmp_path / "gallery" / "gallery_metadata.jsonl"),
+    )
+    monkeypatch.setenv(
+        "GALLERY_MANIFEST_PATH",
+        str(tmp_path / "gallery" / "gallery_manifest.json"),
+    )
+    monkeypatch.setenv("GALLERY_AUTO_LOAD", "false")
     client = TestClient(build_app())
 
     response = client.get("/readyz")
@@ -40,6 +59,20 @@ def test_readyz_reports_present_not_loaded_when_files_exist(monkeypatch, tmp_pat
     monkeypatch.setenv("SFACE_MODEL_PATH", str(embedder_path))
     monkeypatch.setenv("MODEL_MANIFEST_PATH", str(manifest_path))
     monkeypatch.setenv("MODEL_AUTO_LOAD", "false")
+    monkeypatch.setenv("GALLERY_DIR", str(tmp_path / "gallery"))
+    monkeypatch.setenv(
+        "GALLERY_EMBEDDINGS_PATH",
+        str(tmp_path / "gallery" / "gallery_embeddings.npy"),
+    )
+    monkeypatch.setenv(
+        "GALLERY_METADATA_PATH",
+        str(tmp_path / "gallery" / "gallery_metadata.jsonl"),
+    )
+    monkeypatch.setenv(
+        "GALLERY_MANIFEST_PATH",
+        str(tmp_path / "gallery" / "gallery_manifest.json"),
+    )
+    monkeypatch.setenv("GALLERY_AUTO_LOAD", "false")
 
     client = TestClient(build_app())
 
@@ -67,6 +100,20 @@ def test_readyz_reports_embedding_only_when_models_load_without_gallery(
     monkeypatch.setenv("SFACE_MODEL_PATH", str(embedder_path))
     monkeypatch.setenv("MODEL_MANIFEST_PATH", str(manifest_path))
     monkeypatch.setenv("MODEL_AUTO_LOAD", "true")
+    monkeypatch.setenv("GALLERY_DIR", str(tmp_path / "gallery"))
+    monkeypatch.setenv(
+        "GALLERY_EMBEDDINGS_PATH",
+        str(tmp_path / "gallery" / "gallery_embeddings.npy"),
+    )
+    monkeypatch.setenv(
+        "GALLERY_METADATA_PATH",
+        str(tmp_path / "gallery" / "gallery_metadata.jsonl"),
+    )
+    monkeypatch.setenv(
+        "GALLERY_MANIFEST_PATH",
+        str(tmp_path / "gallery" / "gallery_manifest.json"),
+    )
+    monkeypatch.setenv("GALLERY_AUTO_LOAD", "false")
 
     class FakeDetector:
         @staticmethod

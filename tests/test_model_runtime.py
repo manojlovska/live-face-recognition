@@ -20,6 +20,11 @@ def _build_settings(tmp_path, *, auto_load: bool = False) -> Settings:
         sface_model_path=str(tmp_path / "face_recognition_sface.onnx"),
         model_manifest_path=str(tmp_path / "model_manifest.json"),
         model_auto_load=auto_load,
+        gallery_dir=str(tmp_path / "gallery"),
+        gallery_embeddings_path=str(tmp_path / "gallery" / "gallery_embeddings.npy"),
+        gallery_metadata_path=str(tmp_path / "gallery" / "gallery_metadata.jsonl"),
+        gallery_manifest_path=str(tmp_path / "gallery" / "gallery_manifest.json"),
+        gallery_auto_load=False,
     )
 
 
