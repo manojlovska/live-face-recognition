@@ -52,8 +52,7 @@
 
 ## Remaining human gates
 
-- Dataset/legal review for broader or external use.
-- Final human approval for RC1 tagging.
+- Broader or external use beyond the approved RC1 publication scope.
 
 ## Commands to reproduce tests
 
@@ -70,4 +69,4 @@ python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key "$FAC
 
 - This manifest is for an RC1 candidate, not a final release.
 - No secrets, raw reports, embeddings, or base64 payloads are included here.
-- The GitHub Release draft should remain unpublished until the maintainer chooses otherwise.
+- The GitHub Release publication is approved for the RC1 controlled-pilot scope documented in the human approval notes.

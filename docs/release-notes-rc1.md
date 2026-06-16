@@ -8,11 +8,11 @@ v0.1.0-rc1
 
 This is a release-candidate draft, not a final release.
 Draft for controlled-pilot review only. This is not a final release note and does not claim commercial readiness.
-Status: partially ready for controlled pilot.
+Status: approved for internal controlled-pilot RC publication.
 Ready-path validation passed locally with Docker, mounted YuNet/SFace models, and a small local gallery.
 Benchmark numbers are local-machine-specific and the ready-path run used a small local gallery.
-Legal/dataset review remains pending before any broader or external use.
-The GitHub Release remains a draft in docs and has not been published.
+Legal/dataset review remains pending before any broader or external use beyond the approved RC1 publication scope.
+The GitHub Release for v0.1.0-rc1 has been approved for publication.
 
 ## Ready-path validation summary
 

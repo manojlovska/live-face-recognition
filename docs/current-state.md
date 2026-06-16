@@ -1,13 +1,14 @@
 # Current State
 
 ## Status
-RC1 release-package documentation has been prepared. Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery. RC1 sign-off request materials have been prepared. The v0.1.0-rc1 tag has been created and pushed. A GitHub Release draft exists in docs but has not been published. RC1 remains a release candidate, not a final release. Pilot status remains partially ready until human legal/dataset approval is completed. The project remains a face-similarity service, not identity verification. The project is not a final commercial release.
+RC1 release-package documentation has been prepared. Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery. RC1 sign-off request materials have been prepared. Human sign-offs for v0.1.0-rc1 have been recorded. The GitHub Release for v0.1.0-rc1 has been approved for publication. RC1 remains a release candidate, not a final release. The approved use scope is documented in the human approval notes. Pilot status remains partially ready for broader or external use until any further legal/dataset scope is approved. The project remains a face-similarity service, not identity verification. The project is not a final commercial release.
 
 ## Current implemented state:
 - RC1 release-package documentation has been prepared.
 - RC1 sign-off request materials have been prepared.
+- Human sign-offs for v0.1.0-rc1 have been recorded.
 - The v0.1.0-rc1 tag has been created and pushed.
-- A GitHub Release draft exists in docs but has not been published.
+- The GitHub Release for v0.1.0-rc1 has been approved for publication.
 - RC1 remains a release candidate, not a final release.
 - Release-candidate documentation has been consolidated.
 - A pilot-readiness checklist exists.
@@ -15,7 +16,7 @@ RC1 release-package documentation has been prepared. Ready-path Docker validatio
 - RC1 release notes are drafted.
 - Benchmark results now include dated local not-ready and ready-path validation runs, but they are still local evidence rather than a final commercial release claim.
 - Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery.
-- Pilot status remains partially ready until human legal/dataset approval is completed.
+- Pilot status remains partially ready for broader or external use until any further legal/dataset scope is approved.
 - The project remains a face-similarity service, not identity verification.
 - The project is not a final commercial release.
 - Startup configuration validation exists.
@@ -153,9 +154,13 @@ RC1 release-package documentation has been prepared. Ready-path Docker validatio
 - Work Order 19: release-candidate cleanup for test warnings and dependency bounds.
 - Work Order 20: release-candidate documentation pass and pilot-readiness checklist.
 - Work Order 24R: sudo-provisioned ready-path validation with Docker, mounted models/gallery, smoke checks, and ready-path benchmarks.
+- Work Order 25: RC1 release package documentation and human approval notes.
+- Work Order 27: GitHub Release draft for `v0.1.0-rc1` and internal RC1 announcement draft.
+- Work Order 28: RC1 sign-off request package and approval templates.
+- Work Order 30: recorded RC1 approvals and GitHub Release publication.
 
 ## Next recommended work:
-- Work Order 25: prepare RC1 tag, release package, and final human approval notes.
+- Work Order 31: run post-publication verification and prepare pilot-operator onboarding notes.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

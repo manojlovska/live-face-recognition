@@ -28,8 +28,8 @@ def test_readme_and_docs_avoid_identity_verification_claims() -> None:
     assert "commercially ready" not in combined
     assert "bundled celeba" not in combined
     assert "bundled onnx" not in combined
-    assert "partially ready for controlled pilot" in release_readiness.lower()
-    assert "dataset/legal review" in combined.lower()
+    assert "approved for internal controlled-pilot rc publication" in release_readiness.lower()
+    assert "legal/dataset review" in combined.lower()
 
 
 def test_benchmark_results_record_the_measured_baseline() -> None:
@@ -46,6 +46,6 @@ def test_handoff_points_to_next_work_order() -> None:
     handoff = _read(DOCS / "handoff.md")
 
     assert (
-        "Work Order 29: record actual human sign-off decisions and decide whether to publish "
-        "the GitHub Release." in handoff
+        "Work Order 31: run post-publication verification and prepare pilot-operator "
+        "onboarding notes." in handoff
     )

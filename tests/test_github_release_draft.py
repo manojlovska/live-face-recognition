@@ -39,4 +39,4 @@ def test_github_release_draft_stays_candidate_only() -> None:
     assert "legal/dataset approval remains pending" in announcement
     assert "security/privacy signoff remains pending" in announcement
 
-    assert "work order 28" in handoff
+    assert "work order 31" in handoff

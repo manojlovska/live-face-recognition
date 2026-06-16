@@ -3,8 +3,8 @@
 ## Release Principle
 Feature completion is not release readiness. Release readiness requires evidence: tests, docs, benchmark results, privacy/security review, and honest limitations.
 This repository is ready for a controlled pilot only after the pilot checklist is completed.
-Status: partially ready for controlled pilot.
-Runtime validation has been completed locally, but dataset/legal review is still pending.
+Status: approved for internal controlled-pilot RC publication.
+Runtime validation has been completed locally, and the human approval notes record the approved RC1 publication scope.
 
 ## RC1 Release Package
 
@@ -17,6 +17,7 @@ Runtime validation has been completed locally, but dataset/legal review is still
 - [RC1 release notes draft](release-notes-rc1.md)
 - [Benchmark results](benchmark-results.md)
 - [Pilot readiness checklist](pilot-readiness-checklist.md)
+- RC1 publication has been approved for the controlled-pilot scope documented in the human approval notes.
 
 ## WO24R Validation Status
 
@@ -26,7 +27,7 @@ Runtime validation has been completed locally, but dataset/legal review is still
 - Real YuNet/SFace model files were mounted and a small local gallery was built from a permitted sample set.
 - The smoke script ran against the asset-mounted container and reported `ready` with sanitized diagnostics.
 - The benchmark script measured ready-path native, chat, and chat-stream latency using a representative local face image.
-- The worktree is runtime-ready for a controlled pilot candidate, but legal/dataset approval remains pending.
+- The worktree is runtime-ready for a controlled pilot candidate, and the RC1 publication scope has been approved.
 
 ## Release Documents
 
@@ -75,7 +76,7 @@ Runtime validation has been completed locally, but dataset/legal review is still
 | Configuration | startup validation and sanitized diagnostics | complete |
 | Dependencies | runtime/test dependency bounds reviewed for CPU-only RC use | complete |
 | Model card | complete and honest | initial draft |
-| Dataset licensing | limitations documented | initial draft |
+| Dataset licensing | RC1 publication scope approved; broader use still gated | approved for RC1 publication scope |
 | Error handling | structured errors documented/tested | complete |
 | Compatibility | OpenAI Python client compatibility test | complete |
 | Release language | no overclaims | complete |
@@ -85,7 +86,7 @@ Controlled-pilot-ready CPU-only research service for CelebA-based face similarit
 
 The API now supports detector-only, embedding-only, and gallery-backed similarity paths over a local artifact gallery, it has a sample-gallery builder plus CelebA-style local layout discovery, it exposes a minimal OpenAI-compatible chat-completions adapter for image similarity requests with both non-streaming and SSE streaming responses, and it includes a small built-in browser demo for one-frame webcam capture with optional face-box overlays. The full CelebA gallery workflow still blocks RC1.
 The browser demo also includes explicit low-rate live polling, but that remains client-side polling rather than a server-side repeated-frame API.
-This worktree now has measured local not-ready and ready-path validation, but it is still not an authoritative pilot until the checklist is complete and legal/dataset approval is finished.
+This worktree now has measured local not-ready and ready-path validation, and the RC1 publication scope has been approved. It is still not a final release, and broader or external use remains gated by dataset/legal scope.
 
 ## Local Release Checks
 

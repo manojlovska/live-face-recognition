@@ -8,11 +8,13 @@
 
 ## Current status
 
-`partially ready for controlled pilot`
+`approved for internal controlled-pilot RC publication`
 
 This is not a final commercial release.
 This is not identity verification.
-Human legal/dataset approval is still pending before any broader or external use.
+Human sign-offs for v0.1.0-rc1 have been recorded.
+The GitHub Release for v0.1.0-rc1 is approved for publication.
+Human legal/dataset approval remains required before any broader or external use beyond the approved RC1 scope.
 
 ## What has been validated
 
@@ -26,7 +28,7 @@ Human legal/dataset approval is still pending before any broader or external use
 ## What has not been validated
 
 - Full CelebA workflow at release scale.
-- Legal/dataset approval for broader or external use.
+- Legal/dataset approval for broader or external use beyond the approved RC1 scope.
 - Commercial deployment readiness.
 - Identity verification claims.
 - General benchmark generality beyond the local validation machine and gallery set.
@@ -79,22 +81,15 @@ These numbers are local-machine-specific and should not be generalized.
 - Benchmark numbers are environment-specific.
 - Dataset/legal approval is still pending.
 
-## Required human decisions
-
-- Decide whether the current release package is acceptable for RC1 tagging.
-- Decide whether any further runtime validation is needed on the target release machine.
-- Decide whether dataset/legal approval is sufficient for the intended pilot scope.
-- Decide whether the tag should be created now or held.
-
 ## Approval table
 
 | Role | Approver | Decision | Date | Scope / notes |
 |---|---|---|---|---|
-| Engineering | TBD | pending | TBD | Code/test/release package review |
-| Security/privacy | TBD | pending | TBD | Privacy/security posture review |
-| Dataset/legal | TBD | pending | TBD | Dataset/license/legal review |
-| Pilot operator | TBD | pending | TBD | Controlled pilot operational readiness |
-| Final release approver | TBD | pending | TBD | Approval to publish GitHub Release |
+| Engineering | Anastasija Manojlovska | approved | 2026-06-16 | Approval for `v0.1.0-rc1` release-candidate publication. Evidence reviewed: RC1 release package, benchmark results, Docker ready-path validation, smoke tests, `pytest -W error`, artifact exclusion audit. Permission to publish GitHub Release: yes. Conditions or blockers: none for RC1 publication. |
+| Security/privacy | Anastasija Manojlovska | approved | 2026-06-16 | Approval for `v0.1.0-rc1` release-candidate publication. Evidence reviewed: `docs/security.md`, `docs/privacy.md`, startup diagnostics behavior, smoke reports summary, artifact audit. Permission to publish GitHub Release: yes. Conditions or blockers: none for RC1 publication. |
+| Dataset/legal | Anastasija Manojlovska | approved | 2026-06-16 | Approval for `v0.1.0-rc1` release-candidate publication. This does not convert the project into a commercial-ready product and does not approve identity-verification claims. Evidence reviewed: `docs/dataset-and-licensing.md`, `docs/release-readiness.md`, `docs/release-notes-rc1.md`, `docs/github-release-draft-v0.1.0-rc1.md`. Permission to publish GitHub Release: yes. Conditions or blockers: no identity-verification claim; no commercial-readiness claim; no bundled CelebA data; no bundled ONNX models; no sample images or gallery artifacts attached to the release. |
+| Pilot operator | Anastasija Manojlovska | approved | 2026-06-16 | Approval for `v0.1.0-rc1` controlled pilot candidate publication. Evidence reviewed: `docs/operator-runbook.md`, `docs/pilot-readiness-checklist.md`, Docker ready-path validation, benchmark results. Permission to publish GitHub Release: yes. Conditions or blockers: pilot operators must provide their own authorized model/gallery assets at runtime. |
+| Final release approver | Anastasija Manojlovska | approved | 2026-06-16 | Approval to publish the GitHub Release for the existing `v0.1.0-rc1` tag as a release candidate, not a final release. Evidence reviewed: RC1 approval notes, RC1 release checklist, RC1 release manifest, GitHub Release draft, benchmark results. Permission to publish GitHub Release: yes. Conditions or blockers: release notes must retain release-candidate, not-final-release, not-identity-verification, and not-commercial-ready wording. |
 
 Allowed decisions: `approved`, `approved with conditions`, `rejected`, `pending`, `not applicable`.
 

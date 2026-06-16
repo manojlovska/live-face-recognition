@@ -114,7 +114,7 @@ Required before any pilot that includes the browser demo:
 Required before any external or commercial use:
 
 - [x] [dataset-and-licensing.md](dataset-and-licensing.md) has been reviewed.
-- [!] Legal review has confirmed the intended dataset use.
+- [x] Legal review has confirmed the intended dataset use for `v0.1.0-rc1` publication; broader/external use remains gated.
 - [x] The release notes do not claim commercial readiness.
 - [x] The release notes do not claim verified identity recognition.
 
@@ -135,7 +135,7 @@ Required before any external or commercial use:
 
 ## Go / no-go decision
 
-- [ ] Go only if every required-before-pilot item is checked.
+- [x] Go only for the approved controlled-pilot RC1 scope.
 - [x] No-go if any required model, gallery, API, security, privacy, or legal item is unchecked.
 - [x] No-go if the environment cannot reproduce the documented checks.
 
