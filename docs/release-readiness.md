@@ -9,6 +9,9 @@ Runtime validation has been completed locally, but dataset/legal review is still
 ## RC1 Release Package
 
 - [RC1 human approval notes](rc1-human-approval-notes.md)
+- [RC1 sign-off request](rc1-signoff-request.md)
+- [RC1 approval decision template](rc1-approval-decision-template.md)
+- [RC1 review comment template](rc1-review-comment-template.md)
 - [RC1 release checklist](rc1-release-checklist.md)
 - [RC1 release manifest](rc1-release-manifest.md)
 - [RC1 release notes draft](release-notes-rc1.md)
@@ -30,6 +33,9 @@ Runtime validation has been completed locally, but dataset/legal review is still
 - [Pilot readiness checklist](pilot-readiness-checklist.md)
 - [Operator runbook](operator-runbook.md)
 - [RC1 human approval notes](rc1-human-approval-notes.md)
+- [RC1 sign-off request](rc1-signoff-request.md)
+- [RC1 approval decision template](rc1-approval-decision-template.md)
+- [RC1 review comment template](rc1-review-comment-template.md)
 - [RC1 release checklist](rc1-release-checklist.md)
 - [RC1 release manifest](rc1-release-manifest.md)
 - [RC1 release notes draft](release-notes-rc1.md)

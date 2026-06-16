@@ -18,6 +18,9 @@
 - `docs/operator-runbook.md`
 - `docs/release-readiness.md`
 - `docs/release-notes-rc1.md`
+- `docs/rc1-signoff-request.md`
+- `docs/rc1-approval-decision-template.md`
+- `docs/rc1-review-comment-template.md`
 - `docs/rc1-human-approval-notes.md`
 - `docs/rc1-release-checklist.md`
 - `docs/rc1-release-manifest.md`

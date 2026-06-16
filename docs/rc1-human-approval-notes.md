@@ -86,6 +86,23 @@ These numbers are local-machine-specific and should not be generalized.
 - Decide whether dataset/legal approval is sufficient for the intended pilot scope.
 - Decide whether the tag should be created now or held.
 
+## Approval table
+
+| Role | Approver | Decision | Date | Scope / notes |
+|---|---|---|---|---|
+| Engineering | TBD | pending | TBD | Code/test/release package review |
+| Security/privacy | TBD | pending | TBD | Privacy/security posture review |
+| Dataset/legal | TBD | pending | TBD | Dataset/license/legal review |
+| Pilot operator | TBD | pending | TBD | Controlled pilot operational readiness |
+| Final release approver | TBD | pending | TBD | Approval to publish GitHub Release |
+
+Allowed decisions: `approved`, `approved with conditions`, `rejected`, `pending`, `not applicable`.
+
+Do not change `pending` to `approved` without a real human decision.
+Record the approval scope in the notes column.
+Dataset/legal approval is required before broader or external use.
+Final release approver approval is required before publishing GitHub Release.
+
 ## Tagging instructions
 
 Only run the tag commands after explicit human approval:
@@ -100,13 +117,3 @@ git push origin v0.1.0-rc1
 - If any required human gate fails, do not tag.
 - If the target machine differs materially from the validated runtime, rerun smoke and benchmark checks there first.
 - If legal/dataset review is incomplete, stop before external or commercial release actions.
-
-## Approval sign-off
-
-| Role | Name | Decision | Date | Notes |
-|---|---|---|---|---|
-| Engineering |  | TBD |  |  |
-| Security/privacy |  | TBD |  |  |
-| Dataset/legal |  | TBD |  |  |
-| Pilot operator |  | TBD |  |  |
-| Final release approver |  | TBD |  |  |
