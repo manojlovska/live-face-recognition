@@ -11,6 +11,12 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 This is the simplest development path and keeps model/gallery files on the host filesystem.
 
+For full local development and release-candidate testing, install both extras so the local scripts and warning-free test client path are available:
+
+```bash
+pip install -e '.[dev,test]'
+```
+
 For development, the default mode is intentionally forgiving:
 
 - `APP_ENV=development`

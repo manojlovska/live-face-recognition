@@ -7,7 +7,7 @@ CPU-only FastAPI scaffold for the CelebA face-similarity service.
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -e '.[dev]'
+pip install -e '.[dev,test]'
 ```
 
 ## Run the app

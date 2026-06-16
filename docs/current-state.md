@@ -1,7 +1,7 @@
 # Current State
 
 ## Status
-Work Order 18 production configuration validation and startup diagnostics implementation is complete.
+Work Order 19 release-candidate cleanup for test warnings and dependency bounds is complete.
 
 ## Current implemented state:
 - Startup configuration validation exists.
@@ -18,6 +18,9 @@ Work Order 18 production configuration validation and startup diagnostics implem
 - Local benchmark tooling exists for native, chat, and streaming chat endpoints.
 - Benchmarking is sequential and local by default.
 - The tools do not store API keys or image payloads in reports.
+- The test suite is expected to pass without the previous Starlette/FastAPI/TestClient deprecation warning.
+- Runtime and test dependency bounds have been reviewed for CPU-only release-candidate use.
+- No GPU, database, Redis, Celery, or frontend build dependencies are included.
 - Production monitoring and load testing are not implemented yet.
 - The browser demo at /demo supports one-frame capture.
 - The browser demo can optionally draw face boxes from the API response.
@@ -125,6 +128,7 @@ Work Order 18 production configuration validation and startup diagnostics implem
 - Work Order 16: local benchmark and release smoke-test tooling.
 - Work Order 17: CPU-only Docker packaging and production run documentation.
 - Work Order 18: production configuration validation and startup diagnostics.
+- Work Order 19: release-candidate cleanup for test warnings and dependency bounds.
 
 ## Next recommended work:
 - Work Order 19: add release-candidate cleanup by resolving the Starlette/TestClient deprecation warning and tightening test/runtime dependency versions.

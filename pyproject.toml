@@ -9,23 +9,28 @@ description = "CPU-only FastAPI scaffold for a face-similarity service"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-  "fastapi",
-  "opencv-contrib-python-headless",
-  "numpy",
-  "Pillow",
-  "pydantic",
-  "pydantic-settings",
-  "uvicorn[standard]",
+  "fastapi>=0.137,<0.138",
+  "opencv-contrib-python-headless>=4.12,<5",
+  "numpy>=2.0,<3",
+  "Pillow>=11,<13",
+  "pydantic>=2.11,<3",
+  "pydantic-settings>=2.11,<3",
+  "uvicorn[standard]>=0.34,<1",
 ]
 
 [project.optional-dependencies]
 dev = [
-  "httpx",
-  "openai",
-  "pytest",
-  "pytest-asyncio",
-  "pytest-cov",
-  "ruff",
+  # Local scripts use httpx directly; tests use httpx2 via the test extra.
+  "httpx>=0.28,<0.29",
+  "ruff>=0.15,<0.16",
+]
+test = [
+  # Starlette TestClient prefers httpx2 and avoids the deprecated httpx fallback.
+  "httpx2>=2,<3",
+  "openai>=2,<3",
+  "pytest>=9,<10",
+  "pytest-asyncio>=1,<2",
+  "pytest-cov>=7,<8",
 ]
 
 [tool.setuptools]

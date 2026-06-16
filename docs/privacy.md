@@ -48,6 +48,7 @@ The smoke-test and benchmark scripts must:
 - not store base64 image payloads in reports;
 - not store decoded image bytes or embeddings;
 - not send data to external services.
+- The release-candidate test-client dependency change to `httpx2` does not alter these privacy rules.
 
 ## Container Privacy
 - The container image must not include user images, user embeddings, or request bodies.

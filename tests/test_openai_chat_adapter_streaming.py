@@ -3,8 +3,8 @@ from __future__ import annotations
 import json
 
 import pytest
-from fastapi.testclient import TestClient
 
+from tests.httpx_asgi_client import build_openai_http_client
 from tests.image_helpers import make_image_data_url
 from tests.test_chat_completions_streaming import (
     ChatRuntime,
@@ -20,7 +20,7 @@ def test_openai_sdk_can_stream_local_chat_completions(monkeypatch) -> None:
     openai = pytest.importorskip("openai")
 
     monkeypatch.setenv("FACE_API_KEY", "local-dev-key")
-    http_client = TestClient(
+    http_client = build_openai_http_client(
         _build_app(
             ChatRuntime(
                 detector=FakeYuNetDetector(_face_row()),

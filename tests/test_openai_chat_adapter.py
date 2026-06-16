@@ -13,6 +13,7 @@ from app.main import create_app
 from app.services.face_similarity import FaceSimilarityEngine
 from app.services.gallery import GalleryStore
 from app.services.openai_chat_adapter import parse_chat_completion_request
+from tests.httpx_asgi_client import build_openai_http_client
 from tests.image_helpers import make_image_data_url
 
 FIXTURE_DIR = Path(__file__).resolve().parent / "fixtures" / "gallery"
@@ -526,7 +527,7 @@ def test_openai_sdk_can_call_local_chat_completions(monkeypatch) -> None:
     openai = pytest.importorskip("openai")
 
     monkeypatch.setenv("FACE_API_KEY", "local-dev-key")
-    http_client = TestClient(
+    http_client = build_openai_http_client(
         _build_app(
             ChatRuntime(
                 detector=FakeYuNetDetector(_face_row()),
