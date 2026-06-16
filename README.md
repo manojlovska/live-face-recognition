@@ -24,6 +24,13 @@ docker run --rm -p 8000:8000 -e FACE_API_KEY=change-me-local-dev-key live-face-r
 python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key
 ```
 
+Startup diagnostics:
+
+```bash
+curl -H "Authorization: Bearer $FACE_API_KEY" \
+  http://localhost:8000/v1/diagnostics/startup
+```
+
 Open the browser demo at:
 
 ```text
@@ -194,6 +201,7 @@ pytest
 ```bash
 python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key
 python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --endpoint all --requests 20
+python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --check-diagnostics
 ```
 
 ## Environment

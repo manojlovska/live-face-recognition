@@ -53,6 +53,7 @@ The smoke-test and benchmark scripts must:
 - The container image must not include user images, user embeddings, or request bodies.
 - The serving container does not persist uploaded images by default.
 - Local model and gallery artifacts are operator-managed inputs, not user data.
+- The protected startup diagnostics endpoint does not return images, base64 payloads, embeddings, or API keys.
 
 ## Debug Mode
 If a future debug mode saves images, it must be:

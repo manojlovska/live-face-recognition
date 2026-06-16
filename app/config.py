@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-from pydantic import Field
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -14,7 +14,26 @@ class Settings(BaseSettings):
 
     app_name: str = "CelebA Face Similarity API"
     app_version: str = "0.1.0"
-    environment: str = Field(default="development", validation_alias="APP_ENVIRONMENT")
+    environment: str = Field(
+        default="development",
+        validation_alias=AliasChoices("APP_ENV", "APP_ENVIRONMENT"),
+    )
+    strict_startup_validation: bool = Field(
+        default=False,
+        validation_alias="STRICT_STARTUP_VALIDATION",
+    )
+    startup_validate_assets: bool = Field(
+        default=True,
+        validation_alias="STARTUP_VALIDATE_ASSETS",
+    )
+    diagnostics_include_paths: bool = Field(
+        default=False,
+        validation_alias="DIAGNOSTICS_INCLUDE_PATHS",
+    )
+    debug_image_retention: bool = Field(
+        default=False,
+        validation_alias="DEBUG_IMAGE_RETENTION",
+    )
     model_id: str = Field(default="celeba-face-similarity-cpu", validation_alias="FACE_MODEL_ID")
     model_asset_dir: str = Field(default="models", validation_alias="MODEL_ASSET_DIR")
     yunet_model_path: str = Field(
@@ -44,12 +63,8 @@ class Settings(BaseSettings):
         validation_alias="GALLERY_MANIFEST_PATH",
     )
     gallery_auto_load: bool = Field(default=False, validation_alias="GALLERY_AUTO_LOAD")
-    max_image_bytes: int = Field(
-        default=5 * 1024 * 1024,
-        ge=1,
-        validation_alias="FACE_MAX_IMAGE_BYTES",
-    )
-    face_api_key: str | None = None
+    max_image_bytes: int = Field(default=5 * 1024 * 1024, validation_alias="FACE_MAX_IMAGE_BYTES")
+    face_api_key: str | None = Field(default=None, validation_alias="FACE_API_KEY")
 
 
 @lru_cache(maxsize=1)

@@ -18,6 +18,10 @@ Returns readiness state. Should report whether required models and gallery artif
 ### `GET /v1/models`
 Returns the configured model metadata and requires `Authorization: Bearer <FACE_API_KEY>`.
 
+### `GET /v1/diagnostics/startup`
+Returns sanitized startup diagnostics and requires `Authorization: Bearer <FACE_API_KEY>`.
+This endpoint is operationally useful for startup checks, but it is protected because it reports configuration state.
+
 ### `GET /demo`
 Returns the built-in browser demo HTML page. The demo page is public, but any API request it sends still requires Bearer auth.
 The demo can show optional face-box overlays from a single captured frame, and it now also supports explicit low-rate live polling from the browser using the same native endpoint.

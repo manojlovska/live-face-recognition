@@ -32,6 +32,7 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - Use placeholders in docs and tests.
 - If a secret is accidentally exposed, stop and report.
 - Do not bake API keys into container images.
+- Do not use the default local API key in production.
 - Mount secrets and runtime configuration through environment variables or the orchestrator.
 
 ## Image Safety
@@ -58,9 +59,11 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - The browser demo's live polling mode must stop when the camera stops or when the tab becomes hidden.
 - The browser demo must not load third-party scripts or send data to third-party origins.
 - The browser demo overlay must be drawn locally from the API response and must not perform browser-side recognition.
+- The protected `/v1/diagnostics/startup` endpoint must return sanitized diagnostics only and must not expose raw keys, image data, embeddings, or local paths unless path disclosure is explicitly enabled.
 - The smoke-test and benchmark scripts must only contact the configured local/base URL and must not log or store API keys or image payloads.
 - The smoke-test and benchmark scripts must not add telemetry, third-party analytics, or external reporting services.
 - Container packaging must not include `.env`, raw images, embeddings, or benchmark reports.
+- Production startup validation should fail on unknown `APP_ENV`, default production API keys, `DEBUG_IMAGE_RETENTION=true`, invalid image-size settings, and disabled asset validation when production rules require them.
 
 ## Logging Rules
 Do not log:
@@ -102,6 +105,7 @@ Exact values must be documented once implemented.
 ## Container Health
 - `/healthz` is safe for Docker healthchecks because it only reports process liveness.
 - `/readyz` may reveal coarse operational state and is not the preferred container healthcheck target.
+- `/v1/diagnostics/startup` is protected because it reveals sanitized operational configuration and startup state.
 
 ## Dependency Security
 Before RC1, run a dependency audit such as `pip-audit` or document why it was not run.

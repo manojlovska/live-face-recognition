@@ -11,6 +11,14 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 This is the simplest development path and keeps model/gallery files on the host filesystem.
 
+For development, the default mode is intentionally forgiving:
+
+- `APP_ENV=development`
+- `STRICT_STARTUP_VALIDATION=false`
+- `STARTUP_VALIDATE_ASSETS=true`
+- `DIAGNOSTICS_INCLUDE_PATHS=false`
+- `DEBUG_IMAGE_RETENTION=false`
+
 ## Docker Build
 
 ```bash
@@ -57,11 +65,34 @@ docker run --rm \
 
 The API container itself does not need write access to `reports/` during normal serving.
 
+## Production-Like Run
+
+Use explicit production settings when you want fail-fast validation:
+
+```bash
+docker run --rm \
+  -p 8000:8000 \
+  -e APP_ENV=production \
+  -e STRICT_STARTUP_VALIDATION=true \
+  -e STARTUP_VALIDATE_ASSETS=true \
+  -e FACE_API_KEY=change-me-production-key \
+  -v "$PWD/models:/app/models:ro" \
+  -v "$PWD/data/gallery:/app/data/gallery:ro" \
+  live-face-recognition:local
+```
+
+If the API key is the default local placeholder, if `DEBUG_IMAGE_RETENTION=true`, or if startup validation is disabled in production, startup diagnostics will report errors and the application will fail fast.
+
 ## Environment Variables
 
 The main runtime variables are:
 
 ```text
+APP_ENV=development
+STRICT_STARTUP_VALIDATION=false
+STARTUP_VALIDATE_ASSETS=true
+DIAGNOSTICS_INCLUDE_PATHS=false
+DEBUG_IMAGE_RETENTION=false
 FACE_API_KEY=change-me-local-dev-key
 FACE_MODEL_ID=celeba-face-similarity-cpu
 MODEL_ASSET_DIR=models
@@ -78,6 +109,18 @@ FACE_MAX_IMAGE_BYTES=5242880
 ```
 
 Set `FACE_API_KEY` before starting the service so protected endpoints can reject missing or wrong credentials.
+
+## Startup Diagnostics
+
+The protected `GET /v1/diagnostics/startup` endpoint reports sanitized startup diagnostics.
+It is useful for local and container startup checks, and it can optionally include selected paths only when `DIAGNOSTICS_INCLUDE_PATHS=true`.
+
+Example:
+
+```bash
+curl -H "Authorization: Bearer $FACE_API_KEY" \
+  http://localhost:8000/v1/diagnostics/startup
+```
 
 ## Healthcheck and Readiness
 

@@ -190,6 +190,34 @@ def extract_stream_result_mode(body: str) -> str | None:
     return None
 
 
+def extract_startup_diagnostics_summary(payload: Any) -> dict[str, Any] | None:
+    if not isinstance(payload, dict) or payload.get("object") != "startup.diagnostics":
+        return None
+
+    summary = payload.get("summary")
+    if not isinstance(summary, dict):
+        return None
+
+    status = payload.get("status")
+    environment = payload.get("environment")
+    if not isinstance(status, str) or not isinstance(environment, str):
+        return None
+
+    errors = summary.get("errors")
+    warnings = summary.get("warnings")
+    if not isinstance(errors, int) or not isinstance(warnings, int):
+        return None
+
+    return {
+        "status": status,
+        "environment": environment,
+        "summary": {
+            "errors": errors,
+            "warnings": warnings,
+        },
+    }
+
+
 def write_json_report(path: str | Path, payload: Any) -> None:
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)

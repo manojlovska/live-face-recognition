@@ -17,7 +17,7 @@ def test_settings_load_from_environment(monkeypatch) -> None:
     get_settings.cache_clear()
     monkeypatch.setenv("APP_NAME", "Test Service")
     monkeypatch.setenv("APP_VERSION", "9.9.9")
-    monkeypatch.setenv("APP_ENVIRONMENT", "test")
+    monkeypatch.setenv("APP_ENV", "test")
     monkeypatch.setenv("FACE_API_KEY", "local-dev-key")
 
     settings = get_settings()

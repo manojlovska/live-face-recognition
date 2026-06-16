@@ -83,7 +83,7 @@ Revisit this roadmap if:
 - a different model stack is approved by ADR.
 
 ## Scaffold Status
-The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, an offline sample-gallery builder skeleton, an OpenAI-compatible chat adapter with non-streaming and SSE streaming support, and a small built-in browser demo with optional face-box overlays and low-rate live polling are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. Local smoke-test tooling, sequential benchmark tooling, and CPU-only Docker packaging are now implemented. The next milestone is production configuration validation and startup diagnostics.
+The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, an offline sample-gallery builder skeleton, an OpenAI-compatible chat adapter with non-streaming and SSE streaming support, and a small built-in browser demo with optional face-box overlays and low-rate live polling are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. Local smoke-test tooling, sequential benchmark tooling, CPU-only Docker packaging, and startup configuration validation are now implemented. The next milestone is release-candidate cleanup and dependency tightening.
 
 ## Work Order Status
 - Work Order 1: complete.
@@ -103,4 +103,5 @@ The initial scaffold work is complete. One-key authentication, readiness routing
 - Work Order 15: complete.
 - Work Order 16: complete.
 - Work Order 17: complete.
-- Work Order 18: next.
+- Work Order 18: complete.
+- Work Order 19: next.
