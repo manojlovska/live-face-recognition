@@ -181,6 +181,13 @@ ruff format --check .
 pytest
 ```
 
+## Local release checks
+
+```bash
+python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key
+python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --endpoint all --requests 20
+```
+
 ## Environment
 
 Copy `.env.example` to `.env` if you want to override defaults locally.

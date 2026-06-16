@@ -55,6 +55,8 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - The browser demo's live polling mode must stop when the camera stops or when the tab becomes hidden.
 - The browser demo must not load third-party scripts or send data to third-party origins.
 - The browser demo overlay must be drawn locally from the API response and must not perform browser-side recognition.
+- The smoke-test and benchmark scripts must only contact the configured local/base URL and must not log or store API keys or image payloads.
+- The smoke-test and benchmark scripts must not add telemetry, third-party analytics, or external reporting services.
 
 ## Logging Rules
 Do not log:

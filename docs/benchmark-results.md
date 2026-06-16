@@ -16,23 +16,26 @@ CPU:
 RAM:
 OS:
 Python:
-Detector model:
-Embedder model:
-Gallery version:
-Image dimensions:
+Target: native|chat|chat-stream|all
 Requests:
-Concurrency:
+Warmup:
+Base URL:
+Image source: generated|file
 
-Startup time:
-Model load time:
-Gallery load time:
-Decode latency:
-Detection latency:
-Embedding latency:
-Gallery search latency:
-Full native request latency p50/p95:
-Full OpenAI request latency p50/p95:
-Memory after startup:
+Latency ms:
+  min:
+  mean:
+  median:
+  p95:
+  max:
+Status counts:
+Result modes:
+Stream first chunk ms:
+  min:
+  mean:
+  median:
+  p95:
+  max:
 Notes:
 ```
 

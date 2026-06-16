@@ -1,9 +1,14 @@
 # Current State
 
 ## Status
-Work Order 15 browser live polling implementation is complete.
+Work Order 16 benchmark and release smoke-test tooling implementation is complete.
 
 ## Current implemented state:
+- Local smoke-test tooling exists for API and browser-demo contract checks.
+- Local benchmark tooling exists for native, chat, and streaming chat endpoints.
+- Benchmarking is sequential and local by default.
+- The tools do not store API keys or image payloads in reports.
+- Production monitoring and load testing are not implemented yet.
 - The browser demo at /demo supports one-frame capture.
 - The browser demo can optionally draw face boxes from the API response.
 - The browser demo now includes explicit low-rate live polling using the existing /v1/face/similarity endpoint.
@@ -46,6 +51,7 @@ Work Order 15 browser live polling implementation is complete.
 - The browser demo can capture one webcam frame and can also run explicit low-rate live polling against `/v1/face/similarity`.
 - The browser demo can optionally draw face boxes from captured-frame API responses.
 - The browser demo keeps live polling client-side, opt-in, and single-flight.
+- Local smoke-test tooling and sequential local benchmark tooling are now implemented.
 - WebSockets are not implemented.
 - The project still does not download CelebA.
 
@@ -74,6 +80,7 @@ Work Order 15 browser live polling implementation is complete.
 - Offline gallery builder skeleton
 - Pytest-based health/config smoke tests
 - Ruff and packaging configuration
+- Browser demo at `/demo` with one-frame capture, optional face-box overlay, and low-rate live polling
 
 ## Missing
 - Full CelebA gallery build
@@ -81,8 +88,7 @@ Work Order 15 browser live polling implementation is complete.
 - Model downloader
 - Gallery artifacts and builder
 - Full test coverage
-- Benchmarks
-- Browser demo
+- Benchmark results
 
 ## Known Risks
 - CelebA licensing may limit use to non-commercial research/demo contexts.
@@ -106,9 +112,10 @@ Work Order 15 browser live polling implementation is complete.
 - Work Order 13: small built-in browser demo for one-frame webcam capture.
 - Work Order 14: optional client-side face-box overlay for the browser demo.
 - Work Order 15: explicit low-rate live polling for the browser demo using the existing native API.
+- Work Order 16: local benchmark and release smoke-test tooling.
 
 ## Next recommended work:
-- Work Order 16: add basic runtime performance benchmarking and a release-readiness smoke test script for the API and browser demo.
+- Work Order 17: add packaging/deployment hardening with a minimal Dockerfile and production run documentation, while preserving CPU-only operation.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

@@ -41,6 +41,14 @@ The browser demo must:
 - Live polling must not store frames, API responses, or API keys in browser storage.
 - Live polling must stop when the camera stops and when the tab becomes hidden.
 
+## Release Tooling Privacy
+The smoke-test and benchmark scripts must:
+- operate only against the configured local or supplied base URL;
+- not store API keys in reports;
+- not store base64 image payloads in reports;
+- not store decoded image bytes or embeddings;
+- not send data to external services.
+
 ## Debug Mode
 If a future debug mode saves images, it must be:
 - disabled by default;

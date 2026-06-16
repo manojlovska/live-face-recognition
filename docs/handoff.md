@@ -17,6 +17,7 @@
 - A small built-in browser demo now captures one webcam frame on demand and sends it to the native API.
 - The browser demo can optionally draw face boxes from the single-frame response.
 - The browser demo now also supports explicit low-rate live polling with client-side throttling and the existing native API.
+- Local smoke-test tooling and sequential local benchmark tooling are now available.
 
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
@@ -35,7 +36,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 
 ## Missing
 - Full CelebA gallery build
-- Benchmarks
+- Benchmark results
 
 ## Known Risks
 - Dataset licensing and image rights.
@@ -44,7 +45,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 16: add basic runtime performance benchmarking and a release-readiness smoke test script for the API and browser demo.
+Work Order 17: add packaging/deployment hardening with a minimal Dockerfile and production run documentation, while preserving CPU-only operation.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.
