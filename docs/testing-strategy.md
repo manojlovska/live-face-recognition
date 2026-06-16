@@ -38,6 +38,8 @@ If a command is not run, report it as `not run` with the reason.
 - browser demo live polling behavior;
 - release smoke-test script behavior;
 - benchmark script smoke test;
+- Docker packaging checks for CPU-only runtime, non-root user, and ignore rules;
+- smoke-script container target checks against `/healthz`, `/readyz`, native API, chat API, and `/demo`;
 - privacy no-retention default;
 - security scan or secret-pattern check;
 - error object compatibility.
@@ -75,6 +77,7 @@ Skipped integration tests must be reported as skipped, not passed.
 - Browser demo live-polling tests for start/stop controls, single-flight request guards, polling interval handling, hidden-tab stop behavior, and same-origin native API usage.
 - Release smoke-test tests for generated image data URLs, readiness classification, auth checks, demo-page checks, and redacted output.
 - Benchmark script tests for latency summaries, status counts, result-mode extraction, CLI parsing, and JSON report writing.
+- Docker packaging tests for a CPU-only image, non-root runtime user, and build-context exclusions.
 
 ## Test Quality Rule
 For every important safety behavior, ask:

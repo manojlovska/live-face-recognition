@@ -49,6 +49,11 @@ The smoke-test and benchmark scripts must:
 - not store decoded image bytes or embeddings;
 - not send data to external services.
 
+## Container Privacy
+- The container image must not include user images, user embeddings, or request bodies.
+- The serving container does not persist uploaded images by default.
+- Local model and gallery artifacts are operator-managed inputs, not user data.
+
 ## Debug Mode
 If a future debug mode saves images, it must be:
 - disabled by default;
