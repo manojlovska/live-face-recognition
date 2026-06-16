@@ -32,6 +32,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Security | auth, request limits, no-secret checks | not started |
 | Privacy | no-retention policy documented and tested where practical | not started |
 | Packaging | CPU-only Docker image and container smoke checks | in progress |
+| Configuration | startup validation and sanitized diagnostics | in progress |
 | Model card | complete and honest | initial draft |
 | Dataset licensing | limitations documented | initial draft |
 | Error handling | structured errors documented/tested | in progress |
@@ -50,6 +51,7 @@ Run the local smoke test against a running service:
 
 ```bash
 python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key
+python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --check-diagnostics
 ```
 
 Run the sequential local benchmark suite:
@@ -69,6 +71,13 @@ Container packaging checks before a pilot release:
 - confirm `reports/`, model artifacts, gallery artifacts, API keys, and `.env` are not baked into the image;
 - run the smoke script against the container successfully;
 - keep model and gallery mounts read-only for serving.
+
+Production configuration checks before a pilot release:
+- run the app with `APP_ENV=production` and a non-default API key;
+- keep `STRICT_STARTUP_VALIDATION=true` for pilot deployments that require fail-fast asset checks;
+- confirm `/v1/diagnostics/startup` returns sanitized diagnostics with no secrets or raw paths unless path disclosure is explicitly enabled;
+- confirm `DEBUG_IMAGE_RETENTION` remains disabled;
+- confirm `STARTUP_VALIDATE_ASSETS` is set to the intended operating mode.
 
 Before a pilot release, at minimum:
 - the smoke script must pass against the release target;

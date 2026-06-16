@@ -1,9 +1,14 @@
 # Current State
 
 ## Status
-Work Order 17 Docker packaging implementation is complete.
+Work Order 18 production configuration validation and startup diagnostics implementation is complete.
 
 ## Current implemented state:
+- Startup configuration validation exists.
+- The app distinguishes development, test, and production configuration modes.
+- Strict startup validation can fail fast on unsafe settings.
+- A protected `/v1/diagnostics/startup` endpoint exposes sanitized startup diagnostics.
+- Diagnostics do not expose API keys, image payloads, or embeddings.
 - A minimal CPU-only Dockerfile exists.
 - Container runs the FastAPI service with Uvicorn on port 8000.
 - Model files, gallery artifacts, reports, API keys, and .env files are not baked into the image.
@@ -119,9 +124,10 @@ Work Order 17 Docker packaging implementation is complete.
 - Work Order 15: explicit low-rate live polling for the browser demo using the existing native API.
 - Work Order 16: local benchmark and release smoke-test tooling.
 - Work Order 17: CPU-only Docker packaging and production run documentation.
+- Work Order 18: production configuration validation and startup diagnostics.
 
 ## Next recommended work:
-- Work Order 18: add production configuration validation and startup diagnostics for required assets, secrets, and privacy-sensitive settings.
+- Work Order 19: add release-candidate cleanup by resolving the Starlette/TestClient deprecation warning and tightening test/runtime dependency versions.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

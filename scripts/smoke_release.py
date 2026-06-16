@@ -11,6 +11,7 @@ import httpx
 from scripts._client_utils import (
     extract_chat_completion_content,
     extract_native_result_mode,
+    extract_startup_diagnostics_summary,
     extract_stream_result_mode,
     make_tiny_image_data_url,
     write_json_report,
@@ -32,6 +33,11 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=30.0,
         help="Per-request timeout in seconds.",
+    )
+    parser.add_argument(
+        "--check-diagnostics",
+        action="store_true",
+        help="Optionally check the protected startup diagnostics endpoint.",
     )
     return parser
 
@@ -67,12 +73,19 @@ def _record_check(
     }
 
 
-def run_smoke_checks(client: Any, *, api_key: str, base_url: str) -> dict[str, Any]:
+def run_smoke_checks(
+    client: Any,
+    *,
+    api_key: str,
+    base_url: str,
+    check_diagnostics: bool = False,
+) -> dict[str, Any]:
     image_data_url = make_tiny_image_data_url("JPEG")
     checks: dict[str, dict[str, Any]] = {}
     notes: list[str] = []
     readiness_status = "unknown"
     service_status = "operational"
+    diagnostics: dict[str, Any] | None = None
 
     try:
         health_response = client.get("/healthz")
@@ -384,6 +397,60 @@ def run_smoke_checks(client: Any, *, api_key: str, base_url: str) -> dict[str, A
             checks=checks,
         )
 
+    if check_diagnostics:
+        try:
+            diagnostics_response = client.get(
+                "/v1/diagnostics/startup",
+                headers=_auth_headers(api_key),
+            )
+            diagnostics_body = _safe_json(diagnostics_response)
+            if diagnostics_response.status_code == 404:
+                diagnostics = {
+                    "available": False,
+                    "status": "unavailable",
+                }
+                notes.append("Startup diagnostics endpoint is unavailable on this deployment.")
+            else:
+                diagnostics_summary = (
+                    extract_startup_diagnostics_summary(diagnostics_body)
+                    if diagnostics_body is not None
+                    else None
+                )
+                diagnostics_ok = (
+                    diagnostics_response.status_code == 200 and diagnostics_summary is not None
+                )
+                if diagnostics_ok:
+                    diagnostics = {
+                        "available": True,
+                        **diagnostics_summary,
+                    }
+                else:
+                    service_status = "broken"
+                    diagnostics = {
+                        "available": True,
+                        "status": "invalid",
+                    }
+                _record_check(
+                    name="startup_diagnostics",
+                    ok=diagnostics_ok,
+                    status_code=diagnostics_response.status_code,
+                    detail=(
+                        diagnostics_summary["status"]
+                        if diagnostics_summary is not None
+                        else "invalid_diagnostics_response"
+                    ),
+                    checks=checks,
+                )
+        except Exception as exc:  # noqa: BLE001
+            service_status = "broken"
+            _record_check(
+                name="startup_diagnostics",
+                ok=False,
+                status_code=None,
+                detail=f"request_failed: {exc.__class__.__name__}",
+                checks=checks,
+            )
+
     if service_status != "broken" and readiness_status == "ready":
         service_status = "ready"
 
@@ -395,6 +462,8 @@ def run_smoke_checks(client: Any, *, api_key: str, base_url: str) -> dict[str, A
         "checks": checks,
         "notes": notes,
     }
+    if diagnostics is not None:
+        report["diagnostics"] = diagnostics
     return report
 
 
@@ -403,6 +472,19 @@ def format_smoke_report(report: dict[str, Any]) -> str:
         f"service_status: {report['service_status']}",
         f"readiness_status: {report['readiness_status']}",
     ]
+    diagnostics = report.get("diagnostics")
+    if isinstance(diagnostics, dict):
+        if diagnostics.get("available") is False:
+            lines.append("diagnostics: unavailable")
+        else:
+            summary = diagnostics.get("summary", {})
+            lines.append(
+                "diagnostics: "
+                f"{diagnostics.get('status')} "
+                f"env={diagnostics.get('environment')} "
+                f"errors={summary.get('errors')} "
+                f"warnings={summary.get('warnings')}"
+            )
     for name, check in report["checks"].items():
         status = "ok" if check["ok"] else "fail"
         lines.append(f"- {name}: {status} (HTTP {check['status_code']}) {check['detail']}")
@@ -418,7 +500,12 @@ def main(argv: list[str] | None = None) -> int:
 
     report: dict[str, Any]
     with httpx.Client(base_url=args.base_url, timeout=args.timeout) as client:
-        report = run_smoke_checks(client, api_key=args.api_key, base_url=args.base_url)
+        report = run_smoke_checks(
+            client,
+            api_key=args.api_key,
+            base_url=args.base_url,
+            check_diagnostics=args.check_diagnostics,
+        )
 
     if args.output is not None:
         write_json_report(args.output, report)

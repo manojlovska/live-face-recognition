@@ -132,3 +132,19 @@ def test_smoke_main_writes_json_report(tmp_path: Path, monkeypatch) -> None:
     assert report["readiness_status"] == "not_ready"
     assert "local-dev-key" not in output_path.read_text(encoding="utf-8")
     assert "data:image" not in output_path.read_text(encoding="utf-8")
+
+
+def test_smoke_checks_include_sanitized_startup_diagnostics(monkeypatch) -> None:
+    monkeypatch.setenv("FACE_API_KEY", "local-dev-key")
+
+    with _default_client() as client:
+        report = smoke_release.run_smoke_checks(
+            client,
+            api_key="local-dev-key",
+            base_url="http://testserver",
+            check_diagnostics=True,
+        )
+
+    assert report["diagnostics"]["available"] is True
+    assert report["diagnostics"]["status"] == "ok"
+    assert report["diagnostics"]["summary"] == {"errors": 0, "warnings": 0}
