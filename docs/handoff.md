@@ -24,6 +24,12 @@
 - Benchmark results remain a template until a real measured run is recorded.
 - The project remains a CPU-only similarity service and does not claim identity verification or commercial readiness.
 
+## Current State After Work Order 21
+- Warning-free tests passed and a local smoke/benchmark baseline was measured directly from the repository root.
+- The smoke and benchmark scripts now run without extra `PYTHONPATH` setup.
+- Docker validation and real model/gallery RC validation remain blocked in this environment.
+- Benchmark results are recorded, but they reflect the not-ready local runtime rather than a full pilot target.
+
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
 
@@ -50,7 +56,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 21: Run a full RC validation pass on a Docker-capable machine with real model assets and a small local gallery, then fill measured benchmark results.
+Work Order 22: resolve RC validation blockers found during Docker/model/gallery benchmark pass.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

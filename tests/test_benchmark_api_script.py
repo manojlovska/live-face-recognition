@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -155,6 +157,20 @@ def test_benchmark_parser_help_exits_cleanly(capsys) -> None:
 
     assert excinfo.value.code == 0
     assert "Benchmark local API endpoints." in capsys.readouterr().out
+
+
+def test_benchmark_script_runs_help_from_temp_cwd(tmp_path: Path) -> None:
+    script = Path(__file__).resolve().parents[1] / "scripts" / "benchmark_api.py"
+    result = subprocess.run(
+        [sys.executable, str(script), "--help"],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    assert "Benchmark local API endpoints." in result.stdout
 
 
 def test_benchmark_main_writes_json_report(tmp_path: Path, monkeypatch) -> None:

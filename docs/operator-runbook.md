@@ -75,11 +75,15 @@ curl -H "Authorization: Bearer $FACE_API_KEY" \
 python scripts/smoke_release.py --base-url http://localhost:8000 --api-key "$FACE_API_KEY" --check-diagnostics
 ```
 
+Run this from the repository root; the script now resolves the project package path for direct execution.
+
 ## Running benchmarks
 
 ```bash
 python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key "$FACE_API_KEY" --endpoint all --requests 20
 ```
+
+Run this from the repository root as well. When model or gallery assets are unavailable, the benchmark will still produce a measured `engine_not_ready` baseline that should not be treated as a pilot benchmark.
 
 ## Using the native API
 
