@@ -28,22 +28,24 @@ def test_readme_and_docs_avoid_identity_verification_claims() -> None:
     assert "commercially ready" not in combined
     assert "bundled celeba" not in combined
     assert "bundled onnx" not in combined
+    assert "partially ready for controlled pilot" in release_readiness.lower()
+    assert "dataset/legal review" in combined.lower()
 
 
 def test_benchmark_results_record_the_measured_baseline() -> None:
     benchmark_results = _read(DOCS / "benchmark-results.md")
 
     assert "RC validation run: 2026-06-16" in benchmark_results
-    assert "engine_not_ready" in benchmark_results
-    assert "Docker validation remains blocked" in benchmark_results
-    assert "real model/gallery assets were unavailable" in benchmark_results
-    assert "RC ready-path blocker: 2026-06-16" in benchmark_results
-    assert (
-        "WO22 ready-path validation attempt did not produce new ready-path measurements"
-    ) in benchmark_results
+    assert "RC ready-path validation run: 2026-06-16" in benchmark_results
+    assert "similarity" in benchmark_results
+    assert "Current RC1 Limitation" in benchmark_results
+    assert "historical wo21/wo22" in benchmark_results.lower()
 
 
 def test_handoff_points_to_next_work_order() -> None:
     handoff = _read(DOCS / "handoff.md")
 
-    assert "Work Order 23: resolve remaining RC ready-path validation blockers" in handoff
+    assert (
+        "Work Order 25: prepare RC1 tag, release package, and final human approval notes."
+        in handoff
+    )

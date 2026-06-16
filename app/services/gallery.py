@@ -7,8 +7,8 @@ from typing import Any
 
 import numpy as np
 
-from app.api.errors import GalleryStateError
 from app.config import Settings
+from app.core.errors import GalleryStateError
 
 GALLERY_STATE_MISSING = "missing"
 GALLERY_STATE_PRESENT_NOT_LOADED = "present_not_loaded"

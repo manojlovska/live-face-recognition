@@ -1,7 +1,7 @@
 # Benchmark Results
 
 ## Status
-A dated RC validation baseline is recorded below. It is not yet an authoritative pilot benchmark because Docker and the real model/gallery assets were unavailable in this environment.
+A dated RC validation baseline is recorded below, along with a ready-path validation run from a Docker-capable machine with mounted models and a small local gallery. Historical WO21/WO22 not-ready context is preserved for comparison, and the ready-path section below is the current measured runtime evidence. These are local validation results, not a final commercial benchmark claim.
 
 ## Rule
 Do not invent performance numbers. Add results only from actual benchmark runs.
@@ -57,16 +57,55 @@ Do not invent performance numbers. Add results only from actual benchmark runs.
 - These measurements are useful as a local error-path baseline, but they are not authoritative RC benchmark results for a pilot target.
 - No API keys, raw embeddings, or base64 image payloads were recorded in the report files.
 
-## Current RC1 Blocker
-Authoritative RC benchmark results still require a Docker-capable machine with real model assets and a small local gallery.
+## RC ready-path validation run: 2026-06-16
 
-## RC ready-path blocker: 2026-06-16
+### Environment
 
-The WO22 ready-path validation attempt did not produce new ready-path measurements in this environment.
+- Operator: Codex
+- Machine/CPU: Intel(R) Core(TM) Ultra 7 165H, 22 logical CPUs
+- RAM: 15 GiB
+- OS: Linux 6.18.33.1-microsoft-standard-WSL2 on WSL2
+- Python: Python 3.12.3
+- Docker: Docker 29.1.3, build 29.1.3-0ubuntu3~24.04.2
+- Image tag: `live-face-recognition:rc-ready`
+- Git commit: `feature/wo-024r-sudo-ready-path-validation` working tree
+- Model assets: `models/face_detection_yunet.onnx` and `models/face_recognition_sface.onnx` downloaded locally from OpenCV Zoo; SHA-256 computed locally
+- Gallery version: `rc-ready-small-gallery-v1`
+- Gallery item count: 10
+- Gallery embedding dimension: 128
 
-- Docker CLI/daemon are unavailable here.
-- The real YuNet and SFace model assets are unavailable locally.
-- No local gallery artifact set or sample image set is available to build a ready-path gallery.
-- `/readyz` could not be verified as `200 ready` on a mounted ready path.
-- Native similarity, OpenAI chat completions, and `stream=true` could only be exercised on the local not-ready path from WO21.
-- No ready-path benchmark numbers were recorded, so this section is a blocker note only.
+### Validation summary
+
+| Check | Result | Notes |
+|---|---|---|
+| Clean install | pass | `python3.12 -m venv .venv`, `python -m pip install -e '.[dev,test]'` succeeded. |
+| Ruff check | pass | `python -m ruff check .` |
+| Ruff format check | pass | `python -m ruff format --check .` |
+| Pytest -W error | pass | `python -m pytest -W error` passed with 167 tests. |
+| Docker build | pass | `sudo docker build -t live-face-recognition:rc-ready .` |
+| Smoke without assets | pass | Container started operational-but-not-ready; smoke returned `not_ready` with sanitized diagnostics. |
+| Gallery build | pass | Small local gallery built from 10 permitted sample images and 2 identities. |
+| Smoke with assets | pass | Container returned `ready` with sanitized diagnostics. |
+| Readyz with assets | pass | `/readyz` returned `200 ready`. |
+
+### Benchmark results
+
+| Endpoint | Requests | Warmup | Result mode | Min ms | Mean ms | Median ms | P95 ms | Max ms | Errors |
+|---|---:|---:|---|---:|---:|---:|---:|---:|---:|
+| native | 20 | 3 | similarity | 76.267 | 92.756 | 93.607 | 103.230 | 106.154 | 0 |
+| chat | 20 | 3 | similarity | 78.909 | 94.117 | 93.524 | 102.506 | 107.238 | 0 |
+| chat-stream | 20 | 3 | similarity | 91.662 | 104.155 | 103.746 | 109.597 | 112.402 | 0 |
+
+### Stream timing
+
+- chat-stream first chunk latency: min 90.380 ms, mean 102.804 ms, median 102.278 ms, p95 108.694 ms, max 110.332 ms.
+
+### Notes and blockers
+
+- A second ready-path benchmark using the generated 1x1 image also returned `similarity` results with lower latencies, but the representative-image run above is the primary ready-path measurement.
+- The validation run used a small local gallery, not the full CelebA workflow.
+- Dataset/legal review is still required before any external or commercial use.
+- No API keys, raw embeddings, or base64 image payloads were recorded in the report files.
+
+## Current RC1 Limitation
+Authoritative pilot use still requires dataset/legal review and, if the release target differs from this local validation environment, a final run on the target machine with the same assets.

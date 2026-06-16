@@ -3,8 +3,9 @@
 ## Status
 
 Draft for controlled-pilot review only. This is not a final release note and does not claim commercial readiness.
-This worktree has a measured local smoke/benchmark baseline, but full RC validation is still blocked here because Docker and the real model/gallery assets were unavailable.
-WO22 did not add ready-path evidence; the RC1 draft remains gated on a Docker-capable machine with real model assets and a small local gallery.
+This worktree now has measured local not-ready and ready-path validation runs, but it is still not a final release note and does not claim commercial readiness.
+Benchmark numbers are local-machine-specific and the ready-path run used a small local gallery.
+Legal/dataset review remains pending before any broader or external use.
 
 ## What is included
 
@@ -59,7 +60,7 @@ WO22 did not add ready-path evidence; the RC1 draft remains gated on a Docker-ca
 - Smoke tests against the intended runtime
 - Docker build verification on a Docker-capable machine
 - Benchmarks measured and recorded in [benchmark-results.md](benchmark-results.md)
-  - The current recorded benchmark is a local not-ready baseline, not a pilot benchmark.
+  - The current recorded benchmarks include both a local not-ready baseline and a ready-path validation run.
 
 ## Known limitations
 
@@ -67,6 +68,7 @@ WO22 did not add ready-path evidence; the RC1 draft remains gated on a Docker-ca
 - The full CelebA workflow is not bundled in the repository.
 - Benchmark numbers are environment-specific and must be measured.
 - The browser demo is client-side polling, not server-side video streaming.
+- Dataset/legal approval is still required before any broader use.
 
 ## Not included
 
@@ -80,7 +82,7 @@ WO22 did not add ready-path evidence; the RC1 draft remains gated on a Docker-ca
 
 ## Required manual verification before tagging
 
-- Verify model assets and gallery artifacts on the target machine.
+- Verify model assets and gallery artifacts on the target machine if the release target differs from the validated local runtime.
 - Verify `/healthz`, `/readyz`, `/v1/models`, `/v1/face/similarity`, `/v1/chat/completions`, and `/v1/diagnostics/startup`.
 - Verify the browser demo in the intended browser environment.
 - Verify the Docker image build on a Docker-capable machine.

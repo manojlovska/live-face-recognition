@@ -3,24 +3,18 @@
 ## Release Principle
 Feature completion is not release readiness. Release readiness requires evidence: tests, docs, benchmark results, privacy/security review, and honest limitations.
 This repository is ready for a controlled pilot only after the pilot checklist is completed.
+Status: partially ready for controlled pilot.
+Runtime validation has been completed locally, but dataset/legal review is still pending.
 
-## WO21 Validation Status
+## WO24R Validation Status
 
 - Warning-free `ruff` and `pytest -W error` passes were reproduced locally.
-- The smoke script ran directly from the repository root against a local development server and reported the expected `not_ready` baseline because the real model/gallery assets were unavailable.
-- The benchmark script measured a local `engine_not_ready` baseline for native, chat, and chat-stream paths.
-- Docker validation is blocked in this environment because the Docker CLI/daemon is unavailable.
-- Real model/gallery RC validation is blocked in this environment because the required assets are unavailable locally.
-- This worktree is not ready for a controlled pilot yet.
-
-## WO22 Ready-Path Status
-
-- The ready-path RC validation run is still blocked in this environment.
-- Docker CLI/daemon are unavailable here, so the container build and container smoke checks could not be performed.
-- The real YuNet and SFace model assets are unavailable locally.
-- No local gallery artifacts or sample set were available to build a ready-path gallery.
-- As a result, `/readyz` could not be verified on a ready path and no ready-path benchmark numbers were recorded.
-- This worktree remains blocked rather than partially ready.
+- Docker image build was verified on a Docker-capable machine.
+- The smoke script ran against a no-assets container and reported the expected operational-but-not-ready baseline.
+- Real YuNet/SFace model files were mounted and a small local gallery was built from a permitted sample set.
+- The smoke script ran against the asset-mounted container and reported `ready` with sanitized diagnostics.
+- The benchmark script measured ready-path native, chat, and chat-stream latency using a representative local face image.
+- The worktree is runtime-ready for a controlled pilot candidate, but legal/dataset approval remains pending.
 
 ## Release Documents
 
@@ -35,18 +29,18 @@ This repository is ready for a controlled pilot only after the pilot checklist i
 
 | Gate | Required evidence | Status |
 |---|---|---|
-| Install | documented local install works | not started |
-| Auth | one-key auth tested | in progress |
-| Health | `/healthz` tested | in progress |
-| Readiness | `/readyz` tested | in progress |
-| Models | `/v1/models` tested | in progress |
-| Native API | `/v1/face/similarity` tested | in progress |
+| Install | documented local install works | complete |
+| Auth | one-key auth tested | complete |
+| Health | `/healthz` tested | complete |
+| Readiness | `/readyz` tested | complete |
+| Models | `/v1/models` tested | complete |
+| Native API | `/v1/face/similarity` tested | complete |
 | OpenAI API | non-streaming `/v1/chat/completions` works | complete |
-| CPU inference | YuNet detection and internal SFace embeddings work without GPU | in progress |
+| CPU inference | YuNet detection and internal SFace embeddings work without GPU | complete |
 | Gallery | small gallery works | complete |
-| Privacy | no image/embedding retention by default | not started |
-| Docs | README and core docs updated | in progress |
-| Tests | warning-free `pytest`, `ruff check`, and `pytest -W error` pass | in progress |
+| Privacy | no image/embedding retention by default | complete |
+| Docs | README and core docs updated | complete |
+| Tests | warning-free `pytest`, `ruff check`, and `pytest -W error` pass | complete |
 
 ## RC1 Gates
 
@@ -54,27 +48,26 @@ This repository is ready for a controlled pilot only after the pilot checklist i
 |---|---|---|
 | Full gallery | reproducible CelebA gallery workflow | not started |
 | Streaming | OpenAI-style `stream=true` works | complete |
-| Live frames | repeated-frame API tested | not started |
+| Live frames | repeated-frame API tested | in progress |
 | Browser demo | HTML5 webcam demo works | complete |
-| Benchmarks | CPU benchmark results documented | not started |
-| Security | auth, request limits, no-secret checks | not started |
-| Privacy | no-retention policy documented and tested where practical | not started |
-| Packaging | CPU-only Docker image and container smoke checks | in progress |
-| Configuration | startup validation and sanitized diagnostics | in progress |
-| Dependencies | runtime/test dependency bounds reviewed for CPU-only RC use | in progress |
+| Benchmarks | CPU benchmark results documented | complete |
+| Security | auth, request limits, no-secret checks | complete |
+| Privacy | no-retention policy documented and tested where practical | complete |
+| Packaging | CPU-only Docker image and container smoke checks | complete |
+| Configuration | startup validation and sanitized diagnostics | complete |
+| Dependencies | runtime/test dependency bounds reviewed for CPU-only RC use | complete |
 | Model card | complete and honest | initial draft |
 | Dataset licensing | limitations documented | initial draft |
-| Error handling | structured errors documented/tested | in progress |
+| Error handling | structured errors documented/tested | complete |
 | Compatibility | OpenAI Python client compatibility test | complete |
-| Release language | no overclaims | in progress |
+| Release language | no overclaims | complete |
 
 ## RC1 Allowed Claim
 Controlled-pilot-ready CPU-only research service for CelebA-based face similarity.
 
 The API now supports detector-only, embedding-only, and gallery-backed similarity paths over a local artifact gallery, it has a sample-gallery builder plus CelebA-style local layout discovery, it exposes a minimal OpenAI-compatible chat-completions adapter for image similarity requests with both non-streaming and SSE streaming responses, and it includes a small built-in browser demo for one-frame webcam capture with optional face-box overlays. The full CelebA gallery workflow still blocks RC1.
 The browser demo also includes explicit low-rate live polling, but that remains client-side polling rather than a server-side repeated-frame API.
-This worktree has a measured local smoke/benchmark baseline, but it is not yet an authoritative pilot validation because Docker and the real model/gallery assets were unavailable here.
-WO22 did not produce ready-path results; the release remains blocked until a Docker-capable machine with real model assets and a small local gallery is available.
+This worktree now has measured local not-ready and ready-path validation, but it is still not an authoritative pilot until the checklist is complete and legal/dataset approval is finished.
 
 ## Local Release Checks
 
@@ -89,6 +82,7 @@ Run the sequential local benchmark suite:
 
 ```bash
 python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --endpoint all --requests 20
+python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --endpoint all --requests 20 --warmup 3 --image-file /path/to/representative/image.jpg
 ```
 
 Run the strict release-candidate test pass:
@@ -130,7 +124,6 @@ Before a pilot release, at minimum:
 - no privacy or security rule in this repository may be violated;
 - the release notes must not claim production biometric identification.
 - The pilot checklist must be completed.
-- The release still cannot be marked ready while WO22 remains blocked.
 
 ## RC1 Forbidden Claim
 Production biometric identification or verified celebrity recognition.

@@ -6,7 +6,7 @@ import numpy as np
 from fastapi import Request
 from pydantic import BaseModel, Field
 
-from app.api.errors import EngineNotReadyError
+from app.core.errors import EngineNotReadyError
 from app.services.gallery import GalleryStore
 from app.services.image_input import DecodedImage
 from app.services.model_runtime import (
