@@ -36,7 +36,7 @@ def test_rc1_signoff_docs_cover_expected_gates() -> None:
     assert "commercial-ready" in combined
     assert ".env" in combined and "not committed" in combined
     assert "local-machine-specific" in combined
-    assert "work order 31" in handoff
+    assert "work order 32" in handoff
     assert "engineering | anastasija manojlovska | approved | 2026-06-16" in notes
     assert "security/privacy | anastasija manojlovska | approved | 2026-06-16" in notes
     assert "dataset/legal | anastasija manojlovska | approved | 2026-06-16" in notes

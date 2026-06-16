@@ -132,3 +132,17 @@ Use the documented `messages` payload with one `image_url` data URL.
 - Stop the container with `Ctrl+C` or `docker stop`.
 - Remove temporary local gallery artifacts only if they are no longer needed.
 - Keep `.env`, generated reports, and any local secrets out of Git.
+
+## Post-publication and onboarding references
+
+- [RC1 post-publication verification](rc1-post-publication-verification.md)
+- [Pilot-operator onboarding](pilot-operator-onboarding.md)
+- The published RC1 release remains a candidate release, not a final release.
+- Operators must still provide authorized model and gallery artifacts locally.
+
+## Post-publication and onboarding references
+
+- [RC1 post-publication verification](rc1-post-publication-verification.md)
+- [Pilot-operator onboarding](pilot-operator-onboarding.md)
+- The published RC1 release remains a candidate release, not a final release.
+- Operators must still provide authorized model and gallery artifacts locally.

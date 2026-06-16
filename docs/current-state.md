@@ -1,14 +1,16 @@
 # Current State
 
 ## Status
-RC1 release-package documentation has been prepared. Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery. RC1 sign-off request materials have been prepared. Human sign-offs for v0.1.0-rc1 have been recorded. The GitHub Release for v0.1.0-rc1 has been approved for publication. RC1 remains a release candidate, not a final release. The approved use scope is documented in the human approval notes. Pilot status remains partially ready for broader or external use until any further legal/dataset scope is approved. The project remains a face-similarity service, not identity verification. The project is not a final commercial release.
+RC1 release-package documentation has been prepared. Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery. RC1 sign-off request materials have been prepared. Human sign-offs for v0.1.0-rc1 have been recorded. The v0.1.0-rc1 GitHub Release has been published. Post-publication verification documentation exists. Pilot-operator onboarding documentation exists. RC1 remains a release candidate, not a final release. The approved use scope is documented in the human approval notes. Pilot status remains partially ready for broader or external use until any further legal/dataset scope is approved. The project remains a face-similarity service, not identity verification. Operators must provide authorized model and gallery assets at runtime. The project is not a final commercial release.
 
 ## Current implemented state:
 - RC1 release-package documentation has been prepared.
 - RC1 sign-off request materials have been prepared.
 - Human sign-offs for v0.1.0-rc1 have been recorded.
 - The v0.1.0-rc1 tag has been created and pushed.
-- The GitHub Release for v0.1.0-rc1 has been approved for publication.
+- The v0.1.0-rc1 GitHub Release has been published.
+- Post-publication verification documentation exists.
+- Pilot-operator onboarding documentation exists.
 - RC1 remains a release candidate, not a final release.
 - Release-candidate documentation has been consolidated.
 - A pilot-readiness checklist exists.
@@ -18,6 +20,7 @@ RC1 release-package documentation has been prepared. Ready-path Docker validatio
 - Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery.
 - Pilot status remains partially ready for broader or external use until any further legal/dataset scope is approved.
 - The project remains a face-similarity service, not identity verification.
+- Operators must provide authorized model and gallery assets at runtime.
 - The project is not a final commercial release.
 - Startup configuration validation exists.
 - The app distinguishes development, test, and production configuration modes.
@@ -158,9 +161,10 @@ RC1 release-package documentation has been prepared. Ready-path Docker validatio
 - Work Order 27: GitHub Release draft for `v0.1.0-rc1` and internal RC1 announcement draft.
 - Work Order 28: RC1 sign-off request package and approval templates.
 - Work Order 30: recorded RC1 approvals and GitHub Release publication.
+- Work Order 31: post-publication verification and pilot-operator onboarding notes.
 
 ## Next recommended work:
-- Work Order 31: run post-publication verification and prepare pilot-operator onboarding notes.
+- Work Order 32: run a pilot-operator dry run using the onboarding guide and capture feedback.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

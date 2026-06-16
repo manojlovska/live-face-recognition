@@ -104,6 +104,7 @@ See [docs/dataset-and-licensing.md](docs/dataset-and-licensing.md) and [docs/mod
 - [docs/testing-strategy.md](docs/testing-strategy.md)
 - [docs/error-handling.md](docs/error-handling.md)
 - [docs/benchmark-results.md](docs/benchmark-results.md)
+- [RC1 release](https://github.com/manojlovska/live-face-recognition/releases/tag/v0.1.0-rc1)
 
 ## RC1 release package
 
@@ -113,6 +114,8 @@ This package does not imply a final release.
 - [docs/rc1-signoff-request.md](docs/rc1-signoff-request.md)
 - [docs/rc1-approval-decision-template.md](docs/rc1-approval-decision-template.md)
 - [docs/rc1-review-comment-template.md](docs/rc1-review-comment-template.md)
+- [docs/rc1-post-publication-verification.md](docs/rc1-post-publication-verification.md)
+- [docs/pilot-operator-onboarding.md](docs/pilot-operator-onboarding.md)
 - [docs/github-release-draft-v0.1.0-rc1.md](docs/github-release-draft-v0.1.0-rc1.md)
 - [docs/internal-rc1-announcement.md](docs/internal-rc1-announcement.md)
 - [docs/rc1-human-approval-notes.md](docs/rc1-human-approval-notes.md)

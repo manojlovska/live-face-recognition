@@ -46,6 +46,6 @@ def test_handoff_points_to_next_work_order() -> None:
     handoff = _read(DOCS / "handoff.md")
 
     assert (
-        "Work Order 31: run post-publication verification and prepare pilot-operator "
-        "onboarding notes." in handoff
+        "Work Order 32: run a pilot-operator dry run using the onboarding guide and "
+        "capture feedback." in handoff
     )
