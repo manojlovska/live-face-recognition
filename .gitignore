@@ -217,6 +217,7 @@ data/gallery/*.csv
 # Local release reports
 reports/*
 !reports/.gitkeep
+external/*
 
 # Ruff stuff:
 .ruff_cache/
@@ -238,6 +239,7 @@ data/gallery/*
 !data/gallery/.gitkeep
 reports/*
 !reports/.gitkeep
+external/*
 # Local builder reports and generated galleries stay out of Git.
 # Builder reports are generated output
 data/gallery/gallery_build_report.json

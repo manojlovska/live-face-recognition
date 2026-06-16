@@ -36,6 +36,11 @@
 - Ready-path benchmark results were recorded for native, chat, and chat-stream paths using a representative local face image.
 - The remaining release blocker is human legal/dataset approval, not runtime readiness.
 
+## Current State After Work Order 25
+- RC1 release-package documentation has been prepared for human review.
+- The project remains a controlled-pilot candidate, not a final commercial release.
+- Human legal/dataset approval is still pending before any broader or external use.
+
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
 
@@ -62,7 +67,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 25: prepare RC1 tag, release package, and final human approval notes.
+Work Order 26: perform final human approval review and, if approved, create the v0.1.0-rc1 tag.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

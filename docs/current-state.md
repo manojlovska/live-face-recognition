@@ -1,15 +1,19 @@
 # Current State
 
 ## Status
-Work Order 24R validation recorded a ready-path Docker/model/gallery run, and the repository now has both not-ready and ready-path local validation evidence. The project is still not a final commercial release and does not claim identity verification.
+RC1 release-package documentation has been prepared. Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery. Pilot status remains partially ready until human legal/dataset approval is completed. The project remains a face-similarity service, not identity verification. The project is not a final commercial release.
 
 ## Current implemented state:
+- RC1 release-package documentation has been prepared.
 - Release-candidate documentation has been consolidated.
 - A pilot-readiness checklist exists.
 - An operator runbook exists.
 - RC1 release notes are drafted.
 - Benchmark results now include dated local not-ready and ready-path validation runs, but they are still local evidence rather than a final commercial release claim.
-- The project is still not a final commercial release and does not claim identity verification.
+- Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery.
+- Pilot status remains partially ready until human legal/dataset approval is completed.
+- The project remains a face-similarity service, not identity verification.
+- The project is not a final commercial release.
 - Startup configuration validation exists.
 - The app distinguishes development, test, and production configuration modes.
 - Strict startup validation can fail fast on unsafe settings.
