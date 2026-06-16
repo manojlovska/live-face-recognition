@@ -12,6 +12,8 @@
 - `README.md`
 - `docs/current-state.md`
 - `docs/handoff.md`
+- `docs/github-release-draft-v0.1.0-rc1.md`
+- `docs/internal-rc1-announcement.md`
 - `docs/pilot-readiness-checklist.md`
 - `docs/operator-runbook.md`
 - `docs/release-readiness.md`
@@ -65,3 +67,4 @@ python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key "$FAC
 
 - This manifest is for an RC1 candidate, not a final release.
 - No secrets, raw reports, embeddings, or base64 payloads are included here.
+- The GitHub Release draft should remain unpublished until the maintainer chooses otherwise.

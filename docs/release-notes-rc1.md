@@ -12,6 +12,7 @@ Status: partially ready for controlled pilot.
 Ready-path validation passed locally with Docker, mounted YuNet/SFace models, and a small local gallery.
 Benchmark numbers are local-machine-specific and the ready-path run used a small local gallery.
 Legal/dataset review remains pending before any broader or external use.
+The GitHub Release remains a draft in docs and has not been published.
 
 ## Ready-path validation summary
 
@@ -106,3 +107,4 @@ Legal/dataset review remains pending before any broader or external use.
 - Verify smoke tests and benchmark results against the intended runtime.
 - Verify dataset and licensing review before any external or commercial use.
 - Verify the release checklist and human approval notes before creating the tag.
+- Verify the GitHub Release draft text before any publication decision.
