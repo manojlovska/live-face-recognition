@@ -138,3 +138,11 @@ Required before any external or commercial use:
 - [ ] Go only if every required-before-pilot item is checked.
 - [x] No-go if any required model, gallery, API, security, privacy, or legal item is unchecked.
 - [x] No-go if the environment cannot reproduce the documented checks.
+
+## RC1 release package
+
+- [x] RC1 human approval notes are prepared.
+- [x] RC1 release checklist is prepared.
+- [x] RC1 release manifest is prepared.
+- [x] RC1 release notes remain a candidate draft only.
+- [x] Tagging instructions are documented but gated on human approval.

@@ -104,3 +104,13 @@ See [docs/dataset-and-licensing.md](docs/dataset-and-licensing.md) and [docs/mod
 - [docs/testing-strategy.md](docs/testing-strategy.md)
 - [docs/error-handling.md](docs/error-handling.md)
 - [docs/benchmark-results.md](docs/benchmark-results.md)
+
+## RC1 release package
+
+These docs are for RC1 candidate review only and do not imply a final release.
+This package does not imply a final release.
+
+- [docs/rc1-human-approval-notes.md](docs/rc1-human-approval-notes.md)
+- [docs/rc1-release-checklist.md](docs/rc1-release-checklist.md)
+- [docs/rc1-release-manifest.md](docs/rc1-release-manifest.md)
+- [docs/release-notes-rc1.md](docs/release-notes-rc1.md)

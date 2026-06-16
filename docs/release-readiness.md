@@ -6,6 +6,15 @@ This repository is ready for a controlled pilot only after the pilot checklist i
 Status: partially ready for controlled pilot.
 Runtime validation has been completed locally, but dataset/legal review is still pending.
 
+## RC1 Release Package
+
+- [RC1 human approval notes](rc1-human-approval-notes.md)
+- [RC1 release checklist](rc1-release-checklist.md)
+- [RC1 release manifest](rc1-release-manifest.md)
+- [RC1 release notes draft](release-notes-rc1.md)
+- [Benchmark results](benchmark-results.md)
+- [Pilot readiness checklist](pilot-readiness-checklist.md)
+
 ## WO24R Validation Status
 
 - Warning-free `ruff` and `pytest -W error` passes were reproduced locally.
@@ -20,6 +29,9 @@ Runtime validation has been completed locally, but dataset/legal review is still
 
 - [Pilot readiness checklist](pilot-readiness-checklist.md)
 - [Operator runbook](operator-runbook.md)
+- [RC1 human approval notes](rc1-human-approval-notes.md)
+- [RC1 release checklist](rc1-release-checklist.md)
+- [RC1 release manifest](rc1-release-manifest.md)
 - [RC1 release notes draft](release-notes-rc1.md)
 - [Benchmark plan](benchmark-plan.md)
 - [Benchmark results](benchmark-results.md)

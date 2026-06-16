@@ -19,6 +19,7 @@ data/gallery/*
 !data/gallery/.gitkeep
 reports/*
 !reports/.gitkeep
+external/*
 *.npy
 *.sqlite
 *.db

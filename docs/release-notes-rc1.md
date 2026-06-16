@@ -1,11 +1,25 @@
 # RC1 Release Notes Draft
 
+## Candidate
+
+v0.1.0-rc1
+
 ## Status
 
+This is a release-candidate draft, not a final release.
 Draft for controlled-pilot review only. This is not a final release note and does not claim commercial readiness.
-This worktree now has measured local not-ready and ready-path validation runs, but it is still not a final release note and does not claim commercial readiness.
+Status: partially ready for controlled pilot.
+Ready-path validation passed locally with Docker, mounted YuNet/SFace models, and a small local gallery.
 Benchmark numbers are local-machine-specific and the ready-path run used a small local gallery.
 Legal/dataset review remains pending before any broader or external use.
+
+## Ready-path validation summary
+
+- Docker build passed on a Docker-capable machine.
+- No-assets container smoke passed with the expected `not_ready` baseline.
+- Mounted-assets container smoke passed with `/readyz` returning `200 ready`.
+- Native, chat, and chat-stream ready-path benchmarks were measured locally.
+- The measured ready-path numbers are specific to the local validation machine and gallery set.
 
 ## What is included
 
@@ -61,6 +75,7 @@ Legal/dataset review remains pending before any broader or external use.
 - Docker build verification on a Docker-capable machine
 - Benchmarks measured and recorded in [benchmark-results.md](benchmark-results.md)
   - The current recorded benchmarks include both a local not-ready baseline and a ready-path validation run.
+  - The ready-path results are local-machine-specific and not a general performance guarantee.
 
 ## Known limitations
 
@@ -69,6 +84,7 @@ Legal/dataset review remains pending before any broader or external use.
 - Benchmark numbers are environment-specific and must be measured.
 - The browser demo is client-side polling, not server-side video streaming.
 - Dataset/legal approval is still required before any broader use.
+- Model files, sample images, gallery artifacts, raw benchmark reports, API keys, and `.env` are not committed.
 
 ## Not included
 
@@ -79,6 +95,7 @@ Legal/dataset review remains pending before any broader or external use.
 - WebSockets for the browser demo.
 - ONNX model files are not bundled.
 - CelebA data is not bundled.
+- This release remains a face-similarity service, not identity verification.
 
 ## Required manual verification before tagging
 
@@ -88,3 +105,4 @@ Legal/dataset review remains pending before any broader or external use.
 - Verify the Docker image build on a Docker-capable machine.
 - Verify smoke tests and benchmark results against the intended runtime.
 - Verify dataset and licensing review before any external or commercial use.
+- Verify the release checklist and human approval notes before creating the tag.
