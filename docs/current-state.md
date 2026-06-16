@@ -59,6 +59,12 @@ Work Order 24R validation recorded a ready-path Docker/model/gallery run, and th
 - If YuNet is available and loaded, valid images can return detection-only face boxes.
 - If YuNet and SFace are available and loaded, the service can generate internal face embeddings.
 - If YuNet, SFace, and a gallery artifact are loaded, the service can return `top_matches` from the gallery.
+- Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery.
+- `/readyz` reached `200 ready` in the mounted-assets validation run.
+- Native, chat, and chat-stream ready-path benchmarks were measured locally.
+- Pilot status remains partially ready until human legal/dataset approval is completed.
+- The project is a face-similarity service, not identity verification.
+- The project is not a final commercial release.
 - Raw embeddings are not returned by the public API.
 - Detection-only mode does not return embeddings or CelebA matches.
 - top_matches is empty when no gallery artifact is loaded and populated when one is available.

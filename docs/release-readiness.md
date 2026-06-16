@@ -3,7 +3,8 @@
 ## Release Principle
 Feature completion is not release readiness. Release readiness requires evidence: tests, docs, benchmark results, privacy/security review, and honest limitations.
 This repository is ready for a controlled pilot only after the pilot checklist is completed.
-The current state is partially ready: runtime validation has been completed locally, but dataset/legal review is still pending.
+Status: partially ready for controlled pilot.
+Runtime validation has been completed locally, but dataset/legal review is still pending.
 
 ## WO24R Validation Status
 
@@ -36,7 +37,7 @@ The current state is partially ready: runtime validation has been completed loca
 | Native API | `/v1/face/similarity` tested | complete |
 | OpenAI API | non-streaming `/v1/chat/completions` works | complete |
 | CPU inference | YuNet detection and internal SFace embeddings work without GPU | complete |
-| Gallery | small gallery works | in progress |
+| Gallery | small gallery works | complete |
 | Privacy | no image/embedding retention by default | complete |
 | Docs | README and core docs updated | complete |
 | Tests | warning-free `pytest`, `ruff check`, and `pytest -W error` pass | complete |

@@ -4,6 +4,8 @@
 
 Draft for controlled-pilot review only. This is not a final release note and does not claim commercial readiness.
 This worktree now has measured local not-ready and ready-path validation runs, but it is still not a final release note and does not claim commercial readiness.
+Benchmark numbers are local-machine-specific and the ready-path run used a small local gallery.
+Legal/dataset review remains pending before any broader or external use.
 
 ## What is included
 

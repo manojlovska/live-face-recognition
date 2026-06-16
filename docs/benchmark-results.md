@@ -1,7 +1,7 @@
 # Benchmark Results
 
 ## Status
-A dated RC validation baseline is recorded below, along with a ready-path validation run from a Docker-capable machine with mounted models and a small local gallery. These are local validation results, not a final commercial benchmark claim.
+A dated RC validation baseline is recorded below, along with a ready-path validation run from a Docker-capable machine with mounted models and a small local gallery. Historical WO21/WO22 not-ready context is preserved for comparison, and the ready-path section below is the current measured runtime evidence. These are local validation results, not a final commercial benchmark claim.
 
 ## Rule
 Do not invent performance numbers. Add results only from actual benchmark runs.
