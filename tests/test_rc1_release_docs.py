@@ -29,11 +29,11 @@ def test_rc1_release_package_stays_candidate_only() -> None:
     assert "does not imply a final release" in readme
     assert "release-candidate draft, not a final release" in release_notes
     assert "v0.1.0-rc1" in release_notes
-    assert "partially ready for controlled pilot" in release_notes
+    assert "approved for internal controlled-pilot rc publication" in release_notes
     assert "legal/dataset review remains pending" in release_notes
     assert "does not claim commercial readiness" in release_notes
     assert "not identity verification" in approval_notes
-    assert "human legal/dataset approval is still pending" in approval_notes
+    assert "human legal/dataset approval remains required" in approval_notes
     assert "gallery artifacts were generated locally and are not committed" in approval_notes
     assert "raw benchmark reports are not committed" in approval_notes
     assert "api keys are not committed" in approval_notes
@@ -42,5 +42,5 @@ def test_rc1_release_package_stays_candidate_only() -> None:
     assert "run the tag commands only after human approval" in checklist
     assert "v0.1.0-rc1" in manifest
     assert "excluded artifacts" in manifest
-    assert "partially ready for controlled pilot" in release_readiness
-    assert "work order 29" in handoff
+    assert "approved for internal controlled-pilot rc publication" in release_readiness
+    assert "work order 31" in handoff
