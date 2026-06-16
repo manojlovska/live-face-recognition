@@ -22,6 +22,7 @@ Returns the configured model metadata and requires `Authorization: Bearer <FACE_
 Returns the built-in browser demo HTML page. The demo page is public, but any API request it sends still requires Bearer auth.
 The demo can show optional face-box overlays from a single captured frame, and it now also supports explicit low-rate live polling from the browser using the same native endpoint.
 The polling mode is client-side, opt-in, and throttled.
+The repository also includes local smoke-test and benchmark scripts that exercise these routes against a running service. They are tooling only and add no API routes.
 
 ## Native Endpoint
 
