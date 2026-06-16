@@ -30,6 +30,11 @@
 - Docker validation and real model/gallery RC validation remain blocked in this environment.
 - Benchmark results are recorded, but they reflect the not-ready local runtime rather than a full pilot target.
 
+## Current State After Work Order 22
+- The WO22 ready-path validation attempt remains blocked because Docker CLI/daemon and the real model/gallery assets are still unavailable locally.
+- No ready-path Docker/model/gallery benchmark could be recorded here.
+- The release docs now distinguish the earlier not-ready baseline from the current ready-path blocker.
+
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
 
@@ -56,7 +61,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 22: resolve RC validation blockers found during Docker/model/gallery benchmark pass.
+Work Order 23: resolve remaining RC ready-path validation blockers.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

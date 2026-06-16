@@ -59,3 +59,14 @@ Do not invent performance numbers. Add results only from actual benchmark runs.
 
 ## Current RC1 Blocker
 Authoritative RC benchmark results still require a Docker-capable machine with real model assets and a small local gallery.
+
+## RC ready-path blocker: 2026-06-16
+
+The WO22 ready-path validation attempt did not produce new ready-path measurements in this environment.
+
+- Docker CLI/daemon are unavailable here.
+- The real YuNet and SFace model assets are unavailable locally.
+- No local gallery artifact set or sample image set is available to build a ready-path gallery.
+- `/readyz` could not be verified as `200 ready` on a mounted ready path.
+- Native similarity, OpenAI chat completions, and `stream=true` could only be exercised on the local not-ready path from WO21.
+- No ready-path benchmark numbers were recorded, so this section is a blocker note only.

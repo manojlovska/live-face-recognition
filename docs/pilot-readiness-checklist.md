@@ -1,6 +1,7 @@
 # Pilot Readiness Checklist
 
 This checklist is for a controlled pilot of the CPU-only face-similarity service. It is not a declaration of final release, commercial readiness, or identity verification.
+The WO22 ready-path validation attempt is blocked in the current local environment because Docker and the real model/gallery assets are unavailable.
 
 Status legend:
 - `[ ]` not done
@@ -131,6 +132,7 @@ Required before any external or commercial use:
 - The project is still a research/demo face-similarity service.
 - The full CelebA workflow is not bundled in the repo.
 - Benchmark results are local and not yet authoritative for a pilot because the intended Docker/model/gallery runtime was unavailable.
+- WO22 ready-path validation remains blocked until Docker and real model/gallery assets are available.
 - Legal and dataset review are required before any broader use.
 
 ## Go / no-go decision
