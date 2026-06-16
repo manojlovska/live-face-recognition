@@ -214,6 +214,10 @@ data/gallery/*.sqlite
 data/gallery/*.db
 data/gallery/*.csv
 
+# Local release reports
+reports/*
+!reports/.gitkeep
+
 # Ruff stuff:
 .ruff_cache/
 

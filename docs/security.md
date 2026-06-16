@@ -31,6 +31,8 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - Never print full Authorization headers.
 - Use placeholders in docs and tests.
 - If a secret is accidentally exposed, stop and report.
+- Do not bake API keys into container images.
+- Mount secrets and runtime configuration through environment variables or the orchestrator.
 
 ## Image Safety
 - Reject unsupported image formats.
@@ -42,6 +44,7 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - Model assets are operator-supplied local files; the service does not download them at runtime.
 - Model asset presence and checksum checks must not expose raw file contents.
 - Gallery embeddings and metadata are operator-supplied local files; the service does not download them at runtime.
+- For serving, mount model and gallery artifacts read-only.
 - Do not log query embeddings or gallery embeddings.
 - Similarity matches must come from loaded gallery metadata only.
 - The offline gallery builder must not log raw image bytes or embeddings.
@@ -57,6 +60,7 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - The browser demo overlay must be drawn locally from the API response and must not perform browser-side recognition.
 - The smoke-test and benchmark scripts must only contact the configured local/base URL and must not log or store API keys or image payloads.
 - The smoke-test and benchmark scripts must not add telemetry, third-party analytics, or external reporting services.
+- Container packaging must not include `.env`, raw images, embeddings, or benchmark reports.
 
 ## Logging Rules
 Do not log:
@@ -94,6 +98,10 @@ The service should define:
 - timeout behavior.
 
 Exact values must be documented once implemented.
+
+## Container Health
+- `/healthz` is safe for Docker healthchecks because it only reports process liveness.
+- `/readyz` may reveal coarse operational state and is not the preferred container healthcheck target.
 
 ## Dependency Security
 Before RC1, run a dependency audit such as `pip-audit` or document why it was not run.

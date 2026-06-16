@@ -45,7 +45,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 17: add packaging/deployment hardening with a minimal Dockerfile and production run documentation, while preserving CPU-only operation.
+Work Order 18: add production configuration validation and startup diagnostics for required assets, secrets, and privacy-sensitive settings.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

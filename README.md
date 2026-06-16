@@ -16,6 +16,14 @@ pip install -e '.[dev]'
 uvicorn app.main:app --reload
 ```
 
+For a container build and run:
+
+```bash
+docker build -t live-face-recognition:local .
+docker run --rm -p 8000:8000 -e FACE_API_KEY=change-me-local-dev-key live-face-recognition:local
+python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key
+```
+
 Open the browser demo at:
 
 ```text

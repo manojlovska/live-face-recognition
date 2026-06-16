@@ -31,6 +31,7 @@ Feature completion is not release readiness. Release readiness requires evidence
 | Benchmarks | CPU benchmark results documented | not started |
 | Security | auth, request limits, no-secret checks | not started |
 | Privacy | no-retention policy documented and tested where practical | not started |
+| Packaging | CPU-only Docker image and container smoke checks | in progress |
 | Model card | complete and honest | initial draft |
 | Dataset licensing | limitations documented | initial draft |
 | Error handling | structured errors documented/tested | in progress |
@@ -61,6 +62,13 @@ Expected local behavior when assets are missing:
 - `/readyz` may return `503` with `status: not_ready`.
 - The smoke script should still pass if the service responds correctly to health, auth, native, chat, and demo checks.
 - The benchmark script should still produce a useful report, with `engine_not_ready` counted as a valid not-ready outcome.
+
+Container packaging checks before a pilot release:
+- build the CPU-only Docker image successfully;
+- confirm the image runs as a non-root user on port 8000;
+- confirm `reports/`, model artifacts, gallery artifacts, API keys, and `.env` are not baked into the image;
+- run the smoke script against the container successfully;
+- keep model and gallery mounts read-only for serving.
 
 Before a pilot release, at minimum:
 - the smoke script must pass against the release target;

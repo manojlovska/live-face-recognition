@@ -1,9 +1,14 @@
 # Current State
 
 ## Status
-Work Order 16 benchmark and release smoke-test tooling implementation is complete.
+Work Order 17 Docker packaging implementation is complete.
 
 ## Current implemented state:
+- A minimal CPU-only Dockerfile exists.
+- Container runs the FastAPI service with Uvicorn on port 8000.
+- Model files, gallery artifacts, reports, API keys, and .env files are not baked into the image.
+- Model and gallery artifacts are expected to be mounted at runtime.
+- Cloud deployment manifests are not implemented yet.
 - Local smoke-test tooling exists for API and browser-demo contract checks.
 - Local benchmark tooling exists for native, chat, and streaming chat endpoints.
 - Benchmarking is sequential and local by default.
@@ -113,9 +118,10 @@ Work Order 16 benchmark and release smoke-test tooling implementation is complet
 - Work Order 14: optional client-side face-box overlay for the browser demo.
 - Work Order 15: explicit low-rate live polling for the browser demo using the existing native API.
 - Work Order 16: local benchmark and release smoke-test tooling.
+- Work Order 17: CPU-only Docker packaging and production run documentation.
 
 ## Next recommended work:
-- Work Order 17: add packaging/deployment hardening with a minimal Dockerfile and production run documentation, while preserving CPU-only operation.
+- Work Order 18: add production configuration validation and startup diagnostics for required assets, secrets, and privacy-sensitive settings.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.
