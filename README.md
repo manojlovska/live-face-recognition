@@ -110,6 +110,9 @@ See [docs/dataset-and-licensing.md](docs/dataset-and-licensing.md) and [docs/mod
 These docs are for RC1 candidate review only and do not imply a final release.
 This package does not imply a final release.
 
+- [docs/rc1-signoff-request.md](docs/rc1-signoff-request.md)
+- [docs/rc1-approval-decision-template.md](docs/rc1-approval-decision-template.md)
+- [docs/rc1-review-comment-template.md](docs/rc1-review-comment-template.md)
 - [docs/github-release-draft-v0.1.0-rc1.md](docs/github-release-draft-v0.1.0-rc1.md)
 - [docs/internal-rc1-announcement.md](docs/internal-rc1-announcement.md)
 - [docs/rc1-human-approval-notes.md](docs/rc1-human-approval-notes.md)

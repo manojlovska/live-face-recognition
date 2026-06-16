@@ -46,6 +46,11 @@
 - The internal RC1 announcement draft is prepared for maintainers and operators.
 - RC1 remains a controlled-pilot release candidate, not a final release.
 
+## Current State After Work Order 28
+- RC1 sign-off request materials have been prepared.
+- Human sign-offs remain pending unless explicitly recorded.
+- Dataset/legal approval remains a blocker before broader or external use.
+
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
 
@@ -72,7 +77,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 28: perform human sign-off collection for engineering, security/privacy, dataset/legal, pilot operator, and final release approval.
+Work Order 29: record actual human sign-off decisions and decide whether to publish the GitHub Release.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

@@ -46,6 +46,6 @@ def test_handoff_points_to_next_work_order() -> None:
     handoff = _read(DOCS / "handoff.md")
 
     assert (
-        "Work Order 28: perform human sign-off collection for engineering, "
-        "security/privacy, dataset/legal, pilot operator, and final release approval." in handoff
+        "Work Order 29: record actual human sign-off decisions and decide whether to publish "
+        "the GitHub Release." in handoff
     )

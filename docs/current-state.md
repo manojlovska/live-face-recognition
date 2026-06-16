@@ -1,10 +1,11 @@
 # Current State
 
 ## Status
-RC1 release-package documentation has been prepared. Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery. The v0.1.0-rc1 tag has been created and pushed. A GitHub Release draft exists in docs but has not been published. RC1 remains a release candidate, not a final release. Pilot status remains partially ready until human legal/dataset approval is completed. The project remains a face-similarity service, not identity verification. The project is not a final commercial release.
+RC1 release-package documentation has been prepared. Ready-path Docker validation has been measured locally with mounted YuNet/SFace models and a small gallery. RC1 sign-off request materials have been prepared. The v0.1.0-rc1 tag has been created and pushed. A GitHub Release draft exists in docs but has not been published. RC1 remains a release candidate, not a final release. Pilot status remains partially ready until human legal/dataset approval is completed. The project remains a face-similarity service, not identity verification. The project is not a final commercial release.
 
 ## Current implemented state:
 - RC1 release-package documentation has been prepared.
+- RC1 sign-off request materials have been prepared.
 - The v0.1.0-rc1 tag has been created and pushed.
 - A GitHub Release draft exists in docs but has not been published.
 - RC1 remains a release candidate, not a final release.
