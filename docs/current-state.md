@@ -1,14 +1,14 @@
 # Current State
 
 ## Status
-Work Order 20 release-candidate documentation pass and pilot-readiness checklist are complete.
+Work Order 21 validation produced warning-free tests and a local smoke/benchmark baseline, but full Docker/model/gallery RC validation is blocked in this environment.
 
 ## Current implemented state:
 - Release-candidate documentation has been consolidated.
 - A pilot-readiness checklist exists.
 - An operator runbook exists.
 - RC1 release notes are drafted.
-- Benchmark results remain a template until a real measured run is recorded.
+- Benchmark results now include a dated local validation baseline, but they are not yet an authoritative pilot benchmark.
 - The project is still not a final commercial release and does not claim identity verification.
 - Startup configuration validation exists.
 - The app distinguishes development, test, and production configuration modes.
@@ -71,6 +71,8 @@ Work Order 20 release-candidate documentation pass and pilot-readiness checklist
 - The browser demo can optionally draw face boxes from captured-frame API responses.
 - The browser demo keeps live polling client-side, opt-in, and single-flight.
 - Local smoke-test tooling and sequential local benchmark tooling are now implemented.
+- The smoke and benchmark scripts now run directly from the repository root without extra `PYTHONPATH` setup.
+- The local validation baseline here used the not-ready runtime because Docker and real model/gallery assets were unavailable.
 - WebSockets are not implemented.
 - The project still does not download CelebA.
 
@@ -138,7 +140,7 @@ Work Order 20 release-candidate documentation pass and pilot-readiness checklist
 - Work Order 20: release-candidate documentation pass and pilot-readiness checklist.
 
 ## Next recommended work:
-- Work Order 21: run a full RC validation pass on a Docker-capable machine with real model assets and a small local gallery, then fill measured benchmark results.
+- Work Order 22: resolve RC validation blockers found during Docker/model/gallery benchmark pass.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

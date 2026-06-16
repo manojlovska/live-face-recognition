@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import base64
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -105,6 +107,20 @@ def test_smoke_parser_help_exits_cleanly(capsys) -> None:
 
     assert excinfo.value.code == 0
     assert "Run local release smoke checks." in capsys.readouterr().out
+
+
+def test_smoke_script_runs_help_from_temp_cwd(tmp_path: Path) -> None:
+    script = Path(__file__).resolve().parents[1] / "scripts" / "smoke_release.py"
+    result = subprocess.run(
+        [sys.executable, str(script), "--help"],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0
+    assert "Run local release smoke checks." in result.stdout
 
 
 def test_smoke_main_writes_json_report(tmp_path: Path, monkeypatch) -> None:

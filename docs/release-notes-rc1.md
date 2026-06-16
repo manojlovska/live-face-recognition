@@ -3,6 +3,7 @@
 ## Status
 
 Draft for controlled-pilot review only. This is not a final release note and does not claim commercial readiness.
+This worktree has a measured local smoke/benchmark baseline, but full RC validation is still blocked here because Docker and the real model/gallery assets were unavailable.
 
 ## What is included
 
@@ -57,6 +58,7 @@ Draft for controlled-pilot review only. This is not a final release note and doe
 - Smoke tests against the intended runtime
 - Docker build verification on a Docker-capable machine
 - Benchmarks measured and recorded in [benchmark-results.md](benchmark-results.md)
+  - The current recorded benchmark is a local not-ready baseline, not a pilot benchmark.
 
 ## Known limitations
 

@@ -30,17 +30,16 @@ def test_readme_and_docs_avoid_identity_verification_claims() -> None:
     assert "bundled onnx" not in combined
 
 
-def test_benchmark_results_remain_a_template() -> None:
+def test_benchmark_results_record_the_measured_baseline() -> None:
     benchmark_results = _read(DOCS / "benchmark-results.md")
 
-    assert "No authoritative benchmark results are recorded yet." in benchmark_results
-    assert "Latency metric" in benchmark_results
-    assert "5.0" not in benchmark_results
-    assert "18.1" not in benchmark_results
-    assert "0.84" not in benchmark_results
+    assert "RC validation run: 2026-06-16" in benchmark_results
+    assert "engine_not_ready" in benchmark_results
+    assert "Docker validation remains blocked" in benchmark_results
+    assert "real model/gallery assets were unavailable" in benchmark_results
 
 
 def test_handoff_points_to_next_work_order() -> None:
     handoff = _read(DOCS / "handoff.md")
 
-    assert "Work Order 21: Run a full RC validation pass on a Docker-capable machine" in handoff
+    assert "Work Order 22: resolve RC validation blockers" in handoff
