@@ -10,6 +10,11 @@ __pycache__
 *.env
 models/*
 !models/.gitkeep
+celeba/
+CelebA/
+img_align_celeba/
+identity_CelebA.txt
+list_eval_partition.txt
 data/gallery/*
 !data/gallery/.gitkeep
 reports/*

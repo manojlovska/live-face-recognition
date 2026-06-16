@@ -39,6 +39,8 @@ def test_dockerignore_excludes_sensitive_and_generated_files() -> None:
     assert ".env" in text
     assert "models/*" in text
     assert "!models/.gitkeep" in text
+    assert "img_align_celeba/" in text
+    assert "identity_CelebA.txt" in text
     assert "data/gallery/*" in text
     assert "reports/*" in text
     assert "!reports/.gitkeep" in text
