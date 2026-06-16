@@ -35,6 +35,11 @@
           <input id="top-k" name="top-k" type="number" min="1" max="20" value="5" />
         </label>
 
+        <label>
+          Live polling interval (ms)
+          <input id="polling-interval" name="polling-interval" type="number" min="500" value="1500" />
+        </label>
+
         <p class="endpoint-note">
           Native endpoint: <code>/v1/face/similarity</code>
         </p>
@@ -43,11 +48,43 @@
           <button id="start-camera" type="button">Start camera</button>
           <button id="capture-frame" type="button" disabled>Capture frame</button>
           <button id="stop-camera" type="button">Stop camera</button>
+          <button id="start-live-polling" type="button" disabled>Start live polling</button>
+          <button id="stop-live-polling" type="button" disabled>Stop live polling</button>
         </div>
 
         <p class="privacy-note">
           Frame is sent only when you click Capture frame. No continuous streaming. The image is
           not stored by default.
+        </p>
+
+        <div class="live-panel" aria-label="Live polling status">
+          <p id="live-status" class="live-status">Live polling is stopped.</p>
+          <p id="last-success" class="live-metric">Last success: none.</p>
+          <p id="last-error" class="live-metric">Last error: none.</p>
+          <div class="counter-grid" aria-label="Polling counters">
+            <div class="counter-card">
+              <span class="counter-label">Frames sent</span>
+              <span id="frames-sent" class="counter-value">0</span>
+            </div>
+            <div class="counter-card">
+              <span class="counter-label">Successful responses</span>
+              <span id="successful-responses" class="counter-value">0</span>
+            </div>
+            <div class="counter-card">
+              <span class="counter-label">Failed responses</span>
+              <span id="failed-responses" class="counter-value">0</span>
+            </div>
+            <div class="counter-card">
+              <span class="counter-label">Last latency</span>
+              <span id="last-latency" class="counter-value">—</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="privacy-note live-note">
+          Live polling is opt-in and sends repeated frames while enabled. It uses the selected
+          interval, does not run on page load, and stops when the tab is hidden until you restart
+          it.
         </p>
       </section>
 

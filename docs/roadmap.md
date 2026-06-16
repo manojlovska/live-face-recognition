@@ -9,7 +9,7 @@
 | v0.2 | Full gallery | Reproducible CelebA gallery build and validation |
 | v0.3 | OpenAI compatibility | Minimal chat completions compatibility and SSE response streaming |
 | v0.4 | Live API | Repeated-frame API suitable for webcam workflows |
-| v0.5 | Browser demo | HTML5 one-frame camera interface with overlay |
+| v0.5 | Browser demo | HTML5 one-frame camera interface with overlay and opt-in low-rate live polling |
 | v0.6 | Hardening | Benchmarks, tests, docs, security, packaging |
 | v1.0-rc1 | RC1 | Controlled-pilot-ready research service |
 
@@ -46,7 +46,7 @@ RC1 is a controlled-pilot-ready research service with:
 
 - full/reproducible CelebA gallery workflow
 - OpenAI-compatible response streaming
-- browser webcam demo with one-frame capture
+- browser webcam demo with one-frame capture and explicit live polling
 - benchmark results on CPU
 - privacy/security/model documentation
 - expanded tests
@@ -68,7 +68,7 @@ RC1 is a controlled-pilot-ready research service with:
 13. CelebA gallery builder
 14. Gallery validation and benchmark scripts
 15. SSE response streaming
-16. Live repeated-frame support
+16. Low-rate browser live polling
 17. HTML5 webcam demo
 18. Privacy/model/API documentation hardening
 19. Packaging and optional Dockerfile
@@ -83,7 +83,7 @@ Revisit this roadmap if:
 - a different model stack is approved by ADR.
 
 ## Scaffold Status
-The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, an offline sample-gallery builder skeleton, an OpenAI-compatible chat adapter with non-streaming and SSE streaming support, and a small built-in browser demo with optional face-box overlays are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. The next milestone is low-rate live polling.
+The initial scaffold work is complete. One-key authentication, readiness routing, `/v1/models`, the native face-similarity contract, image decoding/validation, model asset management, CPU-only YuNet/SFace loading skeleton, YuNet detection-only output, internal SFace embedding generation, local gallery loading/search, an offline sample-gallery builder skeleton, an OpenAI-compatible chat adapter with non-streaming and SSE streaming support, and a small built-in browser demo with optional face-box overlays and low-rate live polling are now implemented. The builder now also supports CelebA-style layout discovery, partition parsing, and local quality/performance reporting. The next milestone is hardening, benchmarks, and release-readiness evidence.
 
 ## Work Order Status
 - Work Order 1: complete.
@@ -100,4 +100,5 @@ The initial scaffold work is complete. One-key authentication, readiness routing
 - Work Order 12: complete.
 - Work Order 13: complete.
 - Work Order 14: complete.
-- Work Order 15: next.
+- Work Order 15: complete.
+- Work Order 16: next.

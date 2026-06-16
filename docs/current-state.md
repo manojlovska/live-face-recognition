@@ -1,9 +1,14 @@
 # Current State
 
 ## Status
-Work Order 14 browser overlay implementation is complete.
+Work Order 15 browser live polling implementation is complete.
 
 ## Current implemented state:
+- The browser demo at /demo supports one-frame capture.
+- The browser demo can optionally draw face boxes from the API response.
+- The browser demo now includes explicit low-rate live polling using the existing /v1/face/similarity endpoint.
+- Live polling is client-side, opt-in, and throttled.
+- The project still does not implement server-side video streaming, WebSockets, or a repeated-frame API.
 - `/healthz` exists and is public.
 - `/readyz` exists and reports model and gallery status honestly.
 - One-key Bearer authentication exists.
@@ -38,10 +43,9 @@ Work Order 14 browser overlay implementation is complete.
 - The builder is sample-scale first; full CelebA processing is not implemented yet.
 - No uploaded images or decoded images are stored by default.
 - `stream=true` uses OpenAI-style SSE chunk frames.
-- The browser demo can capture one webcam frame and send it to `/v1/face/similarity`.
-- The browser demo can optionally draw face boxes from the captured-frame API response.
-- The browser demo still sends only one request per capture click.
-- Continuous live frame processing is not implemented yet.
+- The browser demo can capture one webcam frame and can also run explicit low-rate live polling against `/v1/face/similarity`.
+- The browser demo can optionally draw face boxes from captured-frame API responses.
+- The browser demo keeps live polling client-side, opt-in, and single-flight.
 - WebSockets are not implemented.
 - The project still does not download CelebA.
 
@@ -101,9 +105,10 @@ Work Order 14 browser overlay implementation is complete.
 - Work Order 12: OpenAI-compatible `stream=true` SSE chat completions.
 - Work Order 13: small built-in browser demo for one-frame webcam capture.
 - Work Order 14: optional client-side face-box overlay for the browser demo.
+- Work Order 15: explicit low-rate live polling for the browser demo using the existing native API.
 
 ## Next recommended work:
-- Work Order 15: add an explicit low-rate live polling mode to the browser demo using the existing API, with start/stop controls and client-side throttling.
+- Work Order 16: add basic runtime performance benchmarking and a release-readiness smoke test script for the API and browser demo.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

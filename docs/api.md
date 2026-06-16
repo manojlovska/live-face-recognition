@@ -20,7 +20,8 @@ Returns the configured model metadata and requires `Authorization: Bearer <FACE_
 
 ### `GET /demo`
 Returns the built-in browser demo HTML page. The demo page is public, but any API request it sends still requires Bearer auth.
-The demo can show optional face-box overlays from a single captured frame, but it still sends only one request per capture click.
+The demo can show optional face-box overlays from a single captured frame, and it now also supports explicit low-rate live polling from the browser using the same native endpoint.
+The polling mode is client-side, opt-in, and throttled.
 
 ## Native Endpoint
 
@@ -34,6 +35,8 @@ Expected responsibilities:
 - decode and validate the image in memory;
 - return `engine_not_ready` until model loading exists;
 - later: detect face(s), compute embeddings, search gallery, return top-k matches.
+
+The browser demo uses this endpoint for both one-frame capture and explicit low-rate live polling. There is no separate repeated-frame or video-streaming endpoint.
 
 ## OpenAI-Compatible Endpoints
 
