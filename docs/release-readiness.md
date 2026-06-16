@@ -2,6 +2,16 @@
 
 ## Release Principle
 Feature completion is not release readiness. Release readiness requires evidence: tests, docs, benchmark results, privacy/security review, and honest limitations.
+This repository is ready for a controlled pilot only after the pilot checklist is completed.
+
+## Release Documents
+
+- [Pilot readiness checklist](pilot-readiness-checklist.md)
+- [Operator runbook](operator-runbook.md)
+- [RC1 release notes draft](release-notes-rc1.md)
+- [Benchmark plan](benchmark-plan.md)
+- [Benchmark results](benchmark-results.md)
+- [Dataset and licensing](dataset-and-licensing.md)
 
 ## MVP Gates
 
@@ -71,6 +81,8 @@ Expected local behavior when assets are missing:
 - `/readyz` may return `503` with `status: not_ready`.
 - The smoke script should still pass if the service responds correctly to health, auth, native, chat, and demo checks.
 - The benchmark script should still produce a useful report, with `engine_not_ready` counted as a valid not-ready outcome.
+- Smoke tests must be run against the intended runtime target, not a guessed environment.
+- Benchmark numbers must be measured and recorded, not invented.
 
 Container packaging checks before a pilot release:
 - build the CPU-only Docker image successfully;
@@ -78,6 +90,7 @@ Container packaging checks before a pilot release:
 - confirm `reports/`, model artifacts, gallery artifacts, API keys, and `.env` are not baked into the image;
 - run the smoke script against the container successfully;
 - keep model and gallery mounts read-only for serving.
+- Docker build verification must occur on a Docker-capable machine.
 
 Production configuration checks before a pilot release:
 - run the app with `APP_ENV=production` and a non-default API key;
@@ -85,6 +98,7 @@ Production configuration checks before a pilot release:
 - confirm `/v1/diagnostics/startup` returns sanitized diagnostics with no secrets or raw paths unless path disclosure is explicitly enabled;
 - confirm `DEBUG_IMAGE_RETENTION` remains disabled;
 - confirm `STARTUP_VALIDATE_ASSETS` is set to the intended operating mode.
+- Review legal and dataset usage before any external or commercial use.
 
 Before a pilot release, at minimum:
 - the dependency policy must be reviewed and kept CPU-only;
@@ -95,6 +109,7 @@ Before a pilot release, at minimum:
 - at least one benchmark report must be recorded and reviewed;
 - no privacy or security rule in this repository may be violated;
 - the release notes must not claim production biometric identification.
+- The pilot checklist must be completed.
 
 ## RC1 Forbidden Claim
 Production biometric identification or verified celebrity recognition.

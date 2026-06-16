@@ -61,3 +61,5 @@ API version is currently represented by `/v1` path prefix and model/gallery mani
 - User accounts
 - Multi-key quota management
 - Persistent conversation history
+
+For pilot preparation, use [pilot-readiness-checklist.md](pilot-readiness-checklist.md) and [operator-runbook.md](operator-runbook.md) together with this API overview.

@@ -19,6 +19,11 @@
 - The browser demo now also supports explicit low-rate live polling with client-side throttling and the existing native API.
 - Local smoke-test tooling and sequential local benchmark tooling are now available.
 
+## Current State After Work Order 20
+- Release-candidate documentation has been consolidated into a pilot checklist, operator runbook, and RC1 draft notes.
+- Benchmark results remain a template until a real measured run is recorded.
+- The project remains a CPU-only similarity service and does not claim identity verification or commercial readiness.
+
 ## Product Goal
 CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no image retention by default, and later browser webcam demo.
 
@@ -45,7 +50,7 @@ CPU-only, OpenAI-compatible CelebA face-similarity API with one-key auth, no ima
 - OpenAI compatibility must remain explicitly scoped.
 
 ## Next Recommended Work Order
-Work Order 20: perform release-candidate documentation pass and produce a pilot-readiness checklist.
+Work Order 21: Run a full RC validation pass on a Docker-capable machine with real model assets and a small local gallery, then fill measured benchmark results.
 
 ## Do Not Do Next
 - Do not add model inference before scaffold/tests are stable.

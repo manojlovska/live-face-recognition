@@ -110,6 +110,7 @@ Exact values must be documented once implemented.
 ## Dependency Security
 Before RC1, run a dependency audit such as `pip-audit` or document why it was not run.
 - The release-candidate dependency policy keeps runtime packages CPU-only, uses `httpx` for local scripts, uses `httpx2` for the warning-free Starlette test client path, and excludes GPU, database, Redis, and Celery packages.
+- Use the [pilot-readiness-checklist.md](pilot-readiness-checklist.md) and [operator-runbook.md](operator-runbook.md) when verifying security-sensitive release steps.
 
 ## Threats Deferred to `threat-model.md`
-The detailed threat model lives in `docs/threat-model.md`.
+The detailed threat model lives in [threat-model.md](threat-model.md).

@@ -193,3 +193,5 @@ The OpenAI-compatible chat adapter uses the same native validation and decoding 
 The browser demo calls this endpoint once per capture button press and can also call it at a low, client-side controlled rate when explicit live polling is enabled. It does not continuously stream frames from the server.
 When the demo overlay is enabled, it draws the returned `faces[].box` values on a local canvas using the captured frame's pixel dimensions as the coordinate basis.
 The browser demo stops live polling when the user clicks Stop live polling, when the camera stops, or when the tab becomes hidden.
+
+For operator validation, pair this document with [operator-runbook.md](operator-runbook.md) and [pilot-readiness-checklist.md](pilot-readiness-checklist.md).

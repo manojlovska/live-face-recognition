@@ -1,211 +1,106 @@
-# CelebA Face Similarity API
+# Live Face Similarity API
 
-CPU-only FastAPI scaffold for the CelebA face-similarity service.
+## What this is
 
-## Local setup
+CPU-only FastAPI service for face similarity against a local CelebA-style gallery.
+It supports a native JSON API, a minimal OpenAI-compatible adapter, a local browser demo, smoke tests, benchmarks, and Docker packaging.
+
+## What this is not
+
+- verified identity recognition
+- commercial-ready biometric product
+- cloud deployment system
+- server-side video streaming
+- WebSocket-based webcam service
+
+The public APIs return similarity results, not identity proof.
+
+## Quick start
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -e '.[dev,test]'
-```
-
-## Run the app
-
-```bash
 uvicorn app.main:app --reload
 ```
 
-For a container build and run:
+## API overview
 
-```bash
-docker build -t live-face-recognition:local .
-docker run --rm -p 8000:8000 -e FACE_API_KEY=change-me-local-dev-key live-face-recognition:local
-python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key
-```
+- `GET /healthz`
+- `GET /readyz`
+- `GET /v1/models`
+- `POST /v1/face/similarity`
+- `POST /v1/chat/completions`
+- `GET /v1/diagnostics/startup`
 
-Startup diagnostics:
+See [docs/api.md](docs/api.md), [docs/native-api.md](docs/native-api.md), and [docs/openai-compatibility.md](docs/openai-compatibility.md).
 
-```bash
-curl -H "Authorization: Bearer $FACE_API_KEY" \
-  http://localhost:8000/v1/diagnostics/startup
-```
-
-Open the browser demo at:
-
-```text
-http://localhost:8000/demo
-```
-
-Browser camera access usually requires `localhost` or HTTPS.
-
-## Health check
-
-```bash
-curl http://127.0.0.1:8000/healthz
-```
-
-`/healthz` is a public liveness check. It only reports that the process is up.
-
-## Readiness check
-
-```bash
-curl http://127.0.0.1:8000/readyz
-```
-
-`/readyz` is public too, but it currently returns `503 not_ready` until the detector, embedder, and gallery are all loaded.
-The response now includes model-asset and gallery status so you can tell whether YuNet and SFace files are missing, present, loaded, or in error.
-
-## Authentication
-
-Protected endpoints require:
-
-```http
-Authorization: Bearer <FACE_API_KEY>
-```
-
-Set `FACE_API_KEY` locally in `.env` before using protected routes.
-
-```bash
-export FACE_API_KEY="change-me-local-dev-key"
-# Current and future protected endpoints use:
-# curl -H "Authorization: Bearer $FACE_API_KEY" http://127.0.0.1:8000/...
-```
-
-## Model list
-
-```bash
-curl -H "Authorization: Bearer change-me-local-dev-key" \
-  http://localhost:8000/v1/models
-```
-
-`/v1/models` is protected and lists the configured model ID. The similarity engine is still not fully ready until the gallery loads.
-
-## Native similarity
-
-Valid `POST /v1/face/similarity` image requests are decoded and validated in memory. If YuNet is loaded, the service returns detection-only face boxes. If YuNet and SFace are both loaded, the service generates embeddings internally, and if a local gallery artifact is also loaded the service returns gallery-backed `top_matches`. Raw embedding vectors are still never returned. The current gallery support is artifact-based and uses a tiny local fixture gallery for tests; it is not a full CelebA build.
-
-Model files are expected under `models/` by default:
-
-- `models/face_detection_yunet.onnx`
-- `models/face_recognition_sface.onnx`
-- `models/model_manifest.json`
-
-To test real YuNet detection manually:
-
-1. Place the YuNet ONNX file at the configured `YUNET_MODEL_PATH`.
-2. Set `MODEL_AUTO_LOAD=true`.
-3. Start the server.
-4. Send a valid `POST /v1/face/similarity` request.
-5. A detection-only result should be returned when the detector loads successfully.
-
-If you also provide the SFace ONNX file and set `MODEL_AUTO_LOAD=true`, the service will generate embeddings internally while still returning only public metadata. If you also provide a local gallery artifact and set `GALLERY_AUTO_LOAD=true`, the service can return similarity results with `top_matches`.
-
-## OpenAI-compatible chat completions
-
-The service also exposes a minimal non-streaming OpenAI-compatible adapter for image similarity requests. The adapter reuses the same native pipeline and returns the similarity result as JSON text in the assistant message.
+## OpenAI-compatible usage
 
 ```python
 from openai import OpenAI
 
-client = OpenAI(
-    api_key="change-me-local-dev-key",
-    base_url="http://localhost:8000/v1",
-)
-
-response = client.chat.completions.create(
-    model="celeba-face-similarity-cpu",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {"type": "text", "text": "Who is this face most similar to?"},
-                {
-                    "type": "image_url",
-                    "image_url": {"url": "data:image/jpeg;base64,..."},
-                },
-            ],
-        }
-    ],
-)
+client = OpenAI(api_key="change-me-local-dev-key", base_url="http://localhost:8000/v1")
 ```
 
-`stream=true` is supported and returns SSE chat-completion chunks.
-
-```python
-stream = client.chat.completions.create(
-    model="celeba-face-similarity-cpu",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {"type": "text", "text": "Who is this face most similar to?"},
-                {
-                    "type": "image_url",
-                    "image_url": {"url": "data:image/jpeg;base64,..."},
-                },
-            ],
-        }
-    ],
-    stream=True,
-)
-
-for chunk in stream:
-    print(chunk.choices[0].delta)
-```
-
-`stream=True` returns SSE chat-completion chunks, not live video streaming.
+See [docs/openai-compatibility.md](docs/openai-compatibility.md) for the supported image-only subset.
 
 ## Browser demo
 
-The built-in browser demo captures one webcam frame on demand and sends it to the native API. It can optionally draw face-box overlays from the single-frame response, and it also includes opt-in low-rate live polling with client-side throttling. It does not continuously stream video and it does not store API keys or images in browser storage.
+The local demo at `/demo` supports one-frame capture, optional face-box overlays, and opt-in low-rate live polling.
+See [docs/browser-demo-design.md](docs/browser-demo-design.md).
 
-## Build gallery
+## Gallery builder
 
-Use the sample builder to create a local gallery artifact from a small CelebA-like directory:
+Use the local builder to create a sample gallery or a CelebA-style local gallery:
 
 ```bash
-python scripts/build_gallery.py \
-  --images-dir /path/to/sample/images \
-  --identity-file /path/to/identity_sample.txt \
-  --output-dir data/gallery \
-  --gallery-version sample-gallery-v1 \
-  --limit 100
+python scripts/build_gallery.py --images-dir /path/to/sample/images --identity-file /path/to/identity_sample.txt --output-dir data/gallery --gallery-version sample-gallery-v1 --limit 100
+python scripts/build_gallery.py --celeba-root /path/to/celeba --output-dir data/gallery --gallery-version celeba-local-v1 --limit 1000 --include-partitions train,val
 ```
 
-This is sample-scale only. It does not process the full CelebA dataset yet.
+See [docs/gallery-build.md](docs/gallery-build.md) and [docs/gallery-manifest.md](docs/gallery-manifest.md).
 
-For a local CelebA-style directory layout, you can also use:
+## Docker
 
 ```bash
-python scripts/build_gallery.py \
-  --celeba-root /path/to/celeba \
-  --output-dir data/gallery \
-  --gallery-version celeba-local-v1 \
-  --limit 1000 \
-  --include-partitions train,val
+docker build -t live-face-recognition:local .
+docker run --rm -p 8000:8000 -e FACE_API_KEY=change-me-local-dev-key live-face-recognition:local
 ```
 
-The builder discovers `img_align_celeba/`, `identity_CelebA.txt`, and an optional `list_eval_partition.txt` under that root. It stays local-only and does not download CelebA.
+Model and gallery artifacts are mounted at runtime. See [docs/deployment.md](docs/deployment.md).
 
-## Quality checks
-
-```bash
-ruff check .
-ruff format --check .
-pytest
-```
-
-## Local release checks
+## Smoke tests and benchmarks
 
 ```bash
-python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key
-python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --endpoint all --requests 20
 python scripts/smoke_release.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --check-diagnostics
+python scripts/benchmark_api.py --base-url http://localhost:8000 --api-key change-me-local-dev-key --endpoint all --requests 20
 ```
 
-## Environment
+See [docs/release-readiness.md](docs/release-readiness.md), [docs/pilot-readiness-checklist.md](docs/pilot-readiness-checklist.md), [docs/operator-runbook.md](docs/operator-runbook.md), and [docs/benchmark-plan.md](docs/benchmark-plan.md).
 
-Copy `.env.example` to `.env` if you want to override defaults locally.
+## Privacy and security
 
-Project documentation lives under `docs/`.
+- API keys are not stored.
+- Uploaded images are not stored by default.
+- User embeddings are not stored by default.
+- Startup diagnostics are sanitized.
+
+See [docs/security.md](docs/security.md) and [docs/privacy.md](docs/privacy.md).
+
+## Dataset and licensing
+
+The intended gallery base is CelebA, but local dataset use and any broader use must be reviewed carefully.
+See [docs/dataset-and-licensing.md](docs/dataset-and-licensing.md) and [docs/model-card.md](docs/model-card.md).
+
+## Documentation map
+
+- [docs/current-state.md](docs/current-state.md)
+- [docs/handoff.md](docs/handoff.md)
+- [docs/release-readiness.md](docs/release-readiness.md)
+- [docs/pilot-readiness-checklist.md](docs/pilot-readiness-checklist.md)
+- [docs/operator-runbook.md](docs/operator-runbook.md)
+- [docs/release-notes-rc1.md](docs/release-notes-rc1.md)
+- [docs/testing-strategy.md](docs/testing-strategy.md)
+- [docs/error-handling.md](docs/error-handling.md)
+- [docs/benchmark-results.md](docs/benchmark-results.md)

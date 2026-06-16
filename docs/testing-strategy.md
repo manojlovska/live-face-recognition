@@ -72,6 +72,8 @@ python3.12 -m ruff format --check .
 python3.12 -m pytest
 ```
 
+The [pilot-readiness-checklist.md](pilot-readiness-checklist.md) and [operator-runbook.md](operator-runbook.md) provide the human release gate beyond the automated test suite.
+
 ## Fixtures
 Use tiny synthetic or legally safe fixtures. Do not commit CelebA images unless the repository policy explicitly permits it.
 

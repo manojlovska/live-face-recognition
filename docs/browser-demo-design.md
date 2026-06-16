@@ -77,3 +77,5 @@ The current implementation keeps the API endpoint fixed to the local native endp
 - server-side video streaming
 - browser-side recognition model
 - browser-side face detection
+
+This demo remains a local operator UI, not a production web application. Use [operator-runbook.md](operator-runbook.md) and [pilot-readiness-checklist.md](pilot-readiness-checklist.md) when validating it for a pilot.
