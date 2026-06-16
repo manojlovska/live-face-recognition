@@ -120,3 +120,4 @@ The build command, layout mode, and model versions must be documented. The manif
 
 ## Scope Boundary
 This builder is sample- and local-layout-oriented. It does not download CelebA and it does not claim a full CelebA-scale workflow yet.
+Use the [operator-runbook.md](operator-runbook.md) and [pilot-readiness-checklist.md](pilot-readiness-checklist.md) when preparing a controlled pilot with gallery artifacts.

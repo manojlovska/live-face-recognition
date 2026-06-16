@@ -51,3 +51,5 @@ Avoid unless legally cleared:
 - "commercial celebrity recognition"
 - "production identity database"
 - "verified celebrity identity"
+
+For any pilot or broader release, review [pilot-readiness-checklist.md](pilot-readiness-checklist.md) and [release-notes-rc1.md](release-notes-rc1.md) alongside this document.

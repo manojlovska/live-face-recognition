@@ -1,9 +1,15 @@
 # Current State
 
 ## Status
-Work Order 19 release-candidate cleanup for test warnings and dependency bounds is complete.
+Work Order 20 release-candidate documentation pass and pilot-readiness checklist are complete.
 
 ## Current implemented state:
+- Release-candidate documentation has been consolidated.
+- A pilot-readiness checklist exists.
+- An operator runbook exists.
+- RC1 release notes are drafted.
+- Benchmark results remain a template until a real measured run is recorded.
+- The project is still not a final commercial release and does not claim identity verification.
 - Startup configuration validation exists.
 - The app distinguishes development, test, and production configuration modes.
 - Strict startup validation can fail fast on unsafe settings.
@@ -129,9 +135,10 @@ Work Order 19 release-candidate cleanup for test warnings and dependency bounds 
 - Work Order 17: CPU-only Docker packaging and production run documentation.
 - Work Order 18: production configuration validation and startup diagnostics.
 - Work Order 19: release-candidate cleanup for test warnings and dependency bounds.
+- Work Order 20: release-candidate documentation pass and pilot-readiness checklist.
 
 ## Next recommended work:
-- Work Order 19: add release-candidate cleanup by resolving the Starlette/TestClient deprecation warning and tightening test/runtime dependency versions.
+- Work Order 21: run a full RC validation pass on a Docker-capable machine with real model assets and a small local gallery, then fill measured benchmark results.
 
 ## Do Not Do Next
 - Do not add browser UI before the API exists.

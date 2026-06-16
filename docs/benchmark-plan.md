@@ -43,3 +43,4 @@ Per target, record:
 
 ## Rule
 Do not place guessed numbers in `benchmark-results.md`.
+Record only measured runs and keep the result template in sync with the pilot checklist.

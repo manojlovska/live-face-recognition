@@ -135,3 +135,4 @@ Native image-validation errors are passed through unchanged so the adapter and n
 Startup configuration validation runs before the service begins serving requests. It raises sanitized runtime errors for unsafe production settings or explicit strict-validation failures, but it does not expose raw API keys, image payloads, embeddings, or unredacted local paths.
 
 The protected `/v1/diagnostics/startup` endpoint returns a sanitized `startup.diagnostics` object with `status`, `environment`, `summary`, and `checks`. If path disclosure is disabled, path fields are omitted rather than redacted with real filesystem values.
+Use the [operator-runbook.md](operator-runbook.md) to interpret startup and readiness failures during a controlled pilot.

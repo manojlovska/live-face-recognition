@@ -60,7 +60,8 @@ The sample-gallery builder processes local image files only and does not downloa
 The local-layout builder extension still does not download CelebA or return raw embedding vectors.
 
 ## Performance
-Actual performance must be recorded in `docs/benchmark-results.md`. Do not invent latency or FPS numbers.
+Actual performance must be recorded in [benchmark-results.md](benchmark-results.md). Do not invent latency or FPS numbers.
+The benchmark results file remains a template until a dated measured run is added.
 
 ## Evaluation Plan
 At minimum:

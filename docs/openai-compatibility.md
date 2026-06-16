@@ -107,3 +107,5 @@ The streamed content is the same privacy-filtered face-similarity payload used b
 
 ## Compatibility Test Requirement
 At least one test instantiates the OpenAI Python client and calls the local service through `base_url`.
+
+For pilot work, keep this compatibility scope narrow: image-only similarity requests, no general chat generation, and no claim of full OpenAI feature parity. Pair this file with [operator-runbook.md](operator-runbook.md) and [pilot-readiness-checklist.md](pilot-readiness-checklist.md).

@@ -92,6 +92,7 @@ At startup, the service should validate that:
 
 ## Update Rule
 Whenever gallery format changes, update this file and add or update tests.
+Any pilot should verify the manifest against the [operator-runbook.md](operator-runbook.md) before the release target is used.
 
 ## Model Manifest Distinction
 - The model manifest documents detector/embedder asset provenance and checksums.

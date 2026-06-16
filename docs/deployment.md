@@ -157,6 +157,8 @@ Before internet exposure:
 - run benchmarks and dependency audit;
 - keep model and gallery mounts read-only for serving.
 
+For pilot work, use [pilot-readiness-checklist.md](pilot-readiness-checklist.md) together with [operator-runbook.md](operator-runbook.md).
+
 ## Not Included
 
 - Kubernetes
