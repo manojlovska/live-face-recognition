@@ -33,10 +33,13 @@ Similarity result only; not identity verification.
 ## Browser Demo Privacy
 The browser demo must:
 - request camera permission explicitly;
-- explain that one captured frame is sent only when the user clicks Capture frame;
+- explain that one captured frame is sent only when the user clicks Capture frame, and repeated frames are sent only when live polling is explicitly enabled;
 - not record video;
 - not store frames by default.
 - when face boxes are shown, draw them locally from the API response only.
+- Live polling in the browser demo must remain opt-in, client-side, and throttled.
+- Live polling must not store frames, API responses, or API keys in browser storage.
+- Live polling must stop when the camera stops and when the tab becomes hidden.
 
 ## Debug Mode
 If a future debug mode saves images, it must be:

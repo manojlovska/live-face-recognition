@@ -35,6 +35,7 @@ If a command is not run, report it as `not run` with the reason.
 - response streaming with `stream=true`;
 - repeated-frame processing behavior;
 - browser demo API path;
+- browser demo live polling behavior;
 - benchmark script smoke test;
 - privacy no-retention default;
 - security scan or secret-pattern check;
@@ -70,6 +71,7 @@ Skipped integration tests must be reported as skipped, not passed.
 - OpenAI chat-completions streaming tests for SSE chunk shape, `[DONE]`, and Python client streaming compatibility against a local `base_url`.
 - Browser demo tests for `/demo`, local static assets, and no-storage/no-CDN script checks.
 - Browser overlay tests for optional face-box drawing logic, local canvas usage, and no continuous polling indicators.
+- Browser demo live-polling tests for start/stop controls, single-flight request guards, polling interval handling, hidden-tab stop behavior, and same-origin native API usage.
 
 ## Test Quality Rule
 For every important safety behavior, ask:

@@ -143,7 +143,7 @@ for chunk in stream:
 
 ## Browser demo
 
-The built-in browser demo captures one webcam frame on demand and sends it to the native API. It can optionally draw face-box overlays from the single-frame response. It does not continuously stream video and it does not store API keys or images in browser storage.
+The built-in browser demo captures one webcam frame on demand and sends it to the native API. It can optionally draw face-box overlays from the single-frame response, and it also includes opt-in low-rate live polling with client-side throttling. It does not continuously stream video and it does not store API keys or images in browser storage.
 
 ## Build gallery
 

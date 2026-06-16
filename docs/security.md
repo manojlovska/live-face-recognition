@@ -51,6 +51,8 @@ The key is loaded from environment variable `FACE_API_KEY` or a documented equiv
 - The OpenAI-compatible chat adapter must reject remote image URLs and multiple images.
 - `stream=true` is supported as SSE response streaming only; it is not live video streaming.
 - The browser demo must not persist API keys or captured images in browser storage.
+- The browser demo's live polling mode must remain same-origin, opt-in, client-side, and throttled.
+- The browser demo's live polling mode must stop when the camera stops or when the tab becomes hidden.
 - The browser demo must not load third-party scripts or send data to third-party origins.
 - The browser demo overlay must be drawn locally from the API response and must not perform browser-side recognition.
 

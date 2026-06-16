@@ -190,5 +190,6 @@ Uploaded image data is decoded in memory and discarded by default. No uploaded i
 
 The OpenAI-compatible chat adapter uses the same native validation and decoding path; the only difference is whether the final response is returned as JSON or SSE chunks.
 
-The browser demo calls this endpoint once per capture button press and does not continuously stream frames.
+The browser demo calls this endpoint once per capture button press and can also call it at a low, client-side controlled rate when explicit live polling is enabled. It does not continuously stream frames from the server.
 When the demo overlay is enabled, it draws the returned `faces[].box` values on a local canvas using the captured frame's pixel dimensions as the coordinate basis.
+The browser demo stops live polling when the user clicks Stop live polling, when the camera stops, or when the tab becomes hidden.
